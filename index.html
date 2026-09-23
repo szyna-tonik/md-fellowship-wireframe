@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Startup Discovery Sprint – MD Fellowship</title>
+<style>
+:root {
+  --bg: #F4F4F2;
+  --surface: #FFFFFF;
+  --placeholder: #E4E4E0;
+  --line: #BDBDB8;
+  --line-soft: #D6D6D2;
+  --muted: #555555;
+  --text: #1A1A1A;
+  --accent: #1A1A1A;
+  --on-accent: #FFFFFF;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --pad-x: 80px;
+  --rhythm: 112px;
+  --nav-h: 80px;
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+h1, h2, h3 { margin: 0; line-height: 1.1; font-weight: 800; }
+h1 { font-size: 72px; letter-spacing: -0.02em; line-height: 1.05; }
+h2 { font-size: 44px; letter-spacing: -0.01em; }
+h3 { font-size: 26px; font-weight: 600; line-height: 1.25; }
+p { margin: 0; }
+a { color: inherit; }
+
+:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+.wrap { width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 var(--pad-x); }
+
+.section { padding: var(--rhythm) 0; border-bottom: 1px solid var(--line-soft); position: relative; }
+section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
+
+.lead { font-size: 29px; font-weight: 600; line-height: 1.3; }
+.body { font-size: 19px; }
+.muted { color: var(--muted); }
+.meta { font-size: 15px; color: var(--muted); }
+.mono { font-family: var(--font-mono); }
+.small { font-size: 14px; }
+.strong { font-weight: 600; }
+
+.stack > * + * { margin-top: 20px; }
+.stack-l > * + * { margin-top: 32px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 56px; padding: 0 30px;
+  background: var(--accent); color: var(--on-accent);
+  border: 1px solid var(--accent);
+  font-family: inherit; font-size: 18px; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+}
+.btn-sm { min-height: 48px; padding: 0 20px; font-size: 16px; }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+
+.cta-row { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.cta-note { font-size: 15px; color: var(--muted); line-height: 1.35; }
+.cta-note b { display: block; font-size: 17px; font-weight: 800; color: var(--text); }
+
+/* ---------- placeholder boxes ---------- */
+.box {
+  position: relative;
+  background: var(--placeholder);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  color: var(--line);
+}
+.box-x { position: absolute; inset: 0; width: 100%; height: 100%; }
+.box-x line { stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.box-label {
+  position: relative;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em;
+  color: var(--muted); text-align: center; padding: 4px 8px;
+  background: var(--placeholder);
+}
+.box-caption { position: relative; font-family: var(--font-mono); font-size: 11px; color: var(--muted); background: var(--placeholder); padding: 2px 8px; text-align: center; }
+
+/* ---------- .tbc placeholders ---------- */
+.tbc { font-family: var(--font-mono); font-size: 0.92em; }
+body.tbc-on .tbc {
+  border-bottom: 1px dashed var(--line);
+  background: var(--placeholder);
+  padding: 0 3px;
+}
+
+/* ---------- nav ---------- */
+.nav { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: var(--nav-h); }
+.nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+.nav-links a { font-size: 16px; text-decoration: none; }
+.nav-links a:hover { text-decoration: underline; }
+.nav-logo { width: 160px; height: 40px; flex: none; }
+.nav-toggle { display: none; }
+.nav-mobile { display: none; }
+
+/* ---------- hero ---------- */
+.hero { padding-top: 88px; }
+.hero-copy { max-width: 900px; }
+.hero-copy > * + * { margin-top: 24px; }
+.hero-meta { font-size: 15px; color: var(--muted); }
+.hero-meta b { color: var(--text); font-weight: 600; }
+.hero-visual { width: 100%; height: 480px; margin-top: 64px; flex-direction: column; gap: 8px; }
+
+/* ---------- split (heading left / content right) ---------- */
+.split { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 80px; align-items: start; }
+
+/* ---------- grids ---------- */
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
+.card { background: var(--surface); border: 1px solid var(--line); padding: 32px; }
+.learn-num { font-family: var(--font-mono); font-size: 14px; color: var(--muted); display: block; margin-bottom: 12px; }
+
+/* ---------- scrollytelling: jak to działa ---------- */
+.sc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 96px; margin-top: 56px; }
+.sc-media { grid-column: 2; grid-row: 1; }
+.sc-steps { grid-column: 1; grid-row: 1; }
+.sc-sticky { position: sticky; top: calc(var(--nav-h) + 56px); height: 68vh; min-height: 420px; display: flex; flex-direction: column; gap: 12px; }
+.sc-frame { position: relative; flex: 1; }
+.sc-img { position: absolute; inset: 0; opacity: 0; transition: opacity 200ms linear; }
+.sc-img.is-active { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .sc-img { transition: none; } }
+.sc-progress { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 0.08em; }
+
+.sc-step {
+  min-height: 78vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 40px 0 40px 36px;
+  border-left: 1px solid var(--line);
+}
+.sc-step.is-active { border-left: 3px solid var(--text); padding-left: 34px; }
+.sc-step h3 { margin-bottom: 12px; }
+.sc-step .sc-desc { color: var(--muted); }
+.sc-step:not(.is-active) > * { opacity: 0.5; }
+.sc-time { font-family: var(--font-mono); font-size: 13px; color: var(--muted); display: block; margin-bottom: 12px; }
+.sc-fast { margin-top: 18px; font-weight: 600; }
+
+/* ---------- reels: karuzela center-mode ---------- */
+.reels-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+.reels-link-mobile { display: none; }
+.carousel { position: relative; margin-top: 40px; }
+.car-viewport { overflow: hidden; padding: 36px 0; cursor: grab; }
+.car-viewport.is-dragging { cursor: grabbing; }
+.car-track { display: flex; gap: 24px; width: max-content; will-change: transform; }
+.reel { width: 250px; flex: none; user-select: none; transition: transform 250ms ease, opacity 250ms ease; transform: scale(0.92); opacity: 0.45; }
+.reel.is-active { transform: scale(1.12); opacity: 1; }
+.reel .box { aspect-ratio: 9 / 16; margin-bottom: 16px; pointer-events: none; }
+.reel h3 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.car-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--line); color: var(--text);
+  font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.car-arrow:disabled { opacity: 0.35; cursor: default; }
+.car-arrow.prev { left: 8px; }
+.car-arrow.next { right: 8px; }
+
+/* ---------- mentors: karuzela ciągła ---------- */
+.marquee { overflow: hidden; margin-top: 48px; padding: 24px 0 8px; }
+.marquee-track { display: flex; width: max-content; animation: marquee 45s linear infinite; }
+.marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-group { display: flex; gap: 24px; padding-right: 24px; }
+.mentor { width: 280px; flex: none; transition: transform 250ms ease; }
+.mentor:hover, .mentor:focus-within { transform: scale(1.06); }
+.mentor-photo { position: relative; aspect-ratio: 3 / 4; margin-bottom: 14px; }
+.mentor-bio {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding: 14px 16px; font-size: 14px; color: var(--muted);
+  opacity: 0; transition: opacity 200ms ease;
+}
+.mentor:hover .mentor-bio, .mentor:focus-within .mentor-bio { opacity: 1; }
+.mentor-name { font-weight: 600; font-size: 18px; }
+@media (prefers-reduced-motion: reduce) {
+  .reel, .car-track, .mentor, .mentor-bio { transition: none !important; }
+  .marquee-track { animation: none; }
+  .marquee { overflow-x: auto; }
+}
+
+/* ---------- numbers ---------- */
+.numbers-row {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px;
+  margin-top: 72px; padding-top: 48px; border-top: 1px solid var(--line-soft);
+}
+.number-v { font-size: 56px; font-weight: 800; line-height: 1; display: block; margin-bottom: 8px; }
+.number-d { font-size: 16px; color: var(--muted); }
+
+/* ---------- dla kogo ---------- */
+.audience { padding: 0; }
+.audience-bg { position: absolute; inset: 0; border: 0; }
+.audience > .wrap { position: relative; z-index: 2; padding-top: var(--rhythm); padding-bottom: var(--rhythm); }
+.audience-card { background: var(--surface); border: 1px solid var(--line); padding: 56px; max-width: 720px; }
+.audience-card > * + * { margin-top: 20px; }
+
+/* ---------- FAQ ---------- */
+.faq-list { border-top: 1px solid var(--line); }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-q {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  background: none; border: 0; padding: 22px 0; margin: 0;
+  font-family: inherit; font-size: 20px; font-weight: 600; color: inherit; text-align: left; cursor: pointer;
+}
+.faq-sign { font-family: var(--font-mono); font-size: 22px; flex: none; color: var(--muted); }
+.faq-a { padding: 0 64px 24px 0; font-size: 18px; color: var(--muted); }
+.faq-a[hidden] { display: none; }
+
+/* ---------- final CTA ---------- */
+.final { background: var(--placeholder); text-align: center; }
+.final h2 { font-size: 52px; max-width: 900px; margin: 0 auto; }
+.final .cta-row { justify-content: center; }
+
+/* ---------- footer ---------- */
+.footer { padding: 56px 0 72px; }
+.footer-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.footer-logo { width: 160px; height: 40px; }
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; font-size: 16px; }
+.footer-partner { display: flex; align-items: center; gap: 16px; font-size: 15px; color: var(--muted); }
+.footer-partner .box { width: 220px; height: 56px; }
+
+/* ---------- sticky mobile CTA ---------- */
+.sticky-cta { display: none; }
+
+/* ---------- tablet / small desktop ---------- */
+@media (min-width: 769px) and (max-width: 1180px) {
+  :root { --pad-x: 48px; --rhythm: 88px; }
+  h1 { font-size: 56px; }
+  h2 { font-size: 38px; }
+  .lead { font-size: 25px; }
+  .hero-visual { height: 400px; }
+  .split { grid-template-columns: 260px minmax(0, 1fr); gap: 48px; }
+  .sc-grid { gap: 48px; }
+  .final h2 { font-size: 42px; }
+  .number-v { font-size: 44px; }
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 768px) {
+  :root { --pad-x: 20px; --rhythm: 56px; --nav-h: 64px; }
+  body { font-size: 16px; }
+  h1 { font-size: 44px; }
+  h2 { font-size: 32px; }
+  h3 { font-size: 21px; }
+  .lead { font-size: 22px; }
+  .body { font-size: 16px; }
+  .number-v { font-size: 40px; }
+  .final h2 { font-size: 32px; }
+
+  .nav-logo { width: 112px; height: 32px; }
+  .nav-links { display: none; }
+  .nav-inner > a.btn { display: none; }
+  .nav-toggle { display: inline-flex; }
+  .nav-mobile { display: none; padding: 8px 0 20px; border-top: 1px solid var(--line-soft); }
+  .nav-mobile.is-open { display: block; }
+  .nav-mobile ul { list-style: none; margin: 0; padding: 0; }
+  .nav-mobile a { display: block; padding: 12px 0; font-size: 18px; text-decoration: none; }
+
+  .hero { padding-top: 40px; }
+  .hero-visual { height: 340px; margin-top: 40px; }
+
+  .split, .grid-2 { grid-template-columns: 1fr; gap: 28px; }
+  .card { padding: 24px; }
+
+  .sc-grid { display: block; margin-top: 32px; }
+  .sc-media {
+    position: sticky; top: var(--nav-h); z-index: 3;
+    background: var(--bg); border-bottom: 1px solid var(--line-soft);
+    padding: 12px 0;
+  }
+  .sc-sticky { position: static; height: 34vh; min-height: 200px; gap: 8px; }
+  .sc-step { min-height: 62vh; padding: 32px 0 32px 24px; }
+  .sc-step.is-active { padding-left: 22px; }
+
+  .reels-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .reels-head .reels-link { display: none; }
+  .reels-link-mobile { display: block; margin-top: 24px; }
+  .carousel { margin-top: 24px; }
+  .car-viewport { padding: 28px 0; }
+  .car-track { gap: 16px; }
+  .reel { width: 190px; }
+  .car-arrow { width: 44px; height: 44px; }
+  .car-arrow.prev { left: 0; }
+  .car-arrow.next { right: 0; }
+  .marquee { margin-top: 32px; }
+  .mentor { width: 220px; }
+
+  .numbers-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 48px; padding-top: 32px; }
+
+  .audience-card { padding: 28px; }
+
+  .faq-q { font-size: 17px; padding: 18px 0; }
+  .faq-a { font-size: 16px; padding-right: 24px; }
+
+  .footer-inner { flex-direction: column; }
+
+  .sticky-cta {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    min-height: 80px; padding: 12px 20px;
+    background: var(--surface); border-top: 1px solid var(--line);
+    transform: translateY(110%); transition: transform 150ms linear;
+  }
+  .sticky-cta.is-visible { transform: translateY(0); }
+  .sticky-cta .cta-note b { font-size: 15px; }
+  body.has-sticky { padding-bottom: 96px; }
+}
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  .sticky-cta { transition: none; }
+}
+
+.only-mobile { display: none; }
+@media (max-width: 768px) {
+  .only-mobile { display: inline; }
+  .only-desktop { display: none; }
+}
+
+/* WIREFRAME-ONLY */
+.wf-bar {
+  position: fixed; top: calc(var(--nav-h) + 12px); right: 12px; z-index: 100;
+  background: var(--surface); border: 1px solid var(--line);
+  padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+}
+.wf-bar strong { font-size: 10px; letter-spacing: 0.12em; color: var(--text); font-weight: 600; }
+.wf-bar button {
+  font-family: var(--font-mono); font-size: 11px; color: var(--text);
+  background: var(--bg); border: 1px solid var(--line); padding: 6px 8px; cursor: pointer; width: 100%; text-align: left;
+}
+.wf-note {
+  display: none;
+  border: 1px dashed var(--line); background: var(--surface);
+  padding: 12px 14px; margin-bottom: 28px; max-width: 760px;
+  font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: var(--muted);
+}
+.wf-note b { color: var(--text); font-weight: 600; display: block; margin-bottom: 4px; letter-spacing: 0.06em; }
+body.notes-on .wf-note { display: block; }
+/* WIREFRAME-ONLY */
+</style>
+</head>
+<body class="tbc-on">
+
+<!-- WIREFRAME-ONLY -->
+<div class="wf-bar" role="group" aria-label="Narzędzia wireframe">
+  <strong>WIREFRAME</strong>
+  <button type="button" id="wf-notes" aria-pressed="false">Notatki: off</button>
+  <button type="button" id="wf-tbc" aria-pressed="true">Placeholdery: on</button>
+</div>
+<!-- WIREFRAME-ONLY -->
+
+<header class="nav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <div class="box nav-logo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">LOGO MD</span></div>
+      <nav aria-label="Główna">
+        <ul class="nav-links">
+          <li><a href="#program">Program</a></li>
+          <li><a href="#jak">Jak to działa</a></li>
+          <li><a href="#mentorzy">Mentorzy</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn-sm" href="#aplikuj">Aplikuj</a>
+      <button type="button" class="btn btn-sm btn-ghost nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-mobile">≡</button>
+    </div>
+    <div class="nav-mobile" id="nav-mobile">
+      <ul>
+        <li><a href="#program">Program</a></li>
+        <li><a href="#jak">Jak to działa</a></li>
+        <li><a href="#mentorzy">Mentorzy</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#aplikuj">Aplikuj</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- 1. HERO -->
+<section class="section hero" id="aplikuj">
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · HERO</b>Kolejność czytania: meta → H1 → tagline → wyjaśnienie → CTA. „Bezpłatnie” i „100 miejsc” to najmocniejsze argumenty konwersji, dlatego są w hero, a nie dopiero w FAQ. Key visual pod tekstem, na pełną szerokość kontenera.</div><!-- WIREFRAME-ONLY -->
+    <div class="hero-copy">
+      <p class="hero-meta">
+        <span class="only-desktop">12–13 listopada 2026 + miesiąc online</span><span class="only-mobile">12–13.11.2026 + miesiąc online</span> · Google for Startups Campus Warsaw · <b>Bezpłatnie</b>
+      </p>
+      <h1>Startup Discovery Sprint</h1>
+      <p class="lead">Zanim zaczniesz budować, porozmawiaj z klientami.</p>
+      <p class="body muted">Miesiąc praktycznego discovery z MD Fellowship – społecznością founderów 18–24, którzy budują firmy z mentorami 1:1.</p>
+      <div class="cta-row" id="hero-cta">
+        <a class="btn" href="#aplikuj">Aplikuj</a>
+        <p class="cta-note"><b>100 miejsc</b>Zgłoszenia do <span class="tbc">[DATA]</span></p>
+      </div>
+    </div>
+    <div class="box hero-visual">
+      <svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg>
+      <span class="box-label">KEY VISUAL</span>
+      <span class="box-caption">do zaprojektowania przez brand designera</span>
+    </div>
+  </div>
+</section>
+
+<!-- 2. ZACZNIJMY OD FAKTÓW -->
+<section class="section" id="program">
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · ZACZNIJMY OD FAKTÓW</b>Rola: nazwać problem, zanim padnie obietnica. Źródło statystyki do potwierdzenia, bo nagłówek obiecuje fakty.</div><!-- WIREFRAME-ONLY -->
+    <div class="split">
+      <h2>Zacznijmy od faktów</h2>
+      <div class="stack" style="max-width:860px">
+        <p class="lead">Startupy rzadko upadają przez brak pieniędzy, słaby zespół czy złą technologię. Najczęściej upadają, bo zbudowały coś, czego nikt nie chce.</p>
+        <p class="body muted">Daj nam miesiąc, pokażemy Ci, jak rozmawiać z potencjalnymi klientami i znaleźć problem do rozwiązania. Jeśli naprawdę się przyłożysz, zakończysz program z pierwszymi płacącymi klientami.</p>
+        <p class="mono small muted">Źródło: <span class="tbc">[ŹRÓDŁO STATYSTYKI]</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. CZEGO SIĘ NAUCZYSZ -->
+<section class="section" id="nauczysz">
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · CZEGO SIĘ NAUCZYSZ</b>Konkret zamiast ogólników, czyli wyróżnik MD: realne budowanie, nie konkurs.</div><!-- WIREFRAME-ONLY -->
+    <h2>Czego się nauczysz</h2>
+    <div class="grid-2" style="margin-top:48px">
+      <div class="card">
+        <span class="learn-num">01</span>
+        <h3>Prowadzić discovery calle.</h3>
+        <p class="body muted" style="margin-top:12px">Większość ludzi pyta: „Czy kupiłbyś to?”. Każdy odpowie, że tak. To bezwartościowy feedback. Pokażemy Ci, jak pytać, żeby usłyszeć prawdę.</p>
+      </div>
+      <div class="card">
+        <span class="learn-num">02</span>
+        <h3>Szukać lekarstwa, nie witaminy.</h3>
+        <p class="body muted" style="margin-top:12px">Witamina to „fajnie by było”. Lekarstwo to „potrzebuję tego na wczoraj”. Za witaminy klienci płacą niechętnie, za lekarstwa od razu.</p>
+      </div>
+      <div class="card">
+        <span class="learn-num">03</span>
+        <h3>Dotrzeć do klienta.</h3>
+        <p class="body muted" style="margin-top:12px">Twoja wiadomość ląduje w skrzynce obok 50 innych, w większości wygenerowanych przez AI. Jeśli brzmisz jak wszyscy, nikt Ci nie odpisze.</p>
+      </div>
+      <div class="card">
+        <span class="learn-num">04</span>
+        <h3>Budować MVP w kilka godzin.</h3>
+        <p class="body muted" style="margin-top:12px">MVP to nie „wersja 1.0 z mniejszą liczbą funkcji”, tylko najtańszy sposób, żeby sprawdzić, czy ktoś zapłaci. Czasem nawet bez linijki kodu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. JAK TO DZIAŁA — sekcja scrollowana -->
+<section class="section" id="jak">
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · JAK TO DZIAŁA</b>Sekcja nośna strony, dlatego dostaje najwięcej miejsca. Zdjęcie po prawej jest przyklejone i podmienia się, gdy kolejny krok wchodzi w środek ekranu. Bez przechwytywania scrolla: strona przewija się normalnie, zmienia się tylko stan. Krok 3 to most do MD Fellowship i główny cel lejka.</div><!-- WIREFRAME-ONLY -->
+    <h2>Jak to działa</h2>
+    <div class="sc-grid">
+      <div class="sc-media" aria-hidden="true">
+        <div class="sc-sticky">
+          <div class="sc-frame">
+            <div class="box sc-img is-active"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE — SPRINT NA CAMPUSIE</span></div>
+            <div class="box sc-img"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE — ROZMOWY Z KLIENTAMI</span></div>
+            <div class="box sc-img"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE — MD FELLOWSHIP</span></div>
+          </div>
+          <p class="sc-progress" id="sc-progress">01 / 03</p>
+        </div>
+      </div>
+      <div class="sc-steps">
+        <article class="sc-step is-active">
+          <span class="sc-time">12–13 listopada</span>
+          <h3>Sprint w Warszawie.</h3>
+          <p class="sc-desc">Prelekcje founderów o <span class="tbc">[TEMATY PRELEKCJI]</span>, a pomiędzy sporo czasu na własną pracę i konsultacje z mentorami.</p>
+        </article>
+        <article class="sc-step">
+          <span class="sc-time">Kolejne 4 tygodnie</span>
+          <h3>Rozmowy z klientami.</h3>
+          <p class="sc-desc">Dzwonisz, piszesz, pytasz i słuchasz. Pomaga Ci w tym nasza grupa na WhatsAppie i kilka spotkań online.</p>
+        </article>
+        <article class="sc-step">
+          <span class="sc-time">13 grudnia · deadline rekrutacji</span>
+          <h3>Fast-track do MD Fellowship.</h3>
+          <p class="sc-desc">Masz już problem, który chcesz rozwiązać? Aplikuj do MD Fellowship, a pomożemy Ci zbudować na nim firmę.</p>
+          <p class="sc-fast">Byłeś na min. 80% spotkań? Przechodzisz od razu do drugiego etapu rekrutacji.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 5. TAK TO WYGLĄDA W PRAKTYCE -->
+<section class="section" id="praktyka">
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · TAK TO WYGLĄDA W PRAKTYCE</b>Karuzela: aktywny reel powiększony na środku, boczne wyciszone, strzałki + drag/swipe. Nowa sekcja. Ten sam content co w kampanii reelsów na IG: ktoś, kto przyszedł z reelsa, widzi na stronie tę samą twarz.</div><!-- WIREFRAME-ONLY -->
+    <div class="reels-head">
+      <div class="stack" style="max-width:640px">
+        <h2>Tak to wygląda w praktyce</h2>
+        <p class="lead" style="font-weight:400">Pięciu Fellows o tym, jak szukali problemu, dzwonili do obcych ludzi i stawiali pierwsze MVP.</p>
+      </div>
+      <p class="reels-link"><a href="https://www.instagram.com/mdfellowship">Więcej na Instagramie →</a></p>
+    </div>
+    <div class="carousel" id="reels-car">
+      <button type="button" class="car-arrow prev" id="car-prev" aria-label="Poprzedni reel">←</button>
+      <div class="car-viewport" id="car-viewport">
+        <div class="car-track" id="car-track">
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3>Jak znalazłem problem</h3>
+            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+          </article>
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3>Moje pierwsze discovery calle</h3>
+            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+          </article>
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3>Zatrudniłem się u klienta</h3>
+            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+          </article>
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3>MVP w Excelu</h3>
+            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+          </article>
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3><span class="tbc">[TEMAT REELSA]</span></h3>
+            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+          </article>
+        </div>
+      </div>
+      <button type="button" class="car-arrow next" id="car-next" aria-label="Następny reel">→</button>
+    </div>
+    <p class="reels-link-mobile"><a href="https://www.instagram.com/mdfellowship">Więcej na Instagramie →</a></p>
+  </div>
+</section>
+
+<!-- 6. WŚRÓD PRELEGENTÓW I MENTORÓW -->
+<section class="section" id="mentorzy">
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · MENTORZY</b>Karuzela przesuwa się sama z prawej do lewej; hover zatrzymuje ją, powiększa kafel i odsłania bio na dole zdjęcia. Wiarygodność: ludzie, którzy sami budowali firmy.</div><!-- WIREFRAME-ONLY -->
+    <div class="stack" style="max-width:860px">
+      <h2>Wśród prelegentów i mentorów</h2>
+      <p class="lead" style="font-weight:400">Ludzie, którzy budowali firmy, zatrudniali, sprzedawali, popełniali błędy i wyciągali z nich wnioski.</p>
+    </div>
+  </div>
+  <div class="marquee" id="mentors-marquee">
+    <div class="marquee-track">
+      <div class="marquee-group">
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+      </div>
+      <div class="marquee-group" aria-hidden="true">
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+          </div>
+          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
+          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. KTO ZA TYM STOI -->
+<section class="section" id="kto">
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · KTO ZA TYM STOI</b>Nowa sekcja. Nagłówek = zdanie z briefu zamiast etykiety „Kto za tym stoi”. Ruch z social media nie zna MD Fellowship, a liczby pokazują wartość nagrody na końcu lejka.</div><!-- WIREFRAME-ONLY -->
+    <div class="stack" style="max-width:780px">
+      <h2>Nie robimy konkursów. Pomagamy serio budować firmy.</h2>
+      <p class="body muted">MD Fellowship to społeczność ludzi w wieku 18–24 lata, którzy już teraz budują swoje pierwsze firmy. Każdy Fellow dostaje mentoring 1:1 od przedsiębiorców, którzy przeszli drogę od pomysłu do globalnego sukcesu.</p>
+      <p class="meta"><a href="https://mdfellows.com/">mdfellows.com →</a> · <a href="https://www.instagram.com/mdfellowship">Instagram</a> · <a href="https://www.linkedin.com/company/md-fellowship/">LinkedIn</a></p>
+    </div>
+    <div class="numbers-row">
+      <div><span class="number-v">300+</span><span class="number-d">aplikacji na każdy batch</span></div>
+      <div><span class="number-v">~10</span><span class="number-d">przyjętych Fellows</span></div>
+      <div><span class="number-v">2×</span><span class="number-d">nabór w roku</span></div>
+      <div><span class="number-v">1:1</span><span class="number-d">mentoring od founderów</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. DLA KOGO -->
+<section class="section audience" id="dlakogo">
+  <div class="box audience-bg" aria-hidden="true"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE TŁA — UCZESTNICY / SALA</span></div>
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · DLA KOGO</b>Copy skrócone, zdjęcie w tle sekcji, treść na karcie. „Nie potrzebujesz pomysłu” to odpowiedź na główną obiekcję grupy docelowej.</div><!-- WIREFRAME-ONLY -->
+    <div class="audience-card">
+      <h2>Dla kogo</h2>
+      <p class="lead">Masz 18–24 lata i chcesz budować własną firmę?</p>
+      <p class="body muted">Aplikuj solo albo w parze – mamy 100 miejsc. Nie potrzebujesz pomysłu, zespołu ani kodowania. Wystarczy odwaga, żeby zapytać obcą osobę, co ją naprawdę boli.</p>
+      <div class="cta-row">
+        <a class="btn" href="#aplikuj">Aplikuj →</a>
+        <p class="cta-note">Zgłoszenia do <span class="tbc">[DATA]</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 9. FAQ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · FAQ</b>Dodane 3 pytania o rekrutację. Placeholdery do uzupełnienia przez klienta.</div><!-- WIREFRAME-ONLY -->
+    <div class="split">
+      <h2>FAQ</h2>
+      <div class="faq-list" id="faq-list">
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="true" aria-controls="faq-p1" id="faq-b1">Ile to kosztuje?<span class="faq-sign" aria-hidden="true">–</span></button></h3>
+          <div class="faq-a" id="faq-p1" role="region" aria-labelledby="faq-b1">Udział w programie jest bezpłatny. Dojazd i ewentualny nocleg w Warszawie organizujesz we własnym zakresie.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p2" id="faq-b2">Do kiedy mogę aplikować?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden>Zgłoszenia przyjmujemy do <span class="tbc">[DATA]</span>. Nie czekaj do ostatniej chwili, mamy 100 miejsc.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p3" id="faq-b3">Jak wygląda rekrutacja?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p3" role="region" aria-labelledby="faq-b3" hidden><span class="tbc">[PROCES REKRUTACJI – do uzupełnienia przez klienta: formularz, kryteria wyboru, ewentualna rozmowa.]</span></div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p4" id="faq-b4">Kiedy dostanę odpowiedź?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p4" role="region" aria-labelledby="faq-b4" hidden><span class="tbc">[DATA ODPOWIEDZI]</span> – dostaniesz maila niezależnie od decyzji.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p5" id="faq-b5">Nie mam pomysłu.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p5" role="region" aria-labelledby="faq-b5" hidden>Tym lepiej, bo nie musisz się z niczym rozstawać. Nauczymy Cię szukać problemów wartych rozwiązania.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p6" id="faq-b6">Nie umiem kodować.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p6" role="region" aria-labelledby="faq-b6" hidden>Nie szkodzi, tu nie kodujemy. Na początku rozmowy z klientami są ważniejsze niż kod.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p7" id="faq-b7">Nie mam zespołu.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p7" role="region" aria-labelledby="faq-b7" hidden>Nic nie szkodzi. Możesz aplikować solo albo w parze.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p8" id="faq-b8">Nie mam żadnego doświadczenia biznesowego. Czy to problem?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p8" role="region" aria-labelledby="faq-b8" hidden>Nie. Program jest właśnie dla osób, które dopiero zaczynają. Wystarczy, że chcesz się uczyć i nie boisz się rozmawiać z ludźmi.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p9" id="faq-b9">Mam już startup. Czy to program dla mnie?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p9" role="region" aria-labelledby="faq-b9" hidden>Tak, jeśli chcesz sprawdzić, czy rozwiązujesz prawdziwy problem. Wielu founderów robi discovery dopiero wtedy, gdy produkt nie chce się sprzedawać. Lepiej zrobić to wcześniej.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p10" id="faq-b10">Ile czasu muszę poświęcić?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p10" role="region" aria-labelledby="faq-b10" hidden>Dwa pełne dni stacjonarnie (12–13 listopada), a potem minimum 10 godzin tygodniowo przez 4 tygodnie na rozmowy z klientami i spotkania online.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p11" id="faq-b11">Czy mogę uczestniczyć tylko online?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p11" role="region" aria-labelledby="faq-b11" hidden><span class="tbc">[DO POTWIERDZENIA PRZED LAUNCHEM]</span></div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p12" id="faq-b12">Co jeszcze mogę zyskać?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p12" role="region" aria-labelledby="faq-b12" hidden>Jeśli będziesz obecny na co najmniej 80% spotkań, przejdziesz od razu do drugiego etapu rekrutacji do MD Fellowship.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. FINALNE CTA -->
+<section class="section final" id="final">
+  <div class="wrap">
+    <!-- WIREFRAME-ONLY --><div class="wf-note" style="margin-left:auto;margin-right:auto;text-align:left"><b>NOTATKA · FINALNE CTA</b>Nowa sekcja. Strona nie może kończyć się na FAQ, a ruch z reelsów to prawie w całości mobile.</div><!-- WIREFRAME-ONLY -->
+    <div class="stack-l">
+      <h2>Daj sobie miesiąc na rozmowy, zamiast budować w ciemno.</h2>
+      <p class="meta">12–13 listopada · Warszawa · bezpłatnie · 100 miejsc</p>
+      <div class="cta-row"><a class="btn" href="#aplikuj">Aplikuj</a></div>
+      <p class="meta">Zgłoszenia do <span class="tbc">[DATA]</span></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- 11. FOOTER -->
+<footer class="footer" id="footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="stack">
+        <div class="box footer-logo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">LOGO MD</span></div>
+        <nav class="footer-links" aria-label="Stopka">
+          <a href="https://mdfellows.com/">mdfellows.com</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.instagram.com/mdfellowship">Instagram</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.linkedin.com/company/md-fellowship/">LinkedIn</a>
+          <span aria-hidden="true">·</span>
+          <span class="tbc">[Polityka prywatności]</span>
+        </nav>
+      </div>
+      <div class="footer-partner">
+        <span>Partner miejsca:</span>
+        <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label tbc">[LOGO Google for Startups Campus]</span></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true">
+  <p class="cta-note"><b>Bezpłatnie · 100 miejsc</b>Zgłoszenia do <span class="tbc">[DATA]</span></p>
+  <a class="btn btn-sm" href="#aplikuj" tabindex="-1">Aplikuj</a>
+</div>
+
+
+<script>
+(function () {
+  /* ---------- FAQ accordion ---------- */
+  var faq = document.getElementById('faq-list');
+  faq.addEventListener('click', function (e) {
+    var btn = e.target.closest('.faq-q');
+    if (!btn) return;
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+    faq.querySelectorAll('.faq-q').forEach(function (b) {
+      b.setAttribute('aria-expanded', 'false');
+      b.querySelector('.faq-sign').textContent = '+';
+      document.getElementById(b.getAttribute('aria-controls')).hidden = true;
+    });
+    if (!isOpen) {
+      btn.setAttribute('aria-expanded', 'true');
+      btn.querySelector('.faq-sign').textContent = '–';
+      document.getElementById(btn.getAttribute('aria-controls')).hidden = false;
+    }
+  });
+
+  /* ---------- mobile menu ---------- */
+  var navToggle = document.getElementById('nav-toggle');
+  var navMobile = document.getElementById('nav-mobile');
+  navToggle.addEventListener('click', function () {
+    var open = navToggle.getAttribute('aria-expanded') === 'true';
+    navToggle.setAttribute('aria-expanded', String(!open));
+    navMobile.classList.toggle('is-open', !open);
+  });
+  navMobile.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') {
+      navToggle.setAttribute('aria-expanded', 'false');
+      navMobile.classList.remove('is-open');
+    }
+  });
+
+  /* ---------- jak to działa: stan sterowany scrollem ---------- */
+  var scSteps = Array.prototype.slice.call(document.querySelectorAll('.sc-step'));
+  var scImgs = Array.prototype.slice.call(document.querySelectorAll('.sc-img'));
+  var scProgress = document.getElementById('sc-progress');
+  function scSet(i) {
+    scSteps.forEach(function (s, j) { s.classList.toggle('is-active', j === i); });
+    scImgs.forEach(function (im, j) { im.classList.toggle('is-active', j === i); });
+    scProgress.textContent = '0' + (i + 1) + ' / 0' + scSteps.length;
+  }
+  if ('IntersectionObserver' in window) {
+    var scIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) scSet(scSteps.indexOf(en.target));
+      });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    scSteps.forEach(function (s) { scIO.observe(s); });
+  }
+
+  /* ---------- reels: karuzela center-mode ---------- */
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vp = document.getElementById('car-viewport');
+  var track = document.getElementById('car-track');
+  var slides = Array.prototype.slice.call(track.children);
+  var carPrev = document.getElementById('car-prev');
+  var carNext = document.getElementById('car-next');
+  var carIdx = Math.floor(slides.length / 2);
+  var baseOffset = 0;
+
+  function carGap() { return parseFloat(getComputedStyle(track).columnGap) || 0; }
+  function carRender(anim) {
+    var w = slides[0].offsetWidth;
+    baseOffset = vp.clientWidth / 2 - (carIdx * (w + carGap()) + w / 2);
+    track.style.transition = (anim && !reduced) ? 'transform 300ms ease' : 'none';
+    track.style.transform = 'translateX(' + baseOffset + 'px)';
+    slides.forEach(function (sl, j) { sl.classList.toggle('is-active', j === carIdx); });
+    carPrev.disabled = carIdx === 0;
+    carNext.disabled = carIdx === slides.length - 1;
+  }
+  carPrev.addEventListener('click', function () { carIdx = Math.max(0, carIdx - 1); carRender(true); });
+  carNext.addEventListener('click', function () { carIdx = Math.min(slides.length - 1, carIdx + 1); carRender(true); });
+
+  var dragX = null;
+  vp.addEventListener('pointerdown', function (e) {
+    dragX = e.clientX;
+    vp.classList.add('is-dragging');
+    vp.setPointerCapture(e.pointerId);
+    track.style.transition = 'none';
+  });
+  vp.addEventListener('pointermove', function (e) {
+    if (dragX === null) return;
+    track.style.transform = 'translateX(' + (baseOffset + (e.clientX - dragX)) + 'px)';
+  });
+  function dragEnd(e) {
+    if (dragX === null) return;
+    var delta = e.clientX - dragX;
+    dragX = null;
+    vp.classList.remove('is-dragging');
+    if (delta < -50) carIdx = Math.min(slides.length - 1, carIdx + 1);
+    else if (delta > 50) carIdx = Math.max(0, carIdx - 1);
+    carRender(true);
+  }
+  vp.addEventListener('pointerup', dragEnd);
+  vp.addEventListener('pointercancel', dragEnd);
+  window.addEventListener('resize', function () { carRender(false); });
+  carRender(false);
+
+  /* ---------- sticky CTA (mobile) ---------- */
+  var bar = document.getElementById('sticky-cta');
+  var barLink = bar.querySelector('a');
+  var mq = window.matchMedia('(max-width: 768px)');
+  var heroVisible = true;
+  var suppress = 0;
+
+  function render() {
+    var show = mq.matches && !heroVisible && suppress === 0;
+    bar.classList.toggle('is-visible', show);
+    bar.setAttribute('aria-hidden', String(!show));
+    barLink.tabIndex = show ? 0 : -1;
+    document.body.classList.toggle('has-sticky', show);
+  }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { heroVisible = en.isIntersecting; });
+      render();
+    }).observe(document.getElementById('hero-cta'));
+
+    var blockers = ['dlakogo', 'final', 'footer'].map(function (id) { return document.getElementById(id); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var was = en.target.dataset.blocking === '1';
+        if (en.isIntersecting && !was) { suppress++; en.target.dataset.blocking = '1'; }
+        else if (!en.isIntersecting && was) { suppress--; en.target.dataset.blocking = '0'; }
+      });
+      render();
+    });
+    blockers.forEach(function (el) { el.dataset.blocking = '0'; io.observe(el); });
+  }
+  mq.addEventListener ? mq.addEventListener('change', render) : mq.addListener(render);
+  render();
+
+  /* WIREFRAME-ONLY */
+  var notesOn = false;
+  var tbcOn = true;
+  var bNotes = document.getElementById('wf-notes');
+  var bTbc = document.getElementById('wf-tbc');
+  bNotes.addEventListener('click', function () {
+    notesOn = !notesOn;
+    document.body.classList.toggle('notes-on', notesOn);
+    bNotes.textContent = 'Notatki: ' + (notesOn ? 'on' : 'off');
+    bNotes.setAttribute('aria-pressed', String(notesOn));
+  });
+  bTbc.addEventListener('click', function () {
+    tbcOn = !tbcOn;
+    document.body.classList.toggle('tbc-on', tbcOn);
+    bTbc.textContent = 'Placeholdery: ' + (tbcOn ? 'on' : 'off');
+    bTbc.setAttribute('aria-pressed', String(tbcOn));
+  });
+  /* WIREFRAME-ONLY */
+})();
+</script>
+
+</body>
+</html>
