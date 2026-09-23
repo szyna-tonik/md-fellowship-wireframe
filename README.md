@@ -22,7 +22,7 @@ open index.html
 
 ## Do uzupełnienia przez klienta
 
-Wszystko w nawiasach kwadratowych czeka na dane: `[DATA]`, `[TEMATY PRELEKCJI]`, `[ŹRÓDŁO STATYSTYKI]`, `[Imię Nazwisko]`, `[PROCES REKRUTACJI]`, `[DATA ODPOWIEDZI]` i dalej.
+Wszystko w nawiasach kwadratowych czeka na dane: `[DATA]`, `[TEMATY PRELEKCJI]`, `[Imię Nazwisko]`, `[PROCES REKRUTACJI]`, `[DATA ODPOWIEDZI]` i dalej.
 
 ## Interakcje
 
