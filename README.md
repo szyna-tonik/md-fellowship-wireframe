@@ -20,12 +20,9 @@ Jeden plik, zero zewnętrznych zasobów — działa po otwarciu z dysku i na dow
 open index.html
 ```
 
-## Narzędzia w rogu ekranu (WIREFRAME-ONLY)
+## Do uzupełnienia przez klienta
 
-- **Notatki: on/off** — przy każdej sekcji pojawia się jej rola i uzasadnienie decyzji.
-- **Placeholdery: on/off** — podświetla wszystko, co klient musi jeszcze uzupełnić (`[DATA]`, `[TEMATY PRELEKCJI]`, `[Imię Nazwisko]` itd.).
-
-Cały kod tych narzędzi jest opatrzony komentarzem `WIREFRAME-ONLY` i wylatuje przed etapem designu.
+Wszystko w nawiasach kwadratowych czeka na dane: `[DATA]`, `[TEMATY PRELEKCJI]`, `[ŹRÓDŁO STATYSTYKI]`, `[Imię Nazwisko]`, `[PROCES REKRUTACJI]`, `[DATA ODPOWIEDZI]` i dalej.
 
 ## Interakcje
 

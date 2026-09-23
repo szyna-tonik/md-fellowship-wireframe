@@ -98,14 +98,6 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 }
 .box-caption { position: relative; font-family: var(--font-mono); font-size: 11px; color: var(--muted); background: var(--placeholder); padding: 2px 8px; text-align: center; }
 
-/* ---------- .tbc placeholders ---------- */
-.tbc { font-family: var(--font-mono); font-size: 0.92em; }
-body.tbc-on .tbc {
-  border-bottom: 1px dashed var(--line);
-  background: var(--placeholder);
-  padding: 0 3px;
-}
-
 /* ---------- nav ---------- */
 .nav { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--line-soft); }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: var(--nav-h); }
@@ -337,38 +329,10 @@ body.tbc-on .tbc {
   .only-desktop { display: none; }
 }
 
-/* WIREFRAME-ONLY */
-.wf-bar {
-  position: fixed; top: calc(var(--nav-h) + 12px); right: 12px; z-index: 100;
-  background: var(--surface); border: 1px solid var(--line);
-  padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--muted);
-  display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
-}
-.wf-bar strong { font-size: 10px; letter-spacing: 0.12em; color: var(--text); font-weight: 600; }
-.wf-bar button {
-  font-family: var(--font-mono); font-size: 11px; color: var(--text);
-  background: var(--bg); border: 1px solid var(--line); padding: 6px 8px; cursor: pointer; width: 100%; text-align: left;
-}
-.wf-note {
-  display: none;
-  border: 1px dashed var(--line); background: var(--surface);
-  padding: 12px 14px; margin-bottom: 28px; max-width: 760px;
-  font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: var(--muted);
-}
-.wf-note b { color: var(--text); font-weight: 600; display: block; margin-bottom: 4px; letter-spacing: 0.06em; }
-body.notes-on .wf-note { display: block; }
-/* WIREFRAME-ONLY */
 </style>
 </head>
-<body class="tbc-on">
+<body>
 
-<!-- WIREFRAME-ONLY -->
-<div class="wf-bar" role="group" aria-label="Narzędzia wireframe">
-  <strong>WIREFRAME</strong>
-  <button type="button" id="wf-notes" aria-pressed="false">Notatki: off</button>
-  <button type="button" id="wf-tbc" aria-pressed="true">Placeholdery: on</button>
-</div>
-<!-- WIREFRAME-ONLY -->
 
 <header class="nav">
   <div class="wrap">
@@ -402,7 +366,6 @@ body.notes-on .wf-note { display: block; }
 <!-- 1. HERO -->
 <section class="section hero" id="aplikuj">
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · HERO</b>Kolejność czytania: meta → H1 → tagline → wyjaśnienie → CTA. „Bezpłatnie” i „100 miejsc” to najmocniejsze argumenty konwersji, dlatego są w hero, a nie dopiero w FAQ. Key visual pod tekstem, na pełną szerokość kontenera.</div><!-- WIREFRAME-ONLY -->
     <div class="hero-copy">
       <p class="hero-meta">
         <span class="only-desktop">12–13 listopada 2026 + miesiąc online</span><span class="only-mobile">12–13.11.2026 + miesiąc online</span> · Google for Startups Campus Warsaw · <b>Bezpłatnie</b>
@@ -412,7 +375,7 @@ body.notes-on .wf-note { display: block; }
       <p class="body muted">Miesiąc praktycznego discovery z MD Fellowship – społecznością founderów 18–24, którzy budują firmy z mentorami 1:1.</p>
       <div class="cta-row" id="hero-cta">
         <a class="btn" href="#aplikuj">Aplikuj</a>
-        <p class="cta-note"><b>100 miejsc</b>Zgłoszenia do <span class="tbc">[DATA]</span></p>
+        <p class="cta-note"><b>100 miejsc</b>Zgłoszenia do [DATA]</p>
       </div>
     </div>
     <div class="box hero-visual">
@@ -426,13 +389,12 @@ body.notes-on .wf-note { display: block; }
 <!-- 2. ZACZNIJMY OD FAKTÓW -->
 <section class="section" id="program">
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · ZACZNIJMY OD FAKTÓW</b>Rola: nazwać problem, zanim padnie obietnica. Źródło statystyki do potwierdzenia, bo nagłówek obiecuje fakty.</div><!-- WIREFRAME-ONLY -->
     <div class="split">
       <h2>Zacznijmy od faktów</h2>
       <div class="stack" style="max-width:860px">
         <p class="lead">Startupy rzadko upadają przez brak pieniędzy, słaby zespół czy złą technologię. Najczęściej upadają, bo zbudowały coś, czego nikt nie chce.</p>
         <p class="body muted">Daj nam miesiąc, pokażemy Ci, jak rozmawiać z potencjalnymi klientami i znaleźć problem do rozwiązania. Jeśli naprawdę się przyłożysz, zakończysz program z pierwszymi płacącymi klientami.</p>
-        <p class="mono small muted">Źródło: <span class="tbc">[ŹRÓDŁO STATYSTYKI]</span></p>
+        <p class="mono small muted">Źródło: [ŹRÓDŁO STATYSTYKI]</p>
       </div>
     </div>
   </div>
@@ -441,7 +403,6 @@ body.notes-on .wf-note { display: block; }
 <!-- 3. CZEGO SIĘ NAUCZYSZ -->
 <section class="section" id="nauczysz">
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · CZEGO SIĘ NAUCZYSZ</b>Konkret zamiast ogólników, czyli wyróżnik MD: realne budowanie, nie konkurs.</div><!-- WIREFRAME-ONLY -->
     <h2>Czego się nauczysz</h2>
     <div class="grid-2" style="margin-top:48px">
       <div class="card">
@@ -471,7 +432,6 @@ body.notes-on .wf-note { display: block; }
 <!-- 4. JAK TO DZIAŁA — sekcja scrollowana -->
 <section class="section" id="jak">
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · JAK TO DZIAŁA</b>Sekcja nośna strony, dlatego dostaje najwięcej miejsca. Zdjęcie po prawej jest przyklejone i podmienia się, gdy kolejny krok wchodzi w środek ekranu. Bez przechwytywania scrolla: strona przewija się normalnie, zmienia się tylko stan. Krok 3 to most do MD Fellowship i główny cel lejka.</div><!-- WIREFRAME-ONLY -->
     <h2>Jak to działa</h2>
     <div class="sc-grid">
       <div class="sc-media" aria-hidden="true">
@@ -488,7 +448,7 @@ body.notes-on .wf-note { display: block; }
         <article class="sc-step is-active">
           <span class="sc-time">12–13 listopada</span>
           <h3>Sprint w Warszawie.</h3>
-          <p class="sc-desc">Prelekcje founderów o <span class="tbc">[TEMATY PRELEKCJI]</span>, a pomiędzy sporo czasu na własną pracę i konsultacje z mentorami.</p>
+          <p class="sc-desc">Prelekcje founderów o [TEMATY PRELEKCJI], a pomiędzy sporo czasu na własną pracę i konsultacje z mentorami.</p>
         </article>
         <article class="sc-step">
           <span class="sc-time">Kolejne 4 tygodnie</span>
@@ -508,7 +468,6 @@ body.notes-on .wf-note { display: block; }
 <!-- 5. TAK TO WYGLĄDA W PRAKTYCE -->
 <section class="section" id="praktyka">
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · TAK TO WYGLĄDA W PRAKTYCE</b>Karuzela: aktywny reel powiększony na środku, boczne wyciszone, strzałki + drag/swipe. Nowa sekcja. Ten sam content co w kampanii reelsów na IG: ktoś, kto przyszedł z reelsa, widzi na stronie tę samą twarz.</div><!-- WIREFRAME-ONLY -->
     <div class="reels-head">
       <div class="stack" style="max-width:640px">
         <h2>Tak to wygląda w praktyce</h2>
@@ -523,27 +482,27 @@ body.notes-on .wf-note { display: block; }
           <article class="reel">
             <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
             <h3>Jak znalazłem problem</h3>
-            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+            <p class="meta">[Imię], [startup]</p>
           </article>
           <article class="reel">
             <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
             <h3>Moje pierwsze discovery calle</h3>
-            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+            <p class="meta">[Imię], [startup]</p>
           </article>
           <article class="reel">
             <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
             <h3>Zatrudniłem się u klienta</h3>
-            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+            <p class="meta">[Imię], [startup]</p>
           </article>
           <article class="reel">
             <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
             <h3>MVP w Excelu</h3>
-            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+            <p class="meta">[Imię], [startup]</p>
           </article>
           <article class="reel">
             <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3><span class="tbc">[TEMAT REELSA]</span></h3>
-            <p class="meta"><span class="tbc">[Imię]</span>, <span class="tbc">[startup]</span></p>
+            <h3>[TEMAT REELSA]</h3>
+            <p class="meta">[Imię], [startup]</p>
           </article>
         </div>
       </div>
@@ -556,7 +515,6 @@ body.notes-on .wf-note { display: block; }
 <!-- 6. WŚRÓD PRELEGENTÓW I MENTORÓW -->
 <section class="section" id="mentorzy">
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · MENTORZY</b>Karuzela przesuwa się sama z prawej do lewej; hover zatrzymuje ją, powiększa kafel i odsłania bio na dole zdjęcia. Wiarygodność: ludzie, którzy sami budowali firmy.</div><!-- WIREFRAME-ONLY -->
     <div class="stack" style="max-width:860px">
       <h2>Wśród prelegentów i mentorów</h2>
       <p class="lead" style="font-weight:400">Ludzie, którzy budowali firmy, zatrudniali, sprzedawali, popełniali błędy i wyciągali z nich wnioski.</p>
@@ -567,117 +525,117 @@ body.notes-on .wf-note { display: block; }
       <div class="marquee-group">
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
       </div>
       <div class="marquee-group" aria-hidden="true">
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
         <article class="mentor" tabindex="0">
           <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
-            <div class="mentor-bio"><span class="tbc">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</span></div>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
           </div>
-          <p class="mentor-name"><span class="tbc">[Imię Nazwisko]</span></p>
-          <p class="meta"><span class="tbc">[Rola, firma]</span></p>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
         </article>
       </div>
     </div>
@@ -687,7 +645,6 @@ body.notes-on .wf-note { display: block; }
 <!-- 7. KTO ZA TYM STOI -->
 <section class="section" id="kto">
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · KTO ZA TYM STOI</b>Nowa sekcja. Nagłówek = zdanie z briefu zamiast etykiety „Kto za tym stoi”. Ruch z social media nie zna MD Fellowship, a liczby pokazują wartość nagrody na końcu lejka.</div><!-- WIREFRAME-ONLY -->
     <div class="stack" style="max-width:780px">
       <h2>Nie robimy konkursów. Pomagamy serio budować firmy.</h2>
       <p class="body muted">MD Fellowship to społeczność ludzi w wieku 18–24 lata, którzy już teraz budują swoje pierwsze firmy. Każdy Fellow dostaje mentoring 1:1 od przedsiębiorców, którzy przeszli drogę od pomysłu do globalnego sukcesu.</p>
@@ -706,14 +663,13 @@ body.notes-on .wf-note { display: block; }
 <section class="section audience" id="dlakogo">
   <div class="box audience-bg" aria-hidden="true"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE TŁA — UCZESTNICY / SALA</span></div>
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · DLA KOGO</b>Copy skrócone, zdjęcie w tle sekcji, treść na karcie. „Nie potrzebujesz pomysłu” to odpowiedź na główną obiekcję grupy docelowej.</div><!-- WIREFRAME-ONLY -->
     <div class="audience-card">
       <h2>Dla kogo</h2>
       <p class="lead">Masz 18–24 lata i chcesz budować własną firmę?</p>
       <p class="body muted">Aplikuj solo albo w parze – mamy 100 miejsc. Nie potrzebujesz pomysłu, zespołu ani kodowania. Wystarczy odwaga, żeby zapytać obcą osobę, co ją naprawdę boli.</p>
       <div class="cta-row">
         <a class="btn" href="#aplikuj">Aplikuj →</a>
-        <p class="cta-note">Zgłoszenia do <span class="tbc">[DATA]</span></p>
+        <p class="cta-note">Zgłoszenia do [DATA]</p>
       </div>
     </div>
   </div>
@@ -721,7 +677,6 @@ body.notes-on .wf-note { display: block; }
 <!-- 9. FAQ -->
 <section class="section" id="faq">
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note"><b>NOTATKA · FAQ</b>Dodane 3 pytania o rekrutację. Placeholdery do uzupełnienia przez klienta.</div><!-- WIREFRAME-ONLY -->
     <div class="split">
       <h2>FAQ</h2>
       <div class="faq-list" id="faq-list">
@@ -733,17 +688,17 @@ body.notes-on .wf-note { display: block; }
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p2" id="faq-b2">Do kiedy mogę aplikować?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden>Zgłoszenia przyjmujemy do <span class="tbc">[DATA]</span>. Nie czekaj do ostatniej chwili, mamy 100 miejsc.</div>
+          <div class="faq-a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden>Zgłoszenia przyjmujemy do [DATA]. Nie czekaj do ostatniej chwili, mamy 100 miejsc.</div>
         </div>
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p3" id="faq-b3">Jak wygląda rekrutacja?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p3" role="region" aria-labelledby="faq-b3" hidden><span class="tbc">[PROCES REKRUTACJI – do uzupełnienia przez klienta: formularz, kryteria wyboru, ewentualna rozmowa.]</span></div>
+          <div class="faq-a" id="faq-p3" role="region" aria-labelledby="faq-b3" hidden>[PROCES REKRUTACJI – do uzupełnienia przez klienta: formularz, kryteria wyboru, ewentualna rozmowa.]</div>
         </div>
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p4" id="faq-b4">Kiedy dostanę odpowiedź?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p4" role="region" aria-labelledby="faq-b4" hidden><span class="tbc">[DATA ODPOWIEDZI]</span> – dostaniesz maila niezależnie od decyzji.</div>
+          <div class="faq-a" id="faq-p4" role="region" aria-labelledby="faq-b4" hidden>[DATA ODPOWIEDZI] – dostaniesz maila niezależnie od decyzji.</div>
         </div>
 
         <div class="faq-item">
@@ -778,7 +733,7 @@ body.notes-on .wf-note { display: block; }
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p11" id="faq-b11">Czy mogę uczestniczyć tylko online?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p11" role="region" aria-labelledby="faq-b11" hidden><span class="tbc">[DO POTWIERDZENIA PRZED LAUNCHEM]</span></div>
+          <div class="faq-a" id="faq-p11" role="region" aria-labelledby="faq-b11" hidden>[DO POTWIERDZENIA PRZED LAUNCHEM]</div>
         </div>
 
         <div class="faq-item">
@@ -794,12 +749,11 @@ body.notes-on .wf-note { display: block; }
 <!-- 10. FINALNE CTA -->
 <section class="section final" id="final">
   <div class="wrap">
-    <!-- WIREFRAME-ONLY --><div class="wf-note" style="margin-left:auto;margin-right:auto;text-align:left"><b>NOTATKA · FINALNE CTA</b>Nowa sekcja. Strona nie może kończyć się na FAQ, a ruch z reelsów to prawie w całości mobile.</div><!-- WIREFRAME-ONLY -->
     <div class="stack-l">
       <h2>Daj sobie miesiąc na rozmowy, zamiast budować w ciemno.</h2>
       <p class="meta">12–13 listopada · Warszawa · bezpłatnie · 100 miejsc</p>
       <div class="cta-row"><a class="btn" href="#aplikuj">Aplikuj</a></div>
-      <p class="meta">Zgłoszenia do <span class="tbc">[DATA]</span></p>
+      <p class="meta">Zgłoszenia do [DATA]</p>
     </div>
   </div>
 </section>
@@ -819,19 +773,19 @@ body.notes-on .wf-note { display: block; }
           <span aria-hidden="true">·</span>
           <a href="https://www.linkedin.com/company/md-fellowship/">LinkedIn</a>
           <span aria-hidden="true">·</span>
-          <span class="tbc">[Polityka prywatności]</span>
+          [Polityka prywatności]
         </nav>
       </div>
       <div class="footer-partner">
         <span>Partner miejsca:</span>
-        <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label tbc">[LOGO Google for Startups Campus]</span></div>
+        <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">[LOGO Google for Startups Campus]</span></div>
       </div>
     </div>
   </div>
 </footer>
 
 <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
-  <p class="cta-note"><b>Bezpłatnie · 100 miejsc</b>Zgłoszenia do <span class="tbc">[DATA]</span></p>
+  <p class="cta-note"><b>Bezpłatnie · 100 miejsc</b>Zgłoszenia do [DATA]</p>
   <a class="btn btn-sm" href="#aplikuj" tabindex="-1">Aplikuj</a>
 </div>
 
@@ -972,24 +926,6 @@ body.notes-on .wf-note { display: block; }
   mq.addEventListener ? mq.addEventListener('change', render) : mq.addListener(render);
   render();
 
-  /* WIREFRAME-ONLY */
-  var notesOn = false;
-  var tbcOn = true;
-  var bNotes = document.getElementById('wf-notes');
-  var bTbc = document.getElementById('wf-tbc');
-  bNotes.addEventListener('click', function () {
-    notesOn = !notesOn;
-    document.body.classList.toggle('notes-on', notesOn);
-    bNotes.textContent = 'Notatki: ' + (notesOn ? 'on' : 'off');
-    bNotes.setAttribute('aria-pressed', String(notesOn));
-  });
-  bTbc.addEventListener('click', function () {
-    tbcOn = !tbcOn;
-    document.body.classList.toggle('tbc-on', tbcOn);
-    bTbc.textContent = 'Placeholdery: ' + (tbcOn ? 'on' : 'off');
-    bTbc.setAttribute('aria-pressed', String(tbcOn));
-  });
-  /* WIREFRAME-ONLY */
 })();
 </script>
 
