@@ -96,7 +96,6 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
   color: var(--muted); text-align: center; padding: 4px 8px;
   background: var(--placeholder);
 }
-.box-caption { position: relative; font-family: var(--font-mono); font-size: 11px; color: var(--muted); background: var(--placeholder); padding: 2px 8px; text-align: center; }
 
 /* ---------- nav ---------- */
 .nav { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--line-soft); }
@@ -114,7 +113,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 .hero-copy > * + * { margin-top: 24px; }
 .hero-meta { font-size: 15px; color: var(--muted); }
 .hero-meta b { color: var(--text); font-weight: 600; }
-.hero-visual { width: 100%; height: 480px; margin-top: 64px; flex-direction: column; gap: 8px; }
+.hero-visual { width: 100%; height: 480px; margin-top: 64px; }
 
 /* ---------- split (heading left / content right) ---------- */
 .split { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 80px; align-items: start; }
@@ -196,7 +195,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 /* ---------- numbers ---------- */
 .numbers-row {
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px;
-  margin-top: 72px; padding-top: 48px; border-top: 1px solid var(--line-soft);
+  margin-top: 80px;
 }
 .number-v { font-size: 56px; font-weight: 800; line-height: 1; display: block; margin-bottom: 8px; }
 .number-d { font-size: 16px; color: var(--muted); }
@@ -204,6 +203,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 /* ---------- dla kogo ---------- */
 .audience { padding: 0; }
 .audience-bg { position: absolute; inset: 0; border: 0; }
+.audience-bg .box-label { position: absolute; right: 24px; bottom: 24px; }
 .audience > .wrap { position: relative; z-index: 2; padding-top: var(--rhythm); padding-bottom: var(--rhythm); }
 .audience-card { background: var(--surface); border: 1px solid var(--line); padding: 56px; max-width: 720px; }
 .audience-card > * + * { margin-top: 20px; }
@@ -299,7 +299,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
   .marquee { margin-top: 32px; }
   .mentor { width: 220px; }
 
-  .numbers-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 48px; padding-top: 32px; }
+  .numbers-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 48px; }
 
   .audience-card { padding: 28px; }
 
@@ -380,7 +380,6 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
     <div class="box hero-visual">
       <svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg>
       <span class="box-label">KEY VISUAL</span>
-      <span class="box-caption">do zaprojektowania przez brand designera</span>
     </div>
   </div>
 </section>
