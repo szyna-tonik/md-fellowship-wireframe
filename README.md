@@ -51,7 +51,7 @@ Strona korzysta z modułu JS, więc trzeba ją otwierać przez serwer, nie z dys
 python3 -m http.server 4173
 ```
 
-**Proxima Nova** (licencja komercyjna) nie jest w repozytorium — pliki trzymamy lokalnie w `design-assets/fonts/proxima-nova/`. Bez nich strona używa kroju zastępczego.
+Fonty: Anton (OFL) i Proxima Nova (Regular, Medium, Semibold) w `design-assets/fonts/`.
 
 ## Tokeny
 
