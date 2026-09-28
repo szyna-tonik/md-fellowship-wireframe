@@ -203,7 +203,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 /* ---------- dla kogo ---------- */
 .audience { padding: 0; }
 .audience-bg { position: absolute; inset: 0; border: 0; }
-.audience-bg .box-label { position: absolute; right: 24px; bottom: 24px; }
+.audience-bg .box-label { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); }
 .audience > .wrap { position: relative; z-index: 2; padding-top: var(--rhythm); padding-bottom: var(--rhythm); }
 .audience-card { background: var(--surface); border: 1px solid var(--line); padding: 56px; max-width: 720px; }
 .audience-card > * + * { margin-top: 20px; }
@@ -302,6 +302,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
   .numbers-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 48px; }
 
   .audience-card { padding: 28px; }
+  .audience-bg .box-label { right: 20px; top: auto; bottom: 16px; transform: none; }
 
   .faq-q { font-size: 17px; padding: 18px 0; }
   .faq-a { font-size: 16px; padding-right: 24px; }
@@ -371,7 +372,8 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
         <span class="only-desktop">12–13 listopada 2026 + miesiąc online</span><span class="only-mobile">12–13.11.2026 + miesiąc online</span> · Google for Startups Campus Warsaw · <b>Bezpłatnie</b>
       </p>
       <h1>Startup Discovery Sprint</h1>
-      <p class="lead">Zanim zaczniesz budować, porozmawiaj z klientami. Miesiąc praktycznego discovery z MD Fellowship – społecznością founderów, którzy budują firmy z mentorami.</p>
+      <p class="lead">Zanim zaczniesz budować, porozmawiaj z klientami.</p>
+      <p class="body muted">Przez miesiąc uczysz się od founderów z MD Fellowship, jak znaleźć problem, za którego rozwiązanie ktoś naprawdę zapłaci. Dla osób w wieku 18–24.</p>
       <div class="cta-row" id="hero-cta">
         <a class="btn" href="#aplikuj">Aplikuj</a>
         <p class="cta-note"><b>100 miejsc</b>Zgłoszenia do [DATA]</p>
@@ -388,10 +390,10 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 <section class="section" id="program">
   <div class="wrap">
     <div class="split">
-      <h2>Zacznijmy od faktów</h2>
+      <h2>Większość startupów nie pada przez brak kasy</h2>
       <div class="stack" style="max-width:860px">
-        <p class="lead">Startupy rzadko upadają przez brak pieniędzy, słaby zespół czy złą technologię. Najczęściej upadają, bo zbudowały coś, czego nikt nie chce.</p>
-        <p class="body muted">Daj nam miesiąc, pokażemy Ci, jak rozmawiać z potencjalnymi klientami i znaleźć problem do rozwiązania. Jeśli naprawdę się przyłożysz, zakończysz program z pierwszymi płacącymi klientami.</p>
+        <p class="lead">Padają, bo zbudowały coś, czego nikt nie potrzebował. Miesiące pracy, logo, pitch deck… i cisza.</p>
+        <p class="body muted">Daj nam miesiąc. Pokażemy ci, jak rozmawiać z potencjalnymi klientami i znaleźć problem, który warto rozwiązać. Przyłożysz się? Masz szansę skończyć program z pierwszymi płacącymi klientami.</p>
       </div>
     </div>
   </div>
@@ -405,22 +407,22 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
       <div class="card">
         <span class="learn-num">01</span>
         <h3>Prowadzić discovery calle.</h3>
-        <p class="body muted" style="margin-top:12px">Większość ludzi pyta: „Czy kupiłbyś to?”. Każdy odpowie, że tak. To bezwartościowy feedback. Pokażemy Ci, jak pytać, żeby usłyszeć prawdę.</p>
+        <p class="body muted" style="margin-top:12px">Zapytasz „kupiłbyś to?”, każdy powie, że tak. I nic z tego nie wynika. Nauczymy cię pytać tak, żeby usłyszeć prawdę, a nie uprzejmości.</p>
       </div>
       <div class="card">
         <span class="learn-num">02</span>
-        <h3>Szukać lekarstwa, nie witaminy.</h3>
-        <p class="body muted" style="margin-top:12px">Witamina to „fajnie by było”. Lekarstwo to „potrzebuję tego na wczoraj”. Za witaminy klienci płacą niechętnie, za lekarstwa od razu.</p>
+        <h3>Odróżniać lekarstwo od witaminy.</h3>
+        <p class="body muted" style="margin-top:12px">Witamina to „fajnie by było”. Lekarstwo to „potrzebuję tego na wczoraj”. Za pierwsze ludzie płacą niechętnie, za drugie od ręki.</p>
       </div>
       <div class="card">
         <span class="learn-num">03</span>
-        <h3>Dotrzeć do klienta.</h3>
-        <p class="body muted" style="margin-top:12px">Twoja wiadomość ląduje w skrzynce obok 50 innych, w większości wygenerowanych przez AI. Jeśli brzmisz jak wszyscy, nikt Ci nie odpisze.</p>
+        <h3>Pisać wiadomości, na które ktoś odpisze.</h3>
+        <p class="body muted" style="margin-top:12px">Twój mail ląduje obok 50 innych, w większości pisanych przez AI. Jeśli brzmisz jak wszyscy, lądujesz w archiwum.</p>
       </div>
       <div class="card">
         <span class="learn-num">04</span>
-        <h3>Budować MVP w kilka godzin.</h3>
-        <p class="body muted" style="margin-top:12px">MVP to nie „wersja 1.0 z mniejszą liczbą funkcji”, tylko najtańszy sposób, żeby sprawdzić, czy ktoś zapłaci. Czasem nawet bez linijki kodu.</p>
+        <h3>Stawiać MVP w kilka godzin.</h3>
+        <p class="body muted" style="margin-top:12px">MVP to nie okrojona wersja 1.0. To najtańszy sposób, żeby sprawdzić, czy ktoś zapłaci. Czasem wystarczy arkusz w Excelu.</p>
       </div>
     </div>
   </div>
@@ -445,18 +447,18 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
         <article class="sc-step is-active">
           <span class="sc-time">12–13 listopada</span>
           <h3>Sprint w Warszawie.</h3>
-          <p class="sc-desc">Prelekcje founderów o [TEMATY PRELEKCJI], a pomiędzy sporo czasu na własną pracę i konsultacje z mentorami.</p>
+          <p class="sc-desc">Dwa dni na Google for Startups Campus. Krótkie prelekcje founderów o [TEMATY PRELEKCJI], a między nimi dużo czasu na własną robotę i rozmowy z mentorami.</p>
         </article>
         <article class="sc-step">
           <span class="sc-time">Kolejne 4 tygodnie</span>
-          <h3>Rozmowy z klientami.</h3>
-          <p class="sc-desc">Dzwonisz, piszesz, pytasz i słuchasz. Pomaga Ci w tym nasza grupa na WhatsAppie i kilka spotkań online.</p>
+          <h3>4 tygodnie w terenie.</h3>
+          <p class="sc-desc">Dzwonisz, piszesz, umawiasz się i słuchasz. Nie robisz tego w pojedynkę: masz grupę na WhatsAppie i kilka spotkań online.</p>
         </article>
         <article class="sc-step">
           <span class="sc-time">13 grudnia · deadline rekrutacji</span>
           <h3>Fast-track do MD Fellowship.</h3>
-          <p class="sc-desc">Masz już problem, który chcesz rozwiązać? Aplikuj do MD Fellowship, a pomożemy Ci zbudować na nim firmę.</p>
-          <p class="sc-fast">Byłeś na min. 80% spotkań? Przechodzisz od razu do drugiego etapu rekrutacji.</p>
+          <p class="sc-desc">Masz problem, który chcesz rozwiązać? Aplikuj do MD Fellowship i zbudujmy na nim firmę.</p>
+          <p class="sc-fast">Weźmiesz udział w min. 80% spotkań? Wskakujesz od razu do drugiego etapu rekrutacji.</p>
         </article>
       </div>
     </div>
@@ -467,8 +469,8 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
   <div class="wrap">
     <div class="reels-head">
       <div class="stack" style="max-width:640px">
-        <h2>Tak to wygląda w praktyce</h2>
-        <p class="lead" style="font-weight:400">Pięciu Fellows o tym, jak szukali problemu, dzwonili do obcych ludzi i stawiali pierwsze MVP.</p>
+        <h2>Zobacz, jak robili to inni</h2>
+        <p class="lead" style="font-weight:400">Pięcioro Fellows opowiada, jak szukali problemu, dzwonili do obcych ludzi i stawiali pierwsze MVP.</p>
       </div>
       <p class="reels-link"><a href="https://www.instagram.com/mdfellowship">Więcej na Instagramie →</a></p>
     </div>
@@ -513,8 +515,8 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 <section class="section" id="mentorzy">
   <div class="wrap">
     <div class="stack" style="max-width:860px">
-      <h2>Wśród prelegentów i mentorów</h2>
-      <p class="lead" style="font-weight:400">Ludzie, którzy budowali firmy, zatrudniali, sprzedawali, popełniali błędy i wyciągali z nich wnioski.</p>
+      <h2>Z kim będziesz pracować</h2>
+      <p class="lead" style="font-weight:400">Ludzie, którzy sami zakładali firmy, zatrudniali, sprzedawali i zaliczali wtopy. I chętnie powiedzą, czego nie znajdziesz w poradnikach.</p>
     </div>
   </div>
   <div class="marquee" id="mentors-marquee">
@@ -644,7 +646,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
   <div class="wrap">
     <div class="stack" style="max-width:780px">
       <h2>Nie robimy konkursów. Pomagamy serio budować firmy.</h2>
-      <p class="body muted">MD Fellowship to społeczność ludzi w wieku 18–24 lata, którzy już teraz budują swoje pierwsze firmy. Każdy Fellow dostaje mentoring 1:1 od przedsiębiorców, którzy przeszli drogę od pomysłu do globalnego sukcesu.</p>
+      <p class="body muted">MD Fellowship to społeczność osób 18–24, które już budują swoje pierwsze firmy. Każdy Fellow ma mentoring 1:1 z przedsiębiorcą, który przeszedł drogę od pomysłu do globalnego sukcesu.</p>
       <p class="meta"><a href="https://mdfellows.com/">mdfellows.com →</a> · <a href="https://www.instagram.com/mdfellowship">Instagram</a> · <a href="https://www.linkedin.com/company/md-fellowship/">LinkedIn</a></p>
     </div>
     <div class="numbers-row">
@@ -662,8 +664,8 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
   <div class="wrap">
     <div class="audience-card">
       <h2>Dla kogo</h2>
-      <p class="lead">Masz 18–24 lata i chcesz budować własną firmę?</p>
-      <p class="body muted">Aplikuj solo albo w parze – mamy 100 miejsc. Nie potrzebujesz pomysłu, zespołu ani kodowania. Wystarczy odwaga, żeby zapytać obcą osobę, co ją naprawdę boli.</p>
+      <p class="lead">Masz 18–24 lata i chcesz zbudować własną firmę?</p>
+      <p class="body muted">Aplikuj solo albo w parze. Nie potrzebujesz pomysłu, zespołu ani umiejętności programowania. Potrzebujesz odwagi, żeby zadzwonić do obcej osoby i zapytać, co ją naprawdę boli.</p>
       <div class="cta-row">
         <a class="btn" href="#aplikuj">Aplikuj →</a>
         <p class="cta-note">Zgłoszenia do [DATA]</p>
@@ -680,7 +682,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="true" aria-controls="faq-p1" id="faq-b1">Ile to kosztuje?<span class="faq-sign" aria-hidden="true">–</span></button></h3>
-          <div class="faq-a" id="faq-p1" role="region" aria-labelledby="faq-b1">Udział w programie jest bezpłatny. Dojazd i ewentualny nocleg w Warszawie organizujesz we własnym zakresie.</div>
+          <div class="faq-a" id="faq-p1" role="region" aria-labelledby="faq-b1">Nic, udział jest bezpłatny. Dojazd i ewentualny nocleg w Warszawie są po twojej stronie.</div>
         </div>
 
         <div class="faq-item">
@@ -695,17 +697,17 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p4" id="faq-b4">Kiedy dostanę odpowiedź?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p4" role="region" aria-labelledby="faq-b4" hidden>[DATA ODPOWIEDZI] – dostaniesz maila niezależnie od decyzji.</div>
+          <div class="faq-a" id="faq-p4" role="region" aria-labelledby="faq-b4" hidden>[DATA ODPOWIEDZI]. Odezwiemy się mailowo niezależnie od decyzji.</div>
         </div>
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p5" id="faq-b5">Nie mam pomysłu.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p5" role="region" aria-labelledby="faq-b5" hidden>Tym lepiej, bo nie musisz się z niczym rozstawać. Nauczymy Cię szukać problemów wartych rozwiązania.</div>
+          <div class="faq-a" id="faq-p5" role="region" aria-labelledby="faq-b5" hidden>Tym lepiej, nie musisz się z żadnym rozstawać. Nauczymy cię szukać problemów, które warto rozwiązać.</div>
         </div>
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p6" id="faq-b6">Nie umiem kodować.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p6" role="region" aria-labelledby="faq-b6" hidden>Nie szkodzi, tu nie kodujemy. Na początku rozmowy z klientami są ważniejsze niż kod.</div>
+          <div class="faq-a" id="faq-p6" role="region" aria-labelledby="faq-b6" hidden>Spoko, tu nie kodujemy. Na starcie rozmowy z klientami są ważniejsze niż kod.</div>
         </div>
 
         <div class="faq-item">
@@ -714,8 +716,8 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
         </div>
 
         <div class="faq-item">
-          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p8" id="faq-b8">Nie mam żadnego doświadczenia biznesowego. Czy to problem?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p8" role="region" aria-labelledby="faq-b8" hidden>Nie. Program jest właśnie dla osób, które dopiero zaczynają. Wystarczy, że chcesz się uczyć i nie boisz się rozmawiać z ludźmi.</div>
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p8" id="faq-b8">Nie mam doświadczenia biznesowego. Czy to problem?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p8" role="region" aria-labelledby="faq-b8" hidden>Nie. Program jest dla osób, które dopiero zaczynają. Wystarczy, że chcesz się uczyć i nie boisz się rozmawiać z ludźmi.</div>
         </div>
 
         <div class="faq-item">
@@ -725,7 +727,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p10" id="faq-b10">Ile czasu muszę poświęcić?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p10" role="region" aria-labelledby="faq-b10" hidden>Dwa pełne dni stacjonarnie (12–13 listopada), a potem minimum 10 godzin tygodniowo przez 4 tygodnie na rozmowy z klientami i spotkania online.</div>
+          <div class="faq-a" id="faq-p10" role="region" aria-labelledby="faq-b10" hidden>Dwa pełne dni na miejscu (12–13 listopada), potem min. 10 godzin tygodniowo przez 4 tygodnie.</div>
         </div>
 
         <div class="faq-item">
@@ -734,8 +736,8 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
         </div>
 
         <div class="faq-item">
-          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p12" id="faq-b12">Co jeszcze mogę zyskać?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p12" role="region" aria-labelledby="faq-b12" hidden>Jeśli będziesz obecny na co najmniej 80% spotkań, przejdziesz od razu do drugiego etapu rekrutacji do MD Fellowship.</div>
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p12" id="faq-b12">Co mi to da poza wiedzą?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p12" role="region" aria-labelledby="faq-b12" hidden>Jeśli weźmiesz udział w min. 80% spotkań, przejdziesz od razu do drugiego etapu rekrutacji do MD Fellowship.</div>
         </div>
 
       </div>
@@ -747,7 +749,7 @@ section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 <section class="section final" id="final">
   <div class="wrap">
     <div class="stack-l">
-      <h2>Daj sobie miesiąc na rozmowy, zamiast budować w ciemno.</h2>
+      <h2>Najtrudniejszy jest pierwszy telefon. Resztę ogarniemy razem.</h2>
       <p class="meta">12–13 listopada · Warszawa · bezpłatnie · 100 miejsc</p>
       <div class="cta-row"><a class="btn" href="#aplikuj">Aplikuj</a></div>
       <p class="meta">Zgłoszenia do [DATA]</p>
