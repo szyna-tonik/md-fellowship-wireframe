@@ -1,0 +1,2137 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Startup Discovery Sprint – MD Fellowship</title>
+<script>
+/* intro: stan startowy ustawiany przed pierwszym renderem, żeby nie mignął gotowy Hero */
+(function () {
+  var d = document.documentElement;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (location.hash && location.hash !== '#aplikuj') return;  // wejście z kotwicy — bez intro
+  d.classList.add('intro');
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  setTimeout(function () { d.classList.remove('intro', 'intro--words', 'intro--spread'); }, 8000);  // bezpiecznik, gdyby skrypt intro nie ruszył
+})();
+</script>
+<style>
+:root {
+  --bg: #F4F4F2;
+  --surface: #FFFFFF;
+  --placeholder: #E4E4E0;
+  --line: #BDBDB8;
+  --line-soft: #D6D6D2;
+  --muted: #555555;
+  --text: #1A1A1A;
+  --accent: #1A1A1A;
+  --on-accent: #FFFFFF;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --pad-x: 80px;
+  --rhythm: 112px;
+  --nav-h: 80px;
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+h1, h2, h3 { margin: 0; line-height: 1.1; font-weight: 800; }
+h1 { font-size: 72px; letter-spacing: -0.02em; line-height: 1.05; }
+h2 { font-size: 44px; letter-spacing: -0.01em; }
+h3 { font-size: 26px; font-weight: 600; line-height: 1.25; }
+p { margin: 0; }
+a { color: inherit; }
+
+:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+.wrap { width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 var(--pad-x); }
+
+.section { padding: var(--rhythm) 0; border-bottom: 1px solid var(--line-soft); position: relative; }
+section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
+
+.lead { font-size: 29px; font-weight: 600; line-height: 1.3; }
+.body { font-size: 19px; }
+.muted { color: var(--muted); }
+.meta { font-size: 15px; color: var(--muted); }
+.mono { font-family: var(--font-mono); }
+.small { font-size: 14px; }
+.strong { font-weight: 600; }
+
+.stack > * + * { margin-top: 20px; }
+.stack-l > * + * { margin-top: 32px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 56px; padding: 0 30px;
+  background: var(--accent); color: var(--on-accent);
+  border: 1px solid var(--accent);
+  font-family: inherit; font-size: 18px; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+}
+.btn-sm { min-height: 48px; padding: 0 20px; font-size: 16px; }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+
+.cta-row { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.cta-note { font-size: 15px; color: var(--muted); line-height: 1.35; }
+.cta-note b { display: block; font-size: 17px; font-weight: 800; color: var(--text); }
+
+/* ---------- placeholder boxes ---------- */
+.box {
+  position: relative;
+  background: var(--placeholder);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  color: var(--line);
+}
+.box-x { position: absolute; inset: 0; width: 100%; height: 100%; }
+.box-x line { stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.box-label {
+  position: relative;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em;
+  color: var(--muted); text-align: center; padding: 4px 8px;
+  background: var(--placeholder);
+}
+
+/* ---------- nav ---------- */
+.nav { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: var(--nav-h); }
+.nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+.nav-links a { font-size: 16px; text-decoration: none; }
+.nav-links a:hover { text-decoration: underline; }
+.nav-logo { width: 160px; height: 40px; flex: none; }
+.nav-toggle { display: none; }
+.nav-mobile { display: none; }
+
+/* ---------- hero ---------- */
+.hero { padding-top: 88px; }
+.hero-copy { max-width: 900px; }
+.hero-copy > * + * { margin-top: 24px; }
+.hero-meta { font-size: 15px; color: var(--muted); }
+.hero-meta b { color: var(--text); font-weight: 600; }
+.hero-visual { width: 100%; height: 480px; margin-top: 64px; }
+
+/* ---------- split (heading left / content right) ---------- */
+.split { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 80px; align-items: start; }
+
+/* ---------- grids ---------- */
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
+.card { background: var(--surface); border: 1px solid var(--line); padding: 32px; }
+.learn-num { font-family: var(--font-mono); font-size: 14px; color: var(--muted); display: block; margin-bottom: 12px; }
+
+/* ---------- scrollytelling: jak to działa ---------- */
+.sc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 96px; margin-top: 56px; }
+.sc-media { grid-column: 2; grid-row: 1; }
+.sc-steps { grid-column: 1; grid-row: 1; }
+.sc-sticky { position: sticky; top: calc(var(--nav-h) + 56px); height: 68vh; min-height: 420px; display: flex; flex-direction: column; gap: 12px; }
+.sc-frame { position: relative; flex: 1; }
+.sc-img { position: absolute; inset: 0; opacity: 0; transition: opacity 200ms linear; }
+.sc-img.is-active { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .sc-img { transition: none; } }
+.sc-progress { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: 0.08em; }
+
+.sc-step {
+  min-height: 78vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 40px 0 40px 36px;
+  border-left: 1px solid var(--line);
+}
+.sc-step.is-active { border-left: 3px solid var(--text); padding-left: 34px; }
+.sc-step h3 { margin-bottom: 12px; }
+.sc-step .sc-desc { color: var(--muted); }
+.sc-step:not(.is-active) > * { opacity: 0.5; }
+.sc-time { font-family: var(--font-mono); font-size: 13px; color: var(--muted); display: block; margin-bottom: 12px; }
+.sc-fast { margin-top: 18px; font-weight: 600; }
+
+/* ---------- reels: karuzela center-mode ---------- */
+.reels-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+.reels-link-mobile { display: none; }
+.carousel { position: relative; margin-top: 40px; }
+.car-viewport { overflow: hidden; padding: 36px 0; cursor: grab; }
+.car-viewport.is-dragging { cursor: grabbing; }
+.car-track { display: flex; gap: 24px; width: max-content; will-change: transform; }
+.reel { width: 250px; flex: none; user-select: none; transition: transform 250ms ease, opacity 250ms ease; transform: scale(0.92); opacity: 0.45; }
+.reel.is-active { transform: scale(1.12); opacity: 1; }
+.reel .box { aspect-ratio: 9 / 16; margin-bottom: 16px; pointer-events: none; }
+.reel h3 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.car-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--line); color: var(--text);
+  font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.car-arrow:disabled { opacity: 0.35; cursor: default; }
+.car-arrow.prev { left: 8px; }
+.car-arrow.next { right: 8px; }
+
+/* ---------- mentors: karuzela ciągła ---------- */
+.marquee { overflow: hidden; margin-top: 48px; padding: 24px 0 8px; }
+.marquee-track { display: flex; width: max-content; animation: marquee 45s linear infinite; }
+.marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-group { display: flex; gap: 24px; padding-right: 24px; }
+.mentor { width: 280px; flex: none; transition: transform 250ms ease; }
+.mentor:hover, .mentor:focus-within { transform: scale(1.06); }
+.mentor-photo { position: relative; aspect-ratio: 3 / 4; margin-bottom: 14px; }
+.mentor-bio {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding: 14px 16px; font-size: 14px; color: var(--muted);
+  opacity: 0; transition: opacity 200ms ease;
+}
+.mentor:hover .mentor-bio, .mentor:focus-within .mentor-bio { opacity: 1; }
+.mentor-name { font-weight: 600; font-size: 18px; }
+@media (prefers-reduced-motion: reduce) {
+  .reel, .car-track, .mentor, .mentor-bio { transition: none !important; }
+  .marquee-track { animation: none; }
+  .marquee { overflow-x: auto; }
+}
+
+/* ---------- numbers ---------- */
+.numbers-row {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px;
+  margin-top: 80px;
+}
+.number-v { font-size: 56px; font-weight: 800; line-height: 1; display: block; margin-bottom: 8px; }
+.number-d { font-size: 16px; color: var(--muted); }
+
+/* ---------- dla kogo ---------- */
+.audience { padding: 0; }
+.audience-bg { position: absolute; inset: 0; border: 0; }
+.audience-bg .box-label { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); }
+.audience > .wrap { position: relative; z-index: 2; padding-top: var(--rhythm); padding-bottom: var(--rhythm); }
+.audience-card { background: var(--surface); border: 1px solid var(--line); padding: 56px; max-width: 720px; }
+.audience-card > * + * { margin-top: 20px; }
+
+/* ---------- FAQ ---------- */
+.faq-list { border-top: 1px solid var(--line); }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-q {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  background: none; border: 0; padding: 22px 0; margin: 0;
+  font-family: inherit; font-size: 20px; font-weight: 600; color: inherit; text-align: left; cursor: pointer;
+}
+.faq-sign { font-family: var(--font-mono); font-size: 22px; flex: none; color: var(--muted); }
+.faq-a { padding: 0 64px 24px 0; font-size: 18px; color: var(--muted); }
+.faq-a[hidden] { display: none; }
+
+/* ---------- final CTA ---------- */
+.final { background: var(--placeholder); text-align: center; }
+.final h2 { font-size: 52px; max-width: 900px; margin: 0 auto; }
+.final .cta-row { justify-content: center; }
+
+/* ---------- footer ---------- */
+.footer { padding: 56px 0 72px; }
+.footer-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.footer-logo { width: 160px; height: 40px; }
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; font-size: 16px; }
+.footer-partner { display: flex; align-items: center; gap: 16px; font-size: 15px; color: var(--muted); }
+.footer-partner .box { width: 220px; height: 56px; }
+
+/* ---------- sticky mobile CTA ---------- */
+.sticky-cta { display: none; }
+
+/* ---------- tablet / small desktop ---------- */
+@media (min-width: 769px) and (max-width: 1180px) {
+  :root { --pad-x: 48px; --rhythm: 88px; }
+  h1 { font-size: 56px; }
+  h2 { font-size: 38px; }
+  .lead { font-size: 25px; }
+  .hero-visual { height: 400px; }
+  .split { grid-template-columns: 260px minmax(0, 1fr); gap: 48px; }
+  .sc-grid { gap: 48px; }
+  .final h2 { font-size: 42px; }
+  .number-v { font-size: 44px; }
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 768px) {
+  :root { --pad-x: 20px; --rhythm: 56px; --nav-h: 64px; }
+  body { font-size: 16px; }
+  h1 { font-size: 44px; }
+  h2 { font-size: 32px; }
+  h3 { font-size: 21px; }
+  .lead { font-size: 22px; }
+  .body { font-size: 16px; }
+  .number-v { font-size: 40px; }
+  .final h2 { font-size: 32px; }
+
+  .nav-logo { width: 112px; height: 32px; }
+  .nav-links { display: none; }
+  .nav-inner > a.btn { display: none; }
+  .nav-toggle { display: inline-flex; }
+  .nav-mobile { display: none; padding: 8px 0 20px; border-top: 1px solid var(--line-soft); }
+  .nav-mobile.is-open { display: block; }
+  .nav-mobile ul { list-style: none; margin: 0; padding: 0; }
+  .nav-mobile a { display: block; padding: 12px 0; font-size: 18px; text-decoration: none; }
+
+  .hero { padding-top: 40px; }
+  .hero-visual { height: 340px; margin-top: 40px; }
+
+  .split, .grid-2 { grid-template-columns: 1fr; gap: 28px; }
+  .card { padding: 24px; }
+
+  .sc-grid { display: block; margin-top: 32px; }
+  .sc-media {
+    position: sticky; top: var(--nav-h); z-index: 3;
+    background: var(--bg); border-bottom: 1px solid var(--line-soft);
+    padding: 12px 0;
+  }
+  .sc-sticky { position: static; height: 34vh; min-height: 200px; gap: 8px; }
+  .sc-step { min-height: 62vh; padding: 32px 0 32px 24px; }
+  .sc-step.is-active { padding-left: 22px; }
+
+  .reels-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .reels-head .reels-link { display: none; }
+  .reels-link-mobile { display: block; margin-top: 24px; }
+  .carousel { margin-top: 24px; }
+  .car-viewport { padding: 28px 0; }
+  .car-track { gap: 16px; }
+  .reel { width: 190px; }
+  .car-arrow { width: 44px; height: 44px; }
+  .car-arrow.prev { left: 0; }
+  .car-arrow.next { right: 0; }
+  .marquee { margin-top: 32px; }
+  .mentor { width: 220px; }
+
+  .numbers-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 48px; }
+
+  .audience-card { padding: 28px; }
+  .audience-bg .box-label { right: 20px; top: auto; bottom: 16px; transform: none; }
+
+  .faq-q { font-size: 17px; padding: 18px 0; }
+  .faq-a { font-size: 16px; padding-right: 24px; }
+
+  .footer-inner { flex-direction: column; }
+
+  .sticky-cta {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    min-height: 80px; padding: 12px 20px;
+    background: var(--surface); border-top: 1px solid var(--line);
+    transform: translateY(110%); transition: transform 150ms linear;
+  }
+  .sticky-cta.is-visible { transform: translateY(0); }
+  .sticky-cta .cta-note b { font-size: 15px; }
+  body.has-sticky { padding-bottom: 96px; }
+}
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  .sticky-cta { transition: none; }
+}
+
+.only-mobile { display: none; }
+@media (max-width: 768px) {
+  .only-mobile { display: inline; }
+  .only-desktop { display: none; }
+}
+
+
+/* =====================================================================
+   DESIGN — nawigacja + sekcje 1–3 z Figmy (MD - Landing Page, 7207:797)
+   Kompozycja desktop skaluje się proporcjonalnie: 1 jednostka --u = 1 px
+   ramki Figmy (1496 px). Poniżej 1024 px osobny układ mobilny.
+   ===================================================================== */
+
+@font-face { font-family: "Anton"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("design-assets/fonts/anton-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Anton"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("design-assets/fonts/anton-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+/* Proxima Nova: licencja komercyjna — pliki lokalnie, w .gitignore.
+   W archiwum nie ma odmiany Medium: bierzemy ją z systemu, a bez niej spada na Regular. */
+@font-face { font-family: "Proxima Nova"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("design-assets/fonts/proxima-nova/ProximaNova-Regular.otf") format("opentype"); }
+@font-face { font-family: "Proxima Nova"; font-style: normal; font-weight: 500; font-display: swap;
+  src: local("Proxima Nova Medium"), local("ProximaNova-Medium"),
+       url("design-assets/fonts/proxima-nova/ProximaNova-Regular.otf") format("opentype"); }
+@font-face { font-family: "Proxima Nova"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("design-assets/fonts/proxima-nova/ProximaNova-Semibold.otf") format("opentype"); }
+
+:root {
+  --c-black: #000000;
+  --c-white: #FFFFFF;
+  --c-blue-500: #B9C5FF;
+  --c-blue-100: #F1F5FF;
+  --c-cream: #FDFBF2;
+
+  --f-display: "Anton", Impact, "Arial Narrow", sans-serif;
+  --f-ui: "Proxima Nova", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-body: "Proxima Nova", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-button: "Proxima Nova", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* 1 px ramki Figmy; liczone względem szerokości <main> */
+  --u: calc(min(100cqw, 1920px) / 1496);
+  --du: var(--u);  /* dekoracje (latarki, biret) */
+  --t: var(--u);   /* tagi i numery */
+}
+main { container-type: inline-size; }
+
+.d-frame { position: relative; width: calc(1496 * var(--u)); margin: 0 auto; }
+
+/* ---------- nawigacja ---------- */
+.d-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; transition: backdrop-filter 200ms ease, -webkit-backdrop-filter 200ms ease; }
+.d-nav.is-scrolled { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.d-nav__bar { display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 40px; }
+.d-nav__logo { display: block; width: 82.449px; height: 20px; flex: none; }
+.d-nav__logo img { display: block; width: 82.449px; height: 20px; }
+.d-nav__links { display: flex; align-items: center; gap: 24px; height: 36px; list-style: none; margin: 0; padding: 0; }
+.d-nav__links a,
+.d-nav__cta,
+.d-nav__mobile a {
+  font-family: var(--f-ui); font-weight: 600; font-size: 16px; line-height: 1.3;
+  letter-spacing: -0.32px; text-transform: uppercase; color: var(--c-black); text-decoration: none;
+}
+.d-nav__links a { display: flex; align-items: center; padding: 7px 16px; }
+.d-nav__actions { display: flex; align-items: center; gap: 8px; }
+.d-nav__cta { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 16px; background: var(--c-blue-100); }
+.d-nav__toggle { display: none; }
+.d-nav__mobile { display: none; }
+
+/* ---------- przyciski ---------- */
+.d-btn {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  height: calc(64 * var(--u)); min-height: 48px; padding: 0 calc(36.571 * var(--u));
+  background: var(--c-white); color: var(--c-black);
+  font-family: var(--f-button); font-weight: 600; font-size: max(16px, calc(22 * var(--u)));
+  line-height: 0.9; letter-spacing: calc(-0.44 * var(--u)); text-transform: uppercase; text-decoration: none;
+}
+
+/* ---------- tekst ---------- */
+.d-body {
+  font-family: var(--f-body); font-weight: 500; font-size: max(16px, calc(22 * var(--u)));
+  line-height: 1.3; letter-spacing: calc(-0.44 * var(--u)); color: var(--c-black);
+}
+
+/* ---------- tagi ---------- */
+.d-tags { position: absolute; left: calc(911 * var(--u)); top: calc(96 * var(--u)); display: flex; flex-direction: column; align-items: flex-start; gap: calc(8 * var(--t)); }
+.d-tags__row { display: flex; gap: calc(8 * var(--t)); }
+.d-tag {
+  display: block; box-sizing: border-box; flex: none; height: calc(56 * var(--t));
+  font-family: var(--f-display); font-weight: 400; font-size: calc(32 * var(--t)); line-height: 1;
+  letter-spacing: calc(-0.64 * var(--t)); text-transform: uppercase; white-space: nowrap; color: var(--c-black);
+  background-repeat: no-repeat;
+}
+.d-tag--free  { width: calc(159 * var(--t)); padding: calc(12 * var(--t)) 0 0 calc(12 * var(--t)); color: var(--c-white);
+  background-image: url("design-assets/tag-bezplatnie.svg"); background-size: calc(158.4 * var(--t)) calc(56 * var(--t)); }
+.d-tag--age   { width: calc(154 * var(--t)); padding: calc(12 * var(--t)) 0 0 calc(13 * var(--t));
+  background-image: url("design-assets/tag-wiek.svg"); background-size: calc(153.6 * var(--t)) calc(56 * var(--t)); }
+.d-tag--date  { width: calc(470 * var(--t)); height: calc(57 * var(--t)); padding: calc(12 * var(--t)) 0 0 calc(12 * var(--t));
+  background-image: url("design-assets/tag-data.svg"); background-size: calc(449.024 * var(--t)) calc(56 * var(--t)); background-position: 0 calc(0.21 * var(--t)); }
+.d-tag--place { width: calc(492 * var(--t)); height: calc(57 * var(--t)); padding: calc(13 * var(--t)) 0 0 calc(14 * var(--t));
+  background-image: url("design-assets/tag-miejsce.svg"); background-size: calc(491.424 * var(--t)) calc(56 * var(--t)); background-position: 0 calc(0.21 * var(--t)); }
+
+/* ---------- efekt Riso (shader Figmy, WebGPU) ---------- */
+.riso { position: relative; flex: none; }
+.riso > img { display: block; width: 100%; height: 100%; }
+.riso[data-fit="cover"] > img { object-fit: cover; }
+.riso__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.riso.is-riso > img { visibility: hidden; }
+
+/* ---------- 1 · HERO ---------- */
+.d-hero { position: relative; background: var(--c-blue-500); overflow: clip; }
+.d-hero__frame { height: calc(820 * var(--u)); }
+.d-hero__title { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(224 * var(--u)); line-height: 1;
+  letter-spacing: calc(-4.48 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+.d-hero__w { position: absolute; white-space: nowrap; }
+.d-hero__w--1 { left: calc(40 * var(--u));  top: calc(96 * var(--u)); }
+.d-hero__w--2 { left: calc(40 * var(--u));  top: calc(320 * var(--u)); }
+.d-hero__w--3 { left: calc(911 * var(--u)); top: calc(320 * var(--u)); }
+.d-hero__w--4 { left: calc(911 * var(--u)); top: calc(544 * var(--u)); }
+.d-hero__intro { position: absolute; left: calc(40 * var(--u)); top: calc(572 * var(--u)); width: calc(615 * var(--u));
+  display: flex; flex-direction: column; align-items: flex-start; gap: calc(24 * var(--u)); }
+
+/* centrowanie przez `translate` (nie `transform`): stosuje się po `rotate`/`scale`,
+   więc obrót za kursorem i wejście w intro kręcą latarką wokół jej środka */
+.d-hero__flashlight { position: absolute; left: calc(711.71 * var(--u)); top: calc(463.53 * var(--u));
+  width: calc(647.816 * var(--du)); height: calc(684.142 * var(--du)); translate: -50% -50%;
+  display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.d-fl--hero { position: relative; flex: none; width: calc(555.676 * var(--du)); height: calc(600 * var(--du)); transform: rotate(-9.58deg); }
+.d-fl--hero .d-fl__shape { position: absolute; left: calc(2.52 * var(--du)); top: calc(5.05 * var(--du)); width: calc(550.268 * var(--du)); height: calc(587.772 * var(--du)); }
+.d-fl--hero .d-fl__photo { position: absolute; left: calc(-0.17 * var(--du)); top: calc(-38.92 * var(--du)); width: calc(547.574 * var(--du)); height: calc(702.703 * var(--du));
+  display: flex; align-items: center; justify-content: center; }
+.d-fl--hero .riso { width: calc(620.116 * var(--du)); height: calc(400.731 * var(--du)); transform: rotate(75deg); }
+
+
+
+/* ---------- 1b · Hero na pełny ekran (desktop) ----------
+   Skala --hs = 1 px ramki Figmy, dobrana tak, żeby kompozycja wypełniła ekran:
+     pion:  56 px nav + 764 px ramki (40 + 672 tytuł + 52)      → (100svh − 56px) / 764
+     poziom: 40 px + STARTUP 682 + min. odstęp 40 + kolumna 545 + 40 px → (100cqw − 80px) / 1267
+   Boki na stałe 40 px: lewa kolumna od lewej krawędzi, prawa (VERY, SPRINT, tagi) od prawej.
+   Gdy decyduje szerokość, nadmiar wysokości (--hy) dzieli się po równo nad i pod treścią. */
+@media (min-width: 1024px) {
+  .d-hero {
+    --hs: min(calc((100svh - 56px) / 764), calc((100cqw - 80px) / 1267));
+    --hy: max(0px, calc((100svh - 56px - 764 * var(--hs)) / 2));
+    --hx: calc(100cqw - 40px - 545 * var(--hs));   /* lewa krawędź prawej kolumny */
+    --u: var(--hs); --du: var(--hs); --t: var(--hs);
+  }
+  .d-hero__frame { width: 100%; height: 100svh; min-height: 560px; }
+  .d-hero__w--1 { left: 40px; top: calc(56px + var(--hy) + 40 * var(--hs)); }
+  .d-hero__w--2 { left: 40px; top: calc(56px + var(--hy) + 264 * var(--hs)); }
+  .d-hero__w--3 { left: var(--hx); top: calc(56px + var(--hy) + 264 * var(--hs)); }
+  .d-hero__w--4 { left: var(--hx); top: calc(56px + var(--hy) + 488 * var(--hs)); }
+  .d-tags { left: var(--hx); top: calc(56px + var(--hy) + 40 * var(--hs)); }
+  .d-hero__intro { left: 40px; top: calc(56px + var(--hy) + 516 * var(--hs)); }
+  .d-hero__flashlight { left: calc(50% - 36.29 * var(--hs)); top: calc(56px + var(--hy) + 407.53 * var(--hs)); }
+}
+
+/* ---------- 1c · latarka: celowanie w kursor + mruganie snopem ----------
+   --aim ustawia skrypt (kąt w stopniach, skokowo — „animacja poklatkowa”).
+   Snop to asset z sekcji Problem przeliczony na latarkę z Hero (skala 0.77709),
+   w osobnej warstwie pod tytułem; skrypt ustawia go na środku latarki. */
+.d-hero__flashlight, .d-hero__beam {
+  translate: calc(-50% + var(--tx, 0px)) calc(-50% + var(--ty, 0px));
+  rotate: calc(var(--aim, 0deg) * (1 - var(--e, 0)) + var(--trot, 0deg));
+  scale: var(--tsc, 1); }
+.d-hero__flashlight { transition: opacity 180ms ease; }
+.d-fl--hero, .d-fl--problem { scale: var(--press, 1); transition: scale 160ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+/* obszar kliknięcia = obrys naklejki z hero-flashlight-shape.svg (te same 24 punkty, w %), niewidoczny */
+.d-fl--hero .d-fl__hit { position: absolute; left: calc(2.52 * var(--du)); top: calc(5.05 * var(--du));
+  width: calc(550.268 * var(--du)); height: calc(587.772 * var(--du));
+  clip-path: polygon(0.00% 17.62%, 5.73% 6.71%, 11.19% 2.68%, 20.23% 0.00%, 29.28% 2.26%, 41.64% 12.93%, 54.07% 29.02%, 58.82% 39.51%, 74.50% 56.04%, 89.72% 70.73%, 100.00% 83.66%, 100.00% 94.39%, 91.87% 100.00%, 81.39% 98.66%, 76.45% 94.39%, 63.31% 82.32%, 55.24% 74.76%, 37.87% 57.80%, 30.71% 54.45%, 20.23% 48.23%, 12.36% 39.51%, 4.49% 34.15%, 0.00% 26.34%, 0.00% 17.62%);
+  pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.d-hero__beam { position: absolute; left: 0; top: 0; width: calc(647.816 * var(--du)); height: calc(684.142 * var(--du));
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none; opacity: 0; }
+.d-fl--hero .d-fl__beam { position: absolute; left: calc(-1602.672 * var(--du)); top: calc(-1569.689 * var(--du));
+  width: calc(1780.516 * var(--du)); height: calc(2148.571 * var(--du)); display: flex; align-items: center; justify-content: center; }
+.d-fl--hero .d-fl__beam img { flex: none; width: calc(1850.905 * var(--du)); height: calc(1125.583 * var(--du)); }
+
+/* ---------- 1d · przejście Hero → Problem ----------
+   html.travel (desktop, bez reduced-motion): latarka z Hero jedzie do pozycji latarki z Problemu,
+   po dojechaniu przejmuje latarka z Problemu i zapala snop. Hero i Problem mają wspólne przycięcie,
+   żeby latarka mogła wyjechać poza Hero bez poziomego scrolla. */
+html { scroll-behavior: auto; overscroll-behavior: none; }   /* smooth-scroll.js: nie łączyć z CSS smooth */
+.d-scene { position: relative; overflow: clip; background: var(--c-blue-500); }
+.d-problem { z-index: 1; }
+html.travel .d-hero { overflow: visible; }
+html.travel .d-hero.is-arrived .d-hero__flashlight { opacity: 0; }
+.d-hero.is-traveling .d-fl__hit { pointer-events: none; }
+html.travel .d-problem__flashlight, html.travel .d-problem__beam { opacity: 0; transition: opacity 180ms ease; }
+html.travel .d-problem.is-lit .d-problem__flashlight, html.travel .d-problem.is-lit .d-problem__beam { opacity: 1; }
+html.travel .d-problem:not(.is-lit) .d-fl__hit { pointer-events: none; }
+.d-fl--problem .d-fl__hit { position: absolute; left: calc(-2.99 * var(--du)); top: calc(-2.12 * var(--du));
+  width: calc(441.89 * var(--du)); height: calc(473.505 * var(--du));
+  clip-path: polygon(0.00% 18.44%, 6.01% 7.02%, 11.75% 2.81%, 21.24% 0.00%, 30.73% 2.36%, 43.71% 13.53%, 56.76% 30.37%, 61.74% 41.35%, 78.20% 58.64%, 89.21% 69.37%, 100.00% 82.90%, 100.00% 94.13%, 91.46% 100.00%, 80.47% 98.60%, 73.76% 93.98%, 63.44% 83.54%, 52.93% 71.64%, 39.75% 60.49%, 32.24% 56.98%, 21.24% 50.47%, 12.98% 41.35%, 4.71% 35.73%, 0.00% 27.56%, 0.00% 18.44%);
+  pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+/* maski: linie tekstu (dzielone skryptem), tagi, przycisk */
+.d-mask { overflow: hidden; }
+.d-mask--btn { display: block; }
+.d-mask .d-btn:focus-visible { outline-offset: -5px; }
+.is-split { display: flex; flex-direction: column; align-items: flex-start; }
+.ln { display: block; overflow: hidden; white-space: nowrap; padding: 0.14em 0; margin: -0.14em 0; }
+.ln__i { display: block; }
+
+/* chowanie Hero: przesunięcia w maskach liczy skrypt z pozycji scrolla (zasada ze scroll-sweep.js),
+   celowo bez `transition` — przejście na zegarze dałoby podwójne opóźnienie. */
+
+/* tekst w Problemie: każde słowo podnosi się od dołu we własnej masce, słowo po słowie,
+   z synchronizacją ze scrollem jak w Colmez (okna czasowe ze scroll-sweep.js).
+   Maska przez clip-path, nie overflow: przy overflow ≠ visible linia bazowa inline-block przeskakuje
+   na dolną krawędź i słowa rozjechałyby się w pionie. Padding/margines robią miejsce na znaki
+   diakrytyczne bez zmiany układu (GOTCHA 3 ze scroll-sweep.js). Klasy .w powstają w skrypcie,
+   więc bez niego tekst wyświetla się normalnie. */
+.d-problem__text .w { display: inline-block; padding: 0.14em 0 0.24em; margin: -0.14em 0 -0.24em; clip-path: inset(0 -0.1em); }
+.d-problem__text .w__i { display: inline-block; transform: translateY(calc(100% + 0.35em)); }
+
+/* ---------- 1a · intro: stan Preload (Figma 7207:801) → Hero ----------
+   html.intro          stan startowy: niebieskie tło, słowa pod maską
+   html.intro--words   słowa wyjeżdżają spod maski
+   html.intro--spread  słowa rozjeżdżają się do pozycji z Hero, reszta się pojawia
+   Klasy zdejmuje skrypt po zakończeniu; bez JS i przy prefers-reduced-motion intro nie startuje. */
+html { scrollbar-gutter: stable; }
+.d-hero__w { display: block; overflow: hidden; }
+.d-hero__wi { display: block; }
+.d-nav__logo { overflow: hidden; transform-origin: 0 0; }
+
+html.intro, html.intro body { overflow: hidden; background: var(--c-blue-500); }
+
+html.intro .d-hero__wi,
+html.intro .d-nav__logo img { translate: 0 105%; transition: translate 950ms cubic-bezier(0.16, 1, 0.3, 1); }
+html.intro .d-hero__w--2 .d-hero__wi { transition-delay: 80ms; }
+html.intro .d-hero__w--3 .d-hero__wi { transition-delay: 160ms; }
+html.intro .d-hero__w--4 .d-hero__wi { transition-delay: 240ms; }
+html.intro--words .d-hero__wi,
+html.intro--words .d-nav__logo img { translate: none; }
+
+html.intro .d-intro-in { opacity: 0; translate: 0 24px;
+  transition: opacity 600ms ease var(--intro-delay, 0ms), translate 900ms cubic-bezier(0.16, 1, 0.3, 1) var(--intro-delay, 0ms); }
+html.intro--spread .d-intro-in { opacity: 1; translate: none; }
+
+html.intro .d-hero__flashlight { opacity: 0; scale: 0.82; rotate: -14deg;
+  transition: opacity 500ms ease 300ms, scale 1200ms cubic-bezier(0.16, 1, 0.3, 1) 300ms, rotate 1200ms cubic-bezier(0.16, 1, 0.3, 1) 300ms; }
+html.intro--spread .d-hero__flashlight { opacity: 1; scale: 1; rotate: 0deg; }
+
+html.intro .d-problem, html.intro .d-learn, html.intro .wf-zone, html.intro .footer { opacity: 0; transition: opacity 600ms ease 500ms; }
+html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .wf-zone, html.intro--spread .footer { opacity: 1; }
+
+@media (min-width: 1024px) {
+  /* Preload: grupa 1210 × 672 wyśrodkowana w ekranie (Startup/disco od 50% − 399, very/Sprint od 50% + 60).
+     Hero: lewa kolumna od 40 px, prawa kończy się 40 px przed krawędzią. Przesunięcie = różnica tych pozycji. */
+  html.intro .d-hero__w { transition: transform 1000ms cubic-bezier(0.83, 0, 0.17, 1); }
+  html.intro .d-hero__w--1, html.intro .d-hero__w--2 { transform: translateX(calc(50cqw - 399 * var(--hs) - 40px)); }
+  html.intro .d-hero__w--3, html.intro .d-hero__w--4 { transform: translateX(calc(605 * var(--hs) + 40px - 50cqw)); }
+  html.intro--spread .d-hero__w { transform: none; }
+}
+
+/* ---------- 2 · PROBLEM ---------- */
+.d-problem { position: relative; }
+.d-problem__frame { min-height: calc(1390 * var(--u)); padding: calc(105 * var(--u)) 0 calc(120 * var(--u)); }
+/* 92 px zamiast 64: szerokość bloku, odstępy i tracking w tej samej proporcji (× 1.4375), żeby linie łamały się jak w Figmie;
+   wcięcie 40 px jak w Hero */
+.d-problem__text { position: relative; z-index: 1; margin-left: 40px; width: calc(1164.375 * var(--u));
+  display: flex; flex-direction: column; gap: calc(46 * var(--u)); }
+.d-problem__text > * { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(92 * var(--u)); line-height: 1.1;
+  letter-spacing: calc(-1.84 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+
+/* Przyklejane warstwy latarki (desktop): kontener 100svh wyciągnięty 50svh w górę, więc przykleja się
+   dokładnie wtedy, gdy nagłówek sekcji dochodzi do połowy ekranu — wtedy latarka z Hero kończy podróż.
+   Dalej latarka stoi w tym samym miejscu ekranu, a tekst przewija się pod nią; pod koniec sekcji odjeżdża.
+   Dwie warstwy, bo tekst ma być między snopem (pod) a korpusem (nad). Marginesy się znoszą, układ bez zmian. */
+.d-problem__pin { position: sticky; top: 0; height: 100svh; pointer-events: none; }
+.d-problem__pin--beam { z-index: 0; margin: -50svh 0 -100svh; }
+.d-problem__pin--body { z-index: 2; margin: 0 0 -50svh; }
+.d-problem__flashlight, .d-problem__beam { position: absolute; left: calc(1350.85 * var(--u)); top: calc(354.55 * var(--u));
+  width: calc(593.086 * var(--du)); height: calc(573.861 * var(--du)); translate: -50% -50%; rotate: var(--aim, 0deg);
+  display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.d-fl--problem { position: relative; flex: none; width: calc(431.81 * var(--du)); height: calc(466.254 * var(--du)); transform: rotate(-68.25deg); }
+.d-fl--problem .d-fl__shape { position: absolute; left: calc(-2.99 * var(--du)); top: calc(-2.12 * var(--du)); width: calc(441.89 * var(--du)); height: calc(473.505 * var(--du)); }
+.d-fl--problem .d-fl__photo { position: absolute; left: calc(-0.14 * var(--du)); top: calc(-30.24 * var(--du)); width: calc(425.514 * var(--du)); height: calc(546.063 * var(--du));
+  display: flex; align-items: center; justify-content: center; }
+.d-fl--problem .riso { width: calc(481.885 * var(--du)); height: calc(311.404 * var(--du)); transform: rotate(75deg); }
+.d-fl--problem .d-fl__beam { position: absolute; left: calc(-1245.42 * var(--du)); top: calc(-1219.79 * var(--du)); width: calc(1383.621 * var(--du)); height: calc(1669.633 * var(--du));
+  display: flex; align-items: center; justify-content: center; }
+.d-fl--problem .d-fl__beam img { flex: none; width: calc(1438.32 * var(--du)); height: calc(874.679 * var(--du)); }
+/* snop dłuższy (--beam-len) przy zachowanym kącie: skala wokół głowicy, czyli środka wąskiego końca
+   stożka (1425.07 × 37.5 w pliku SVG = 49.08% / −45.71% od środka obrazka) */
+.d-fl__beam img { --beam-len: 2.5;
+  transform: rotate(66.03deg) translate(49.08%, -45.71%) scale(var(--beam-len)) translate(-49.08%, 45.71%); }
+
+/* ---------- 3 · CZEGO SIĘ NAUCZYSZ ---------- */
+.d-learn { position: relative; background: var(--c-cream); overflow: clip; }
+.d-learn__frame { min-height: calc(1264 * var(--u)); padding: calc(150 * var(--u)) calc(40 * var(--u)) calc(160 * var(--u));
+  display: grid; grid-template-columns: calc(705 * var(--u)) calc(607 * var(--u)); column-gap: calc(104 * var(--u)); align-items: start; }
+.d-learn__title { grid-column: 1; grid-row: 1; margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(112 * var(--u));
+  line-height: 1.1; letter-spacing: calc(-2.24 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+.d-learn__list { grid-column: 2; grid-row: 1; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: calc(80 * var(--u)); }
+
+.d-skill__num { position: relative; isolation: isolate; display: block; box-sizing: border-box;
+  width: calc(42 * var(--t)); height: calc(37 * var(--t)); padding: calc(6 * var(--t)) 0 0 calc(10 * var(--t)); margin-bottom: calc(16 * var(--t));
+  font-family: var(--f-display); font-weight: 400; font-size: calc(24 * var(--t)); line-height: 1;
+  letter-spacing: calc(-0.48 * var(--t)); text-transform: uppercase; color: var(--c-black); }
+.d-skill__num::before { content: ""; position: absolute; z-index: -1; left: calc(0.5 * var(--t)); top: calc(0.5 * var(--t));
+  width: calc(41.5 * var(--t)); height: calc(36 * var(--t)); background: url("design-assets/num-bracket.svg") no-repeat 0 0 / 100% 100%; }
+.d-skill:nth-child(even) .d-skill__num { padding-top: calc(7 * var(--t)); }
+.d-skill:nth-child(even) .d-skill__num::before { background-image: url("design-assets/num-bracket-alt.svg"); transform: scaleX(-1); }
+.d-skill:nth-child(3) .d-skill__num { padding-left: calc(9 * var(--t)); }
+.d-skill__title { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(32 * var(--u)); line-height: 1;
+  letter-spacing: calc(-0.64 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+.d-skill__desc { margin-top: calc(24 * var(--u)); }
+
+.d-learn__cap { position: absolute; left: calc(101 * var(--u)); top: calc(303 * var(--u));
+  width: calc(584.037 * var(--du)); height: calc(440.543 * var(--du));
+  display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.d-cap { position: relative; flex: none; width: calc(524.989 * var(--du)); height: calc(338.506 * var(--du)); transform: rotate(-12.04deg); }
+.d-cap__shape { position: absolute; left: 0; top: 0; width: calc(524.989 * var(--du)); height: calc(338.506 * var(--du)); }
+.d-cap .riso { position: absolute; left: calc(32.09 * var(--du)); top: calc(15.88 * var(--du)); width: calc(484.449 * var(--du)); height: calc(310.804 * var(--du)); }
+
+/* ---------- mobile (brak projektu w Figmie — układ tymczasowy) ---------- */
+@media (max-width: 1023px) {
+  :root { --m: calc(min(100cqw, 600px) / 390); --t: calc(var(--m) * 0.62); }
+
+  .d-nav__bar { padding: 0 20px; }
+  .d-nav nav { display: none; }
+  .d-nav__toggle { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 32px; padding: 0 10px;
+    background: var(--c-blue-100); border: 0; cursor: pointer; }
+  .d-nav__toggle span { display: block; height: 2px; background: var(--c-black); }
+  .d-nav__mobile.is-open { display: block; background: var(--c-blue-100); padding: 8px 20px 16px; }
+  .d-nav__mobile ul { list-style: none; margin: 0; padding: 0; }
+  .d-nav__mobile a { display: block; padding: 12px 0; font-size: 16px; }
+
+  .d-frame { width: 100%; }
+  .d-body { font-size: 17px; letter-spacing: -0.2px; }
+  .d-btn { height: 56px; padding: 0 28px; font-size: 20px; letter-spacing: -0.4px; }
+
+  .d-hero__frame { height: auto; padding: calc(56px + 24 * var(--m)) calc(20 * var(--m)) calc(48 * var(--m)); display: flex; flex-direction: column; }
+  .d-tags { position: static; order: 1; }
+  .d-hero__title { order: 2; margin-top: calc(28 * var(--m)); font-size: calc(112 * var(--m)); line-height: 1; letter-spacing: calc(-2.24 * var(--m)); }
+  /* maska ma pełną wysokość 1em (inaczej ucina glify); ciasny rytm linii z ujemnego marginesu */
+  .d-hero__w { position: static; display: block; }
+  .d-hero__w + .d-hero__w { margin-top: -0.08em; }
+  .d-hero__w--3, .d-hero__w--4 { text-align: right; }
+  .d-hero__beam { --du: calc(var(--m) * 0.42); }
+  .d-hero__flashlight { position: relative; order: 3; left: auto; top: auto; translate: none; --du: calc(var(--m) * 0.42);
+    margin: calc(-78 * var(--m)) 0 calc(-56 * var(--m)) calc(96 * var(--m)); }
+  .d-hero__intro { position: static; order: 4; width: auto; margin-top: calc(8 * var(--m)); gap: 20px; }
+
+  .d-problem { overflow: clip; }
+  .d-problem__frame { min-height: 0; padding: calc(210 * var(--m)) calc(20 * var(--m)) calc(72 * var(--m)); }
+  .d-problem__pin, .d-problem__pin--beam, .d-problem__pin--body { position: absolute; inset: 0; height: auto; margin: 0; }
+  .d-problem__text { width: auto; margin-left: 0; gap: calc(20 * var(--m)); }
+  .d-problem__text > * { font-size: calc(34 * var(--m)); letter-spacing: calc(-0.68 * var(--m)); }
+  .d-problem__flashlight, .d-problem__beam { --du: calc(var(--m) * 0.42); left: calc(330 * var(--m)); top: calc(96 * var(--m)); }
+
+  .d-learn__frame { min-height: 0; display: flex; flex-direction: column; padding: calc(72 * var(--m)) calc(20 * var(--m)) calc(80 * var(--m)); }
+  .d-learn__title { order: 1; font-size: calc(64 * var(--m)); letter-spacing: calc(-1.28 * var(--m)); }
+  .d-learn__cap { order: 2; position: relative; left: auto; top: auto; --du: calc(var(--m) * 0.6); margin: calc(-12 * var(--m)) auto calc(24 * var(--m)); }
+  .d-learn__list { order: 3; gap: calc(44 * var(--m)); }
+  .d-skill__title { font-size: calc(26 * var(--m)); letter-spacing: calc(-0.52 * var(--m)); }
+  .d-skill__desc { margin-top: 16px; }
+}
+</style>
+</head>
+<body>
+
+
+<header class="d-nav">
+  <div class="d-nav__bar">
+    <a class="d-nav__logo" href="#aplikuj" aria-label="MD Fellowship"><img src="design-assets/logo-md.svg" width="82.449" height="20" alt=""></a>
+    <nav aria-label="Główna">
+      <ul class="d-nav__links d-intro-in" style="--intro-delay: 380ms">
+        <li><a href="#program">Program</a></li>
+        <li><a href="#jak">Jak to działa</a></li>
+        <li><a href="#mentorzy">Mentorzy</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <div class="d-nav__actions d-intro-in" style="--intro-delay: 440ms">
+      <a class="d-nav__cta" href="#aplikuj">Aplikuj</a>
+      <button type="button" class="d-nav__toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-mobile"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="d-nav__mobile" id="nav-mobile">
+    <ul>
+      <li><a href="#program">Program</a></li>
+      <li><a href="#jak">Jak to działa</a></li>
+      <li><a href="#mentorzy">Mentorzy</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+<div class="d-scene">
+
+<!-- 1. HERO (Figma 7207:801) -->
+<section class="d-hero" id="aplikuj">
+  <div class="d-frame d-hero__frame">
+    <div class="d-hero__beam" aria-hidden="true">
+      <div class="d-fl d-fl--hero">
+        <div class="d-fl__beam"><img src="design-assets/problem-beam.svg" width="1438.32" height="874.679" alt=""></div>
+      </div>
+    </div>
+    <h1 class="d-hero__title"><span class="d-hero__w d-hero__w--1"><span class="d-hero__wi">Startup</span></span> <span class="d-hero__w d-hero__w--2"><span class="d-hero__wi">disco</span></span><span class="d-hero__w d-hero__w--3"><span class="d-hero__wi">very</span></span> <span class="d-hero__w d-hero__w--4"><span class="d-hero__wi">Sprint</span></span></h1>
+    <div class="d-hero__intro d-intro-in" id="hero-cta" style="--intro-delay: 560ms">
+      <p class="d-body" data-split="lines">Zanim zaczniesz budować, porozmawiaj z klientami: przez miesiąc founderzy z MD Fellowship pokażą ci, jak znaleźć problem, za którego rozwiązanie ktoś naprawdę zapłaci.</p>
+      <span class="d-mask d-mask--btn"><a class="d-btn d-mask__i" href="#aplikuj">Aplikuj</a></span>
+    </div>
+    <div class="d-hero__flashlight" aria-hidden="true">
+      <div class="d-fl d-fl--hero">
+        <img class="d-fl__shape" src="design-assets/hero-flashlight-shape.svg" width="550.268" height="587.772" alt="">
+        <div class="d-fl__hit"></div>
+        <div class="d-fl__photo">
+          <div class="riso" data-fit="cover" data-design-width="620.116" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
+        </div>
+      </div>
+    </div>
+    <div class="d-tags d-intro-in" style="--intro-delay: 500ms">
+      <p class="d-tags__row d-mask"><span class="d-tag d-tag--free d-mask__i">Bezpłatnie</span><span class="d-tag d-tag--age d-mask__i">18–24 lata</span></p>
+      <p class="d-mask"><span class="d-tag d-tag--date d-mask__i">12–13 listopada 2026 + 1-mc online</span></p>
+      <p class="d-mask"><span class="d-tag d-tag--place d-mask__i">Google for Startups Campus Warsaw</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. PROBLEM (Figma 7207:864) -->
+<section class="d-problem" id="program">
+  <div class="d-frame d-problem__frame">
+    <!-- przyklejane warstwy latarki: snop pod tekstem, korpus nad tekstem -->
+    <div class="d-problem__pin d-problem__pin--beam" aria-hidden="true">
+      <div class="d-problem__beam">
+        <div class="d-fl d-fl--problem">
+          <div class="d-fl__beam"><img src="design-assets/problem-beam.svg" width="1438.32" height="874.679" alt=""></div>
+        </div>
+      </div>
+    </div>
+    <div class="d-problem__pin d-problem__pin--body" aria-hidden="true">
+      <div class="d-problem__flashlight">
+        <div class="d-fl d-fl--problem">
+          <img class="d-fl__shape" src="design-assets/problem-flashlight-shape.svg" width="441.89" height="473.505" alt="">
+          <div class="d-fl__hit"></div>
+          <div class="d-fl__photo">
+            <div class="riso" data-fit="cover" data-design-width="481.885" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-problem__text">
+      <h2 class="d-reveal" data-split="words">Większość startupów<br>nie pada przez brak kasy.</h2>
+      <p class="d-reveal" data-split="words">Padają, bo zbudowały coś, czego nikt nie potrzebował. Miesiące pracy, logo, pitch deck… i cisza.</p>
+      <p class="d-reveal" data-split="words">Daj nam miesiąc. Pokażemy ci, jak rozmawiać z potencjalnymi klientami i znaleźć problem, który warto rozwiązać.</p>
+      <p class="d-reveal" data-split="words">Przyłożysz się? Masz szansę skończyć program z pierwszymi płacącymi klientami.</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- /d-scene -->
+
+<!-- 3. CZEGO SIĘ NAUCZYSZ (Figma 7207:879) -->
+<section class="d-learn" id="nauczysz">
+  <div class="d-frame d-learn__frame">
+    <h2 class="d-learn__title">Czego się nauczysz?</h2>
+    <ol class="d-learn__list">
+      <li class="d-skill">
+        <span class="d-skill__num" aria-hidden="true">01</span>
+        <h3 class="d-skill__title">Prowadzić discovery calle</h3>
+        <p class="d-body d-skill__desc">Zapytasz „kupiłbyś to?”, każdy powie, że tak. I nic z tego nie wynika. Nauczymy cię pytać tak, żeby usłyszeć prawdę, a nie uprzejmości.</p>
+      </li>
+      <li class="d-skill">
+        <span class="d-skill__num" aria-hidden="true">02</span>
+        <h3 class="d-skill__title">Odróżniać lekarstwo od witaminy</h3>
+        <p class="d-body d-skill__desc">Witamina to „fajnie by było”. Lekarstwo to „potrzebuję tego na wczoraj”. Za pierwsze ludzie płacą niechętnie, za drugie od ręki.</p>
+      </li>
+      <li class="d-skill">
+        <span class="d-skill__num" aria-hidden="true">03</span>
+        <h3 class="d-skill__title">Pisać wiadomości, na które ktoś odpisze</h3>
+        <p class="d-body d-skill__desc">Twój mail ląduje obok 50 innych, w większości pisanych przez AI. Jeśli brzmisz jak wszyscy, lądujesz w archiwum.</p>
+      </li>
+      <li class="d-skill">
+        <span class="d-skill__num" aria-hidden="true">04</span>
+        <h3 class="d-skill__title">Stawiać MVP w kilka godzin</h3>
+        <p class="d-body d-skill__desc">MVP to nie okrojona wersja 1.0. To najtańszy sposób, żeby sprawdzić, czy ktoś zapłaci. Czasem wystarczy arkusz w Excelu.</p>
+      </li>
+    </ol>
+    <div class="d-learn__cap" aria-hidden="true">
+      <div class="d-cap">
+        <img class="d-cap__shape" src="design-assets/grad-cap-shape.svg" width="524.989" height="338.506" alt="">
+        <div class="riso" data-fit="fill" data-design-width="484.449" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":7,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-grad-cap.png" width="484.449" height="310.804" alt=""></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wf-zone">
+
+<!-- 4. JAK TO DZIAŁA — sekcja scrollowana -->
+<section class="section" id="jak">
+  <div class="wrap">
+    <h2>Jak to działa</h2>
+    <div class="sc-grid">
+      <div class="sc-media" aria-hidden="true">
+        <div class="sc-sticky">
+          <div class="sc-frame">
+            <div class="box sc-img is-active"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE — SPRINT NA CAMPUSIE</span></div>
+            <div class="box sc-img"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE — ROZMOWY Z KLIENTAMI</span></div>
+            <div class="box sc-img"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE — MD FELLOWSHIP</span></div>
+          </div>
+          <p class="sc-progress" id="sc-progress">01 / 03</p>
+        </div>
+      </div>
+      <div class="sc-steps">
+        <article class="sc-step is-active">
+          <span class="sc-time">12–13 listopada</span>
+          <h3>Sprint w Warszawie.</h3>
+          <p class="sc-desc">Dwa dni na Google for Startups Campus. Krótkie prelekcje founderów o [TEMATY PRELEKCJI], a między nimi dużo czasu na własną robotę i rozmowy z mentorami.</p>
+        </article>
+        <article class="sc-step">
+          <span class="sc-time">Kolejne 4 tygodnie</span>
+          <h3>4 tygodnie w terenie.</h3>
+          <p class="sc-desc">Dzwonisz, piszesz, umawiasz się i słuchasz. Nie robisz tego w pojedynkę: masz grupę na WhatsAppie i kilka spotkań online.</p>
+        </article>
+        <article class="sc-step">
+          <span class="sc-time">13 grudnia · deadline rekrutacji</span>
+          <h3>Fast-track do MD Fellowship.</h3>
+          <p class="sc-desc">Masz problem, który chcesz rozwiązać? Aplikuj do MD Fellowship i zbudujmy na nim firmę.</p>
+          <p class="sc-fast">Weźmiesz udział w min. 80% spotkań? Wskakujesz od razu do drugiego etapu rekrutacji.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 5. TAK TO WYGLĄDA W PRAKTYCE -->
+<section class="section" id="praktyka">
+  <div class="wrap">
+    <div class="reels-head">
+      <div class="stack" style="max-width:640px">
+        <h2>Zobacz, jak robili to inni</h2>
+        <p class="lead" style="font-weight:400">Pięcioro Fellows opowiada, jak szukali problemu, dzwonili do obcych ludzi i stawiali pierwsze MVP.</p>
+      </div>
+      <p class="reels-link"><a href="https://www.instagram.com/mdfellowship">Więcej na Instagramie →</a></p>
+    </div>
+    <div class="carousel" id="reels-car">
+      <button type="button" class="car-arrow prev" id="car-prev" aria-label="Poprzedni reel">←</button>
+      <div class="car-viewport" id="car-viewport">
+        <div class="car-track" id="car-track">
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3>Jak znalazłem problem</h3>
+            <p class="meta">[Imię], [startup]</p>
+          </article>
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3>Moje pierwsze discovery calle</h3>
+            <p class="meta">[Imię], [startup]</p>
+          </article>
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3>Zatrudniłem się u klienta</h3>
+            <p class="meta">[Imię], [startup]</p>
+          </article>
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3>MVP w Excelu</h3>
+            <p class="meta">[Imię], [startup]</p>
+          </article>
+          <article class="reel">
+            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3>[TEMAT REELSA]</h3>
+            <p class="meta">[Imię], [startup]</p>
+          </article>
+        </div>
+      </div>
+      <button type="button" class="car-arrow next" id="car-next" aria-label="Następny reel">→</button>
+    </div>
+    <p class="reels-link-mobile"><a href="https://www.instagram.com/mdfellowship">Więcej na Instagramie →</a></p>
+  </div>
+</section>
+
+<!-- 6. WŚRÓD PRELEGENTÓW I MENTORÓW -->
+<section class="section" id="mentorzy">
+  <div class="wrap">
+    <div class="stack" style="max-width:860px">
+      <h2>Z kim będziesz pracować</h2>
+      <p class="lead" style="font-weight:400">Ludzie, którzy sami zakładali firmy, zatrudniali, sprzedawali i zaliczali wtopy. I chętnie powiedzą, czego nie znajdziesz w poradnikach.</p>
+    </div>
+  </div>
+  <div class="marquee" id="mentors-marquee">
+    <div class="marquee-track">
+      <div class="marquee-group">
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+      </div>
+      <div class="marquee-group" aria-hidden="true">
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+        <article class="mentor" tabindex="0">
+          <div class="box mentor-photo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE</span>
+            <div class="mentor-bio">[2 zdania bio: co zbudował, czym się zajmuje dziś.]</div>
+          </div>
+          <p class="mentor-name">[Imię Nazwisko]</p>
+          <p class="meta">[Rola, firma]</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. KTO ZA TYM STOI -->
+<section class="section" id="kto">
+  <div class="wrap">
+    <div class="stack" style="max-width:780px">
+      <h2>Nie robimy konkursów. Pomagamy serio budować firmy.</h2>
+      <p class="body muted">MD Fellowship to społeczność osób 18–24, które już budują swoje pierwsze firmy. Każdy Fellow ma mentoring 1:1 z przedsiębiorcą, który przeszedł drogę od pomysłu do globalnego sukcesu.</p>
+      <p class="meta"><a href="https://mdfellows.com/">mdfellows.com →</a> · <a href="https://www.instagram.com/mdfellowship">Instagram</a> · <a href="https://www.linkedin.com/company/md-fellowship/">LinkedIn</a></p>
+    </div>
+    <div class="numbers-row">
+      <div><span class="number-v">300+</span><span class="number-d">aplikacji na każdy batch</span></div>
+      <div><span class="number-v">~10</span><span class="number-d">przyjętych Fellows</span></div>
+      <div><span class="number-v">2×</span><span class="number-d">nabór w roku</span></div>
+      <div><span class="number-v">1:1</span><span class="number-d">mentoring od founderów</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. DLA KOGO -->
+<section class="section audience" id="dlakogo">
+  <div class="box audience-bg" aria-hidden="true"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE TŁA — UCZESTNICY / SALA</span></div>
+  <div class="wrap">
+    <div class="audience-card">
+      <h2>Dla kogo</h2>
+      <p class="lead">Masz 18–24 lata i chcesz zbudować własną firmę?</p>
+      <p class="body muted">Aplikuj solo albo w parze. Nie potrzebujesz pomysłu, zespołu ani umiejętności programowania. Potrzebujesz odwagi, żeby zadzwonić do obcej osoby i zapytać, co ją naprawdę boli.</p>
+      <div class="cta-row">
+        <a class="btn" href="#aplikuj">Aplikuj →</a>
+        <p class="cta-note">Zgłoszenia do [DATA]</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 9. FAQ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="split">
+      <h2>FAQ</h2>
+      <div class="faq-list" id="faq-list">
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="true" aria-controls="faq-p1" id="faq-b1">Ile to kosztuje?<span class="faq-sign" aria-hidden="true">–</span></button></h3>
+          <div class="faq-a" id="faq-p1" role="region" aria-labelledby="faq-b1">Nic, udział jest bezpłatny. Dojazd i ewentualny nocleg w Warszawie są po twojej stronie.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p2" id="faq-b2">Do kiedy mogę aplikować?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden>Zgłoszenia przyjmujemy do [DATA]. Nie czekaj do ostatniej chwili, mamy 100 miejsc.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p3" id="faq-b3">Jak wygląda rekrutacja?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p3" role="region" aria-labelledby="faq-b3" hidden>[PROCES REKRUTACJI – do uzupełnienia przez klienta: formularz, kryteria wyboru, ewentualna rozmowa.]</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p4" id="faq-b4">Kiedy dostanę odpowiedź?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p4" role="region" aria-labelledby="faq-b4" hidden>[DATA ODPOWIEDZI]. Odezwiemy się mailowo niezależnie od decyzji.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p5" id="faq-b5">Nie mam pomysłu.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p5" role="region" aria-labelledby="faq-b5" hidden>Tym lepiej, nie musisz się z żadnym rozstawać. Nauczymy cię szukać problemów, które warto rozwiązać.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p6" id="faq-b6">Nie umiem kodować.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p6" role="region" aria-labelledby="faq-b6" hidden>Spoko, tu nie kodujemy. Na starcie rozmowy z klientami są ważniejsze niż kod.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p7" id="faq-b7">Nie mam zespołu.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p7" role="region" aria-labelledby="faq-b7" hidden>Nic nie szkodzi. Możesz aplikować solo albo w parze.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p8" id="faq-b8">Nie mam doświadczenia biznesowego. Czy to problem?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p8" role="region" aria-labelledby="faq-b8" hidden>Nie. Program jest dla osób, które dopiero zaczynają. Wystarczy, że chcesz się uczyć i nie boisz się rozmawiać z ludźmi.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p9" id="faq-b9">Mam już startup. Czy to program dla mnie?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p9" role="region" aria-labelledby="faq-b9" hidden>Tak, jeśli chcesz sprawdzić, czy rozwiązujesz prawdziwy problem. Wielu founderów robi discovery dopiero wtedy, gdy produkt nie chce się sprzedawać. Lepiej zrobić to wcześniej.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p10" id="faq-b10">Ile czasu muszę poświęcić?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p10" role="region" aria-labelledby="faq-b10" hidden>Dwa pełne dni na miejscu (12–13 listopada), potem min. 10 godzin tygodniowo przez 4 tygodnie.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p11" id="faq-b11">Czy mogę uczestniczyć tylko online?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p11" role="region" aria-labelledby="faq-b11" hidden>[DO POTWIERDZENIA PRZED LAUNCHEM]</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p12" id="faq-b12">Co mi to da poza wiedzą?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p12" role="region" aria-labelledby="faq-b12" hidden>Jeśli weźmiesz udział w min. 80% spotkań, przejdziesz od razu do drugiego etapu rekrutacji do MD Fellowship.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. FINALNE CTA -->
+<section class="section final" id="final">
+  <div class="wrap">
+    <div class="stack-l">
+      <h2>Najtrudniejszy jest pierwszy telefon. Resztę ogarniemy razem.</h2>
+      <p class="meta">12–13 listopada · Warszawa · bezpłatnie · 100 miejsc</p>
+      <div class="cta-row"><a class="btn" href="#aplikuj">Aplikuj</a></div>
+      <p class="meta">Zgłoszenia do [DATA]</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wf-zone -->
+
+</main>
+
+<!-- 11. FOOTER -->
+<footer class="footer" id="footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="stack">
+        <div class="box footer-logo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">LOGO MD</span></div>
+        <nav class="footer-links" aria-label="Stopka">
+          <a href="https://mdfellows.com/">mdfellows.com</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.instagram.com/mdfellowship">Instagram</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.linkedin.com/company/md-fellowship/">LinkedIn</a>
+          <span aria-hidden="true">·</span>
+          [Polityka prywatności]
+        </nav>
+      </div>
+      <div class="footer-partner">
+        <span>Partner miejsca:</span>
+        <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">[LOGO Google for Startups Campus]</span></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true">
+  <p class="cta-note"><b>Bezpłatnie · 100 miejsc</b>Zgłoszenia do [DATA]</p>
+  <a class="btn btn-sm" href="#aplikuj" tabindex="-1">Aplikuj</a>
+</div>
+
+
+<script>
+(function () {
+  /* ---------- FAQ accordion ---------- */
+  var faq = document.getElementById('faq-list');
+  faq.addEventListener('click', function (e) {
+    var btn = e.target.closest('.faq-q');
+    if (!btn) return;
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+    faq.querySelectorAll('.faq-q').forEach(function (b) {
+      b.setAttribute('aria-expanded', 'false');
+      b.querySelector('.faq-sign').textContent = '+';
+      document.getElementById(b.getAttribute('aria-controls')).hidden = true;
+    });
+    if (!isOpen) {
+      btn.setAttribute('aria-expanded', 'true');
+      btn.querySelector('.faq-sign').textContent = '–';
+      document.getElementById(btn.getAttribute('aria-controls')).hidden = false;
+    }
+  });
+
+  /* ---------- mobile menu ---------- */
+  var navToggle = document.getElementById('nav-toggle');
+  var navMobile = document.getElementById('nav-mobile');
+  navToggle.addEventListener('click', function () {
+    var open = navToggle.getAttribute('aria-expanded') === 'true';
+    navToggle.setAttribute('aria-expanded', String(!open));
+    navMobile.classList.toggle('is-open', !open);
+  });
+  navMobile.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') {
+      navToggle.setAttribute('aria-expanded', 'false');
+      navMobile.classList.remove('is-open');
+    }
+  });
+
+  /* ---------- jak to działa: stan sterowany scrollem ---------- */
+  var scSteps = Array.prototype.slice.call(document.querySelectorAll('.sc-step'));
+  var scImgs = Array.prototype.slice.call(document.querySelectorAll('.sc-img'));
+  var scProgress = document.getElementById('sc-progress');
+  function scSet(i) {
+    scSteps.forEach(function (s, j) { s.classList.toggle('is-active', j === i); });
+    scImgs.forEach(function (im, j) { im.classList.toggle('is-active', j === i); });
+    scProgress.textContent = '0' + (i + 1) + ' / 0' + scSteps.length;
+  }
+  if ('IntersectionObserver' in window) {
+    var scIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) scSet(scSteps.indexOf(en.target));
+      });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    scSteps.forEach(function (s) { scIO.observe(s); });
+  }
+
+  /* ---------- reels: karuzela center-mode ---------- */
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vp = document.getElementById('car-viewport');
+  var track = document.getElementById('car-track');
+  var slides = Array.prototype.slice.call(track.children);
+  var carPrev = document.getElementById('car-prev');
+  var carNext = document.getElementById('car-next');
+  var carIdx = Math.floor(slides.length / 2);
+  var baseOffset = 0;
+
+  function carGap() { return parseFloat(getComputedStyle(track).columnGap) || 0; }
+  function carRender(anim) {
+    var w = slides[0].offsetWidth;
+    baseOffset = vp.clientWidth / 2 - (carIdx * (w + carGap()) + w / 2);
+    track.style.transition = (anim && !reduced) ? 'transform 300ms ease' : 'none';
+    track.style.transform = 'translateX(' + baseOffset + 'px)';
+    slides.forEach(function (sl, j) { sl.classList.toggle('is-active', j === carIdx); });
+    carPrev.disabled = carIdx === 0;
+    carNext.disabled = carIdx === slides.length - 1;
+  }
+  carPrev.addEventListener('click', function () { carIdx = Math.max(0, carIdx - 1); carRender(true); });
+  carNext.addEventListener('click', function () { carIdx = Math.min(slides.length - 1, carIdx + 1); carRender(true); });
+
+  var dragX = null;
+  vp.addEventListener('pointerdown', function (e) {
+    dragX = e.clientX;
+    vp.classList.add('is-dragging');
+    vp.setPointerCapture(e.pointerId);
+    track.style.transition = 'none';
+  });
+  vp.addEventListener('pointermove', function (e) {
+    if (dragX === null) return;
+    track.style.transform = 'translateX(' + (baseOffset + (e.clientX - dragX)) + 'px)';
+  });
+  function dragEnd(e) {
+    if (dragX === null) return;
+    var delta = e.clientX - dragX;
+    dragX = null;
+    vp.classList.remove('is-dragging');
+    if (delta < -50) carIdx = Math.min(slides.length - 1, carIdx + 1);
+    else if (delta > 50) carIdx = Math.max(0, carIdx - 1);
+    carRender(true);
+  }
+  vp.addEventListener('pointerup', dragEnd);
+  vp.addEventListener('pointercancel', dragEnd);
+  window.addEventListener('resize', function () { carRender(false); });
+  carRender(false);
+
+  /* ---------- sticky CTA (mobile) ---------- */
+  var bar = document.getElementById('sticky-cta');
+  var barLink = bar.querySelector('a');
+  var mq = window.matchMedia('(max-width: 768px)');
+  var heroVisible = true;
+  var suppress = 0;
+
+  function render() {
+    var show = mq.matches && !heroVisible && suppress === 0;
+    bar.classList.toggle('is-visible', show);
+    bar.setAttribute('aria-hidden', String(!show));
+    barLink.tabIndex = show ? 0 : -1;
+    document.body.classList.toggle('has-sticky', show);
+  }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { heroVisible = en.isIntersecting; });
+      render();
+    }).observe(document.getElementById('hero-cta'));
+
+    var blockers = ['dlakogo', 'final', 'footer'].map(function (id) { return document.getElementById(id); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var was = en.target.dataset.blocking === '1';
+        if (en.isIntersecting && !was) { suppress++; en.target.dataset.blocking = '1'; }
+        else if (!en.isIntersecting && was) { suppress--; en.target.dataset.blocking = '0'; }
+      });
+      render();
+    });
+    blockers.forEach(function (el) { el.dataset.blocking = '0'; io.observe(el); });
+  }
+  mq.addEventListener ? mq.addEventListener('change', render) : mq.addListener(render);
+  render();
+
+})();
+</script>
+
+<script>
+/* =====================================================================
+   Efekt „Riso” z Figmy (CodeComponent ab4f9935…) — setup/render/manifest
+   skopiowane bez zmian z eksportu Figma MCP (pominięte tylko defineProperties —
+   metadane panelu Figmy, w eksporcie oznaczone jako no-op). Poniżej cienki host WebGPU,
+   który podaje efektowi zdjęcie jako teksturę wejściową i canvas jako wyjście.
+   Bez WebGPU zostaje zwykłe zdjęcie (bez rastra).
+   ===================================================================== */
+var RisoEffect = (function () {
+function setup(device, frame) {
+    var wgsl = `
+diagnostic(off,derivative_uniformity);
+struct Uniforms {
+  frameData: vec4f,
+  inputDimsData: vec4f,
+  color1: vec4f,
+  color2: vec4f,
+  misregistration: vec4f,
+  dotScale: vec4f,
+  grain: vec4f,
+};
+@group(0) @binding(0) var<uniform> u: Uniforms;
+@group(0) @binding(1) var samp: sampler;
+@group(0) @binding(2) var inputTex: texture_2d<f32>;
+
+struct VsIn {
+  @location(0) pos: vec2f,
+  @location(1) uv: vec2f,
+};
+struct VsOut {
+  @builtin(position) position: vec4f,
+  @location(0) uv: vec2f,
+};
+
+fn sampleInput(p: vec2f) -> vec4f {
+  return textureSampleLevel(inputTex, samp, clamp(p, vec2f(0.0), vec2f(1.0)), 0.0);
+}
+
+// Like sampleInput but returns transparent (premultiplied zero) outside the
+// input rect instead of repeating the edge texel.
+fn sampleInputOrZero(p: vec2f) -> vec4f {
+  let inside = step(vec2f(0.0), p) * step(p, vec2f(1.0));
+  return sampleInput(p) * (inside.x * inside.y);
+}
+
+fn halftone(px: vec2f, angle: f32, dotSz: f32) -> f32 {
+
+  let c = cos(angle);
+
+  let s = sin(angle);
+
+  let rot = vec2f(px.x * c - px.y * s, px.x * s + px.y * c);
+
+  let cell = rot / dotSz;
+
+  let cellCenter = (floor(cell) + 0.5) * dotSz;
+
+  let unrot = vec2f(cellCenter.x * c + cellCenter.y * s, -cellCenter.x * s + cellCenter.y * c);
+
+  let dist = length(px - unrot);
+
+  return dist;
+
+}
+
+fn hash21(p: vec2f) -> f32 {
+
+  var q = p;
+
+  q = fract(q * vec2f(127.1, 311.7));
+
+  q += dot(q, q + 19.19);
+
+  return fract(q.x * q.y);
+
+}
+
+@vertex fn vs_main(in: VsIn) -> VsOut {
+  var out: VsOut;
+  out.position = vec4f(in.pos, 0.0, 1.0);
+  out.uv = in.uv;
+  return out;
+}
+
+@fragment fn fs_main(@location(0) outputUv_in: vec2f) -> @location(0) vec4f {
+  let time = u.frameData.x;
+  let outputUv = outputUv_in;
+  let dims = max(u.frameData.yz, vec2f(1.0));
+  let inputDims = max(u.inputDimsData.xy, vec2f(1.0));
+  let inputTexel = vec2f(1.0) / inputDims;
+  let uv = outputUv;
+  // texel and aspect are input-relative to match uv. Zoom fills rescale texel
+  // alongside their uv redefinition below (see zoomLocal).
+  let texel = inputTexel;
+  let aspect = inputDims.x / max(inputDims.y, 1.0);
+  let color1 = u.color1;
+  let color2 = u.color2;
+  let misregistration = u.misregistration.x;
+  let dotScale = u.dotScale.x;
+  let grain = u.grain.x;
+  let inputColor = sampleInput(uv);
+  // Sample input at base UV and offset UV for misregistration
+  let px = uv * dims;
+  let offsetUv = clamp((px + vec2f(misregistration, misregistration * 0.5)) / dims, vec2f(0.0), vec2f(1.0));
+  let baseColor = sampleInput(uv);
+  let offsetColor = sampleInput(offsetUv);
+  // Luminance for each sample
+  let lum1 = dot(baseColor.rgb, vec3f(0.299, 0.587, 0.114));
+  let lum2 = dot(offsetColor.rgb, vec3f(0.299, 0.587, 0.114));
+  // Halftone screens at classic print angles
+  let angle1 = radians(45.0);
+  let angle2 = radians(75.0);
+  let dist1 = halftone(px, angle1, dotScale);
+  let dist2 = halftone(px, angle2, dotScale);
+  // Dot radius based on luminance (darker = bigger dot)
+  let r1 = (1.0 - lum1) * dotScale * 0.5;
+  let r2 = (1.0 - lum2) * dotScale * 0.5;
+  // Dot coverage: 1 inside the dot, 0 outside
+  let dot1 = select(0.0, 1.0, dist1 < r1);
+  let dot2 = select(0.0, 1.0, dist2 < r2);
+  // Compose two ink layers — multiply blend (overprint)
+  let ink1 = color1.rgb * dot1;
+  let ink2 = color2.rgb * dot2;
+  // Paper base is near-white
+  let paper = vec3f(0.97, 0.96, 0.93);
+  // Overprint: multiply where both inks overlap, additive blend each ink into paper
+  var result = paper;
+  result = select(result, result * color1.rgb, dot1 > 0.5);
+  result = select(result, result * color2.rgb, dot2 > 0.5);
+  // Grain
+  let grainVal = (hash21(px) - 0.5) * grain;
+  result = clamp(result + grainVal, vec3f(0.0), vec3f(1.0));
+  // Shadow density boost
+  let luminance = dot(result, vec3f(0.299, 0.587, 0.114));
+  result = result * (0.85 + 0.15 * luminance);
+  return vec4f(result * inputColor.a, inputColor.a);
+}
+`;
+    frame.state.module = device.createShaderModule({ code: wgsl });
+    frame.state.pipeline = null;
+    frame.state.pipelineFormat = null;
+    frame.state.quad = device.createBuffer({
+        size: 6 * 4 * 4,
+        usage: GPUBufferUsage.VERTEX,
+        mappedAtCreation: true,
+    });
+    new Float32Array(frame.state.quad.getMappedRange()).set([
+        -1, -1, 0, 1,
+        1, -1, 1, 1,
+        -1, 1, 0, 0,
+        -1, 1, 0, 0,
+        1, -1, 1, 1,
+        1, 1, 1, 0,
+    ]);
+    frame.state.quad.unmap();
+    frame.state.uniformBuf = device.createBuffer({
+        size: 112,
+        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+    });
+    frame.state.sampler = device.createSampler({
+        magFilter: 'linear',
+        minFilter: 'linear',
+        addressModeU: 'clamp-to-edge',
+        addressModeV: 'clamp-to-edge',
+    });
+    frame.state.placeholder = device.createTexture({
+        size: [1, 1, 1],
+        format: 'rgba8unorm',
+        usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST,
+    });
+    device.queue.writeTexture({ texture: frame.state.placeholder }, new Uint8Array([0, 0, 0, 0]), { bytesPerRow: 4 }, { width: 1, height: 1, depthOrArrayLayers: 1 });
+}
+function render(device, frame) {
+    var params = frame.params || {};
+    function finiteNumber(value, fallback) {
+        var num = Number(value);
+        return Number.isFinite(num) ? num : fallback;
+    }
+    function numberParam(name, fallback) {
+        return finiteNumber(params[name], fallback);
+    }
+    function boolParam(name, fallback) {
+        if (typeof params[name] === 'boolean')
+            return params[name] ? 1 : 0;
+        return fallback ? 1 : 0;
+    }
+    function selectParam(name, count, fallbackIndex) {
+        // A select is a numeric dropdown: params[name] is the chosen option's index.
+        var index = Math.round(Number(params[name]));
+        return Number.isFinite(index) && index >= 0 && index < count ? index : fallbackIndex;
+    }
+    function colorParam(name, fallback) {
+        var value = params[name] || {};
+        return [
+            finiteNumber(value.r, fallback[0]),
+            finiteNumber(value.g, fallback[1]),
+            finiteNumber(value.b, fallback[2]),
+            finiteNumber(value.a, fallback[3]),
+        ];
+    }
+    function pointParam(name, fallback) {
+        var value = params[name] || {};
+        return [
+            finiteNumber(value.x, fallback[0]),
+            finiteNumber(value.y, fallback[1]),
+        ];
+    }
+    function pointRadiusParam(name, fallback) {
+        var value = params[name] || {};
+        return [
+            finiteNumber(value.x, fallback[0]),
+            finiteNumber(value.y, fallback[1]),
+            finiteNumber(value.radius, fallback[2]),
+        ];
+    }
+    function pointPointLineParam(name, fallback) {
+        var value = params[name] || {};
+        return [
+            finiteNumber(value.x, fallback[0]),
+            finiteNumber(value.y, fallback[1]),
+            finiteNumber(value.x2, fallback[2]),
+            finiteNumber(value.y2, fallback[3]),
+        ];
+    }
+    function pointAngleRadiusParam(name, fallback) {
+        var value = params[name] || {};
+        return [
+            finiteNumber(value.x, fallback[0]),
+            finiteNumber(value.y, fallback[1]),
+            finiteNumber(value.radius, fallback[2]),
+            finiteNumber(value.angle, fallback[3]),
+        ];
+    }
+    function colorPointParam(name, fallback) {
+        var value = params[name] || {};
+        var color = value.color || {};
+        return [
+            finiteNumber(value.x, fallback[0]),
+            finiteNumber(value.y, fallback[1]),
+            0,
+            0,
+            finiteNumber(color.r, fallback[2]),
+            finiteNumber(color.g, fallback[3]),
+            finiteNumber(color.b, fallback[4]),
+            finiteNumber(color.a, fallback[5]),
+        ];
+    }
+    function gradientParam(name, fallback) {
+        var value = params[name] || {};
+        var stops = Array.isArray(value.stops) && value.stops.length > 0 ? value.stops : fallback;
+        // Layout: 8 stop colors (rgba), then 8 positions packed 4-per-vec4, then the live count.
+        var out = new Array(44).fill(0);
+        var count = Math.min(stops.length, 8);
+        for (var i = 0; i < count; i++) {
+            var stop = stops[i] || {};
+            var color = stop.color || {};
+            out[i * 4] = finiteNumber(color.r, 0);
+            out[i * 4 + 1] = finiteNumber(color.g, 0);
+            out[i * 4 + 2] = finiteNumber(color.b, 0);
+            out[i * 4 + 3] = finiteNumber(color.a, 1);
+            out[32 + i] = finiteNumber(stop.position, 0);
+        }
+        out[40] = count;
+        return out;
+    }
+    var output = frame.output || {};
+    var width = Math.max(1, finiteNumber(output.width, 1));
+    var height = Math.max(1, finiteNumber(output.height, 1));
+    var time = 0;
+    var inputWidth = width;
+    var inputHeight = height;
+    device.queue.writeBuffer(frame.state.uniformBuf, 0, new Float32Array([
+        time, width, height, 0,
+        inputWidth, inputHeight, 0, 0,
+        ...colorParam("color1", [1, 0.2, 0.4, 1]),
+        ...colorParam("color2", [0, 0.7, 0.8, 1]),
+        numberParam("misregistration", 4), 0, 0, 0,
+        numberParam("dotScale", 8), 0, 0, 0,
+        numberParam("grain", 0.15), 0, 0, 0,
+    ]));
+    var inputView = frame.input != null
+        ? frame.input.createView()
+        : frame.state.placeholder.createView();
+    var outputFormat = frame.output.format;
+    if (frame.state.pipeline == null || frame.state.pipelineFormat !== outputFormat) {
+        frame.state.pipeline = device.createRenderPipeline({
+            layout: 'auto',
+            vertex: {
+                module: frame.state.module,
+                entryPoint: 'vs_main',
+                buffers: [{
+                        arrayStride: 16,
+                        attributes: [
+                            { shaderLocation: 0, format: 'float32x2', offset: 0 },
+                            { shaderLocation: 1, format: 'float32x2', offset: 8 },
+                        ],
+                    }],
+            },
+            fragment: {
+                module: frame.state.module,
+                entryPoint: 'fs_main',
+                targets: [{ format: outputFormat }],
+            },
+            primitive: { topology: 'triangle-list' },
+        });
+        frame.state.pipelineFormat = outputFormat;
+    }
+    var bindGroup = device.createBindGroup({
+        layout: frame.state.pipeline.getBindGroupLayout(0),
+        entries: [
+            { binding: 0, resource: { buffer: frame.state.uniformBuf } },
+            { binding: 1, resource: frame.state.sampler },
+            { binding: 2, resource: inputView },
+        ],
+    });
+    var encoder = device.createCommandEncoder();
+    var pass = encoder.beginRenderPass({
+        colorAttachments: [{
+                view: frame.output.createView(),
+                loadOp: 'clear',
+                clearValue: { r: 0, g: 0, b: 0, a: 0 },
+                storeOp: 'store',
+            }],
+    });
+    pass.setPipeline(frame.state.pipeline);
+    pass.setBindGroup(0, bindGroup);
+    pass.setVertexBuffer(0, frame.state.quad);
+    pass.draw(6);
+    pass.end();
+    device.queue.submit([encoder.finish()]);
+}
+var manifest = {
+  "version": 2,
+  "name": "Riso",
+  "isAnimated": false,
+  "usesMouse": false
+};
+return { setup: setup, render: render, manifest: manifest };
+})();
+
+/* ---------- host WebGPU ---------- */
+(async function initRiso() {
+  var nodes = Array.prototype.slice.call(document.querySelectorAll('.riso[data-riso]'));
+  if (!nodes.length || !navigator.gpu) return;
+  var device;
+  try {
+    var adapter = await navigator.gpu.requestAdapter();
+    if (!adapter) return;
+    device = await adapter.requestDevice();
+  } catch (e) { return; }
+  var format = navigator.gpu.getPreferredCanvasFormat();
+  var items = [];
+
+  for (var i = 0; i < nodes.length; i++) {
+    var el = nodes[i];
+    var img = el.querySelector('img');
+    try { await img.decode(); } catch (e) { continue; }
+    var canvas = document.createElement('canvas');
+    canvas.className = 'riso__canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    el.appendChild(canvas);
+    var ctx = canvas.getContext('webgpu');
+    if (!ctx) { canvas.remove(); continue; }
+    ctx.configure({ device: device, format: format, alphaMode: 'premultiplied' });
+    var frame = { state: {}, params: {} };
+    RisoEffect.setup(device, frame);
+    items.push({ el: el, img: img, canvas: canvas, ctx: ctx, frame: frame, input: null, params: JSON.parse(el.dataset.riso) });
+  }
+
+  function draw(it) {
+    var cssW = it.el.clientWidth, cssH = it.el.clientHeight;
+    if (!cssW || !cssH) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var W = Math.max(1, Math.round(cssW * dpr)), H = Math.max(1, Math.round(cssH * dpr));
+    it.canvas.width = W; it.canvas.height = H;
+
+    // zdjęcie wpasowane jak w Figmie (cover albo fill) do rozmiaru wyjścia
+    var src = document.createElement('canvas');
+    src.width = W; src.height = H;
+    var g = src.getContext('2d');
+    var iw = it.img.naturalWidth, ih = it.img.naturalHeight;
+    if (it.el.dataset.fit === 'cover') {
+      var sc = Math.max(W / iw, H / ih), dw = iw * sc, dh = ih * sc;
+      g.drawImage(it.img, (W - dw) / 2, (H - dh) / 2, dw, dh);
+    } else {
+      g.drawImage(it.img, 0, 0, W, H);
+    }
+    if (it.input) it.input.destroy();
+    it.input = device.createTexture({
+      size: [W, H], format: 'rgba8unorm',
+      usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+    });
+    device.queue.copyExternalImageToTexture({ source: src }, { texture: it.input, premultipliedAlpha: true }, [W, H]);
+
+    // parametry z Figmy są w px ramki projektu — przeliczamy na px urządzenia,
+    // żeby raster wyglądał tak samo przy każdej szerokości ekranu
+    var k = dpr * Math.max(cssW / parseFloat(it.el.dataset.designWidth), 0.7);
+    it.frame.params = {
+      grain: it.params.grain,
+      misregistration: it.params.misregistration * k,
+      dotScale: it.params.dotScale * k,
+      color1: it.params.color1,
+      color2: it.params.color2
+    };
+    it.frame.input = it.input;
+    it.frame.output = it.ctx.getCurrentTexture();
+    RisoEffect.render(device, it.frame);
+    it.el.classList.add('is-riso');
+  }
+
+  function drawAll() { items.forEach(draw); }
+  drawAll();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawAll);
+  var t;
+  window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(drawAll, 120); });
+  device.lost.then(function () { items.forEach(function (it) { it.el.classList.remove('is-riso'); }); });
+})();
+</script>
+
+<script>
+/* ---------- intro: Preload → Hero ---------- */
+(function () {
+  var d = document.documentElement;
+  if (!d.classList.contains('intro')) return;
+  window.scrollTo(0, 0);
+  var EASE = 'cubic-bezier(0.83, 0, 0.17, 1)';
+  var desktop = window.matchMedia('(min-width: 1024px)').matches;
+  var logo = document.querySelector('.d-nav__logo');
+  var frame = document.querySelector('.d-hero__frame');
+
+  // Preload: logo w 2× obok tytułu (Figma 7207:1036) — 605 px ramki w lewo od środka ekranu,
+  // 10 px niżej niż górna krawędź STARTUP, szerokość 164.898 px ramki
+  var logoFrom = null;
+  if (desktop) {
+    var fr = frame.getBoundingClientRect(), lr = logo.getBoundingClientRect();
+    var hs = parseFloat(getComputedStyle(document.querySelector('.d-hero__title')).fontSize) / 224;
+    var w1 = document.querySelector('.d-hero__w--1').getBoundingClientRect();
+    logoFrom = 'translate(' + (fr.left + fr.width / 2 - 605 * hs - lr.left) + 'px, ' + (w1.top + 10 * hs - lr.top) + 'px) scale(' + (164.898 * hs / lr.width) + ')';
+    logo.style.transform = logoFrom;
+  }
+
+  function words() {
+    d.classList.add('intro--words');
+    setTimeout(spread, 1600);
+  }
+  function spread() {
+    d.classList.add('intro--spread');
+    if (logoFrom) {
+      var anim = logo.animate([{ transform: logoFrom }, { transform: 'none' }], { duration: 1000, easing: EASE, fill: 'forwards' });
+      logo.style.transform = '';
+      anim.finished.then(function () { anim.cancel(); });
+    }
+    setTimeout(function () { d.classList.remove('intro', 'intro--words', 'intro--spread'); }, 1900);
+  }
+
+  // start po załadowaniu fontów (max 1,5 s), żeby słowa nie wjechały w kroju zastępczym
+  var fonts = document.fonts ? Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 1500); })]) : Promise.resolve();
+  fonts.then(function () { requestAnimationFrame(function () { requestAnimationFrame(words); }); });
+})();
+</script>
+<script type="module">
+/* =====================================================================
+   Hero → Problem na scrollu — zasada ze scroll-sweep.js:
+     1. TRACK    pozycja scrolla → jedna wartość 0..1 na sekcję lub blok
+     2. SYNC     wygładzanie bez podwójnego opóźnienia: kółko myszy (już wygładzone
+                 przez smooth-scroll.js) bierzemy wprost, resztę wejść wygładzamy tu,
+                 z tą samą sztywnością 6.5
+     3. TIMELINE wartość 0..1 → okno dla każdego elementu (start + przesunięcie)
+     4. PAINT    jeden zapis transform na element, tylko gdy wartość się zmieniła
+   Wygląd bez zmian: słowa, tagi, linie i przycisk odjeżdżają w swoich maskach,
+   latarka jedzie z Hero do Problemu, tekst Problemu wjeżdża linia po linii.
+   Nic nie działa na własnym zegarze, więc ruch stoi razem ze scrollem
+   i cofa się przy przewijaniu w górę.
+   ===================================================================== */
+import { createSmoothScroll } from './design-assets/js/smooth-scroll.js';
+import { trackProgress } from './design-assets/js/scroll-sweep.js';
+
+const d = document.documentElement;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const desktopMq = matchMedia('(min-width: 1024px)');
+const introRunning = () => d.classList.contains('intro');
+const travelOn = () => desktopMq.matches && !reduced;
+
+const hero = document.querySelector('.d-hero');
+const heroFrame = hero.querySelector('.d-hero__frame');
+const heroFl = hero.querySelector('.d-hero__flashlight');
+const heroBeam = hero.querySelector('.d-hero__beam');
+const problem = document.querySelector('.d-problem');
+const probFl = problem.querySelector('.d-problem__flashlight');
+const probBeam = problem.querySelector('.d-problem__beam .d-fl__beam');
+const probPin = problem.querySelector('.d-problem__pin--body');
+const probTitle = problem.querySelector('.d-problem__text > *');
+const nav = document.querySelector('.d-nav');
+
+/* ---------- smooth scroll (plik bez zmian) ---------- */
+const ss = createSmoothScroll({ autoRun: false, isLocked: introRunning });
+
+// plik wymaga wyłączenia CSS scroll-behavior — płynne kotwice robimy tutaj
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  const id = a && a.getAttribute('href').slice(1);
+  const el = id && document.getElementById(id);
+  if (!el) return;
+  e.preventDefault();
+  const margin = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+  scrollTo({ top: el.getBoundingClientRect().top + scrollY - margin, behavior: reduced ? 'auto' : 'smooth' });
+  history.pushState(null, '', '#' + id);
+});
+
+/* ---------- podział tekstu na linie: każda linia we własnej masce ---------- */
+const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function splitLines(el) {
+  if (!el.dataset.src) el.dataset.src = el.innerHTML;
+  el.innerHTML = el.dataset.src;
+  el.classList.remove('is-split');
+  const words = [];
+  [...el.childNodes].forEach((n) => {
+    if (n.nodeType !== 3) return;                       // <br> zostaje jako wymuszone łamanie
+    const frag = document.createDocumentFragment();
+    n.textContent.split(/(\s+)/).forEach((part) => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+      const s = document.createElement('span'); s.textContent = part; frag.appendChild(s); words.push(s);
+    });
+    n.replaceWith(frag);
+  });
+  const lines = []; let top = null;
+  words.forEach((w) => {
+    if (top === null || Math.abs(w.offsetTop - top) > 2) { lines.push([]); top = w.offsetTop; }
+    lines[lines.length - 1].push(w.textContent);
+  });
+  el.innerHTML = lines.map((ws, i) =>
+    '<span class="ln" style="--i:' + i + '"><span class="ln__i">' + esc(ws.join(' ')) + ' </span></span>').join('');
+  el.classList.add('is-split');
+}
+const splitTargets = reduced ? [] : [...document.querySelectorAll('[data-split="lines"]')];
+const splitAll = () => { splitTargets.forEach(splitLines); collect(); };
+
+// słowa (Problem): każde w masce <span class="w"><span class="w__i">, z zachowaniem spacji i <br>; niezależne od układu, więc raz
+function splitWords(el) {
+  [...el.childNodes].forEach((n) => {
+    if (n.nodeType !== 3) return;
+    const frag = document.createDocumentFragment();
+    n.textContent.split(/(\s+)/).forEach((part) => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+      const w = document.createElement('span'); w.className = 'w';
+      const i = document.createElement('span'); i.className = 'w__i'; i.textContent = part;
+      w.appendChild(i); frag.appendChild(w);
+    });
+    n.replaceWith(frag);
+  });
+}
+if (!reduced) document.querySelectorAll('[data-split="words"]').forEach(splitWords);
+
+/* ---------- 1–2 · TRACK + SYNC ---------- */
+const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+const seg = (p, a, b) => clamp01((p - a) / (b - a));
+const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const STIFFNESS = 6.5;                                   // ta sama co w smooth-scroll.js
+
+const makeTrack = (raw) => ({ raw, Ps: null, key: -1 });
+function sync(t, driving, dt) {
+  const P = t.raw();
+  if (t.Ps === null || driving || reduced) t.Ps = P;     // start / kółko: już wygładzone
+  else t.Ps += (P - t.Ps) * (1 - Math.exp(-dt * STIFFNESS));  // scrollbar, klawisze, dotyk
+  if (Math.abs(P - t.Ps) < 1e-4) t.Ps = P;
+  return t.Ps;
+}
+
+/* ---------- 3–4 · TIMELINE + PAINT: przesunięcie w masce ----------
+   k = 0 na miejscu, k = 1 całkiem schowane; dir +1 pod maską (wjazd), −1 nad maską (wyjazd) */
+const OFF = '(100% + 0.35em)';
+function paintMask(el, k, dir) {
+  const v = k <= 0 ? 'none' : 'translateY(calc(' + (dir * k).toFixed(4) + ' * ' + OFF + '))';
+  if (el.__v !== v) { el.style.transform = v; el.__v = v; }
+}
+
+// chowanie Hero: kolejność i przesunięcia jak w poprzedniej wersji (słowa → tagi → opis → przycisk),
+// cała sekwencja mieści się w pierwszych ~45% wysokości ekranu przewinięcia
+const EXIT = { span: 0.45, rise: 0.45 };
+const exitTrack = makeTrack(() => clamp01(scrollY / (hero.offsetHeight * EXIT.span)));
+let exitItems = [];
+function paintHeroExit(P) {
+  for (const it of exitItems) paintMask(it.el, easeInOut(seg(P, it.at, it.at + EXIT.rise)), -1);
+}
+
+// tekst w Problemie: każdy blok ma własny postęp (trackProgress), słowa podnoszą się po kolei.
+// Okna jak w Colmez (createSweep): start + (i / n) · spread, wjazd przez `rise` z easeOut.
+// Jednostki postępu bloku: 0 = góra bloku na dole ekranu, 1 = dół bloku nad górą ekranu.
+const WORDS = { start: 0.02, spread: 0.26, rise: 0.07 };
+let wordTracks = [];
+function paintWords(t, P) {
+  const n = t.words.length;
+  t.words.forEach((el, i) => {
+    const rs = WORDS.start + (i / Math.max(1, n)) * WORDS.spread;
+    paintMask(el, 1 - easeOut(seg(P, rs, rs + WORDS.rise)), +1);
+  });
+}
+function buildWordTracks() {
+  wordTracks = [...document.querySelectorAll('.d-reveal[data-split="words"]')].map((block) =>
+    Object.assign(makeTrack(() => trackProgress(block)), { words: [...block.querySelectorAll('.w__i')] }));
+}
+
+function collect() {   // po podziale na linie (start i każda zmiana rozmiaru)
+  const q = (sel, root = hero) => [...root.querySelectorAll(sel)];
+  exitItems = [];
+  q('.d-hero__wi').forEach((el, i) => exitItems.push({ el, at: [0, 0.06, 0.10, 0.16][i] || 0 }));
+  q('.d-tags .d-mask').forEach((row, i) => q('.d-mask__i', row).forEach((el) => exitItems.push({ el, at: 0.02 + i * 0.06 })));
+  q('.d-hero__intro .ln__i').forEach((el, i) => exitItems.push({ el, at: 0.10 + i * 0.06 }));
+  q('.d-hero__intro .d-mask--btn .d-mask__i').forEach((el) => exitItems.push({ el, at: 0.30 }));
+  exitItems.forEach((it) => { it.el.__v = undefined; });
+  exitTrack.key = -1;
+  if (!reduced) buildWordTracks();
+}
+
+/* ---------- celowanie w kursor, animacja poklatkowa ----------
+   8 klatek/s, co klatkę 35% pozostałej drogi, kąt co 4° z drganiem ±1,2°,
+   miękki limit wychylenia ±max od pozycji z projektu */
+const shortest = (from, to) => from + (((to - from) % 360 + 540) % 360 - 180);
+function makeAimer({ el, host, rest, max, active }) {
+  const STEP = 4, FOLLOW = 0.35, JITTER = 1.2;
+  let target = 0, current = 0, shown = 0;
+  return {
+    move(x, y) {
+      if (!active()) return;
+      const r = el.getBoundingClientRect();
+      const a = Math.atan2(y - (r.top + r.height / 2), x - (r.left + r.width / 2)) * 180 / Math.PI;
+      target = max * Math.tanh(shortest(0, a - rest) / max);
+    },
+    tick() {
+      if (introRunning()) return;
+      if (!active()) target = 0;
+      const diff = target - current;
+      if (Math.abs(diff) < STEP / 2) return;
+      current += diff * FOLLOW;
+      const next = Math.round(current / STEP) * STEP + (Math.random() * 2 - 1) * JITTER;
+      if (Math.abs(next - shown) < 0.5) return;
+      shown = next;
+      host.style.setProperty('--aim', shown.toFixed(2) + 'deg');
+    },
+    reset() { target = 0; },
+  };
+}
+
+/* ---------- mruganie (maks. 3 błyski na sekundę — WCAG 2.3.1) ---------- */
+const S = 'steps(1, end)';
+const FX = reduced ? {
+  heroFlicker: { frames: [{ opacity: 0 }, { opacity: 0.9, offset: 0.3 }, { opacity: 0.9, offset: 0.7 }, { opacity: 0 }], duration: 1400 },
+  litFlicker:  { frames: [{ opacity: 1 }, { opacity: 0.5, offset: 0.4 }, { opacity: 1 }], duration: 800 },
+  switchOn:    { frames: [{ opacity: 0 }, { opacity: 1 }], duration: 400 },
+} : {
+  // Hero: zgaszona → dwa błyski → świeci → gaśnie
+  heroFlicker: { frames: [
+    { opacity: 0, offset: 0, easing: S }, { opacity: 1, offset: 0.01, easing: S }, { opacity: 0, offset: 0.055, easing: S },
+    { opacity: 0.8, offset: 0.165, easing: S }, { opacity: 0, offset: 0.21, easing: S }, { opacity: 1, offset: 0.41, easing: S },
+    { opacity: 1, offset: 0.72, easing: 'ease-in' }, { opacity: 0, offset: 1 } ], duration: 1600 },
+  // Problem: świeci → mrugnięcie → wraca do świecenia
+  litFlicker: { frames: [
+    { opacity: 1, offset: 0, easing: S }, { opacity: 0, offset: 0.03, easing: S }, { opacity: 0.7, offset: 0.16, easing: S },
+    { opacity: 0, offset: 0.24, easing: S }, { opacity: 1, offset: 0.5, easing: S }, { opacity: 1, offset: 1 } ], duration: 900 },
+  // zapalenie po dojechaniu latarki
+  switchOn: { frames: [
+    { opacity: 0, offset: 0, easing: S }, { opacity: 1, offset: 0.06, easing: S }, { opacity: 0, offset: 0.16, easing: S },
+    { opacity: 0.6, offset: 0.34 }, { opacity: 1, offset: 0.5 }, { opacity: 1, offset: 1 } ], duration: 700 },
+};
+const running = (el) => el.getAnimations().some((a) => a.playState === 'running');
+
+function wirePress(host, fl, canClick, onClick) {
+  const hit = fl.querySelector('.d-fl__hit');
+  const press = (on) => host.style.setProperty('--press', on ? '0.97' : '1');
+  hit.addEventListener('pointerdown', () => { if (canClick()) press(true); });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach((t) => hit.addEventListener(t, () => press(false)));
+  hit.addEventListener('click', () => { if (canClick()) onClick(); });
+}
+
+/* ---------- podróż latarki Hero → Problem ---------- */
+let geo = null, tx = 0, ty = 0, e = 0, lit = true, fresh = true;
+
+function placeHeroBeam() {   // snop Hero na środku latarki (bez przesunięcia podróży)
+  const f = heroFl.getBoundingClientRect(), r = heroFrame.getBoundingClientRect();
+  heroBeam.style.left = (f.left + f.width / 2 - r.left - tx) + 'px';
+  heroBeam.style.top = (f.top + f.height / 2 - r.top - ty) + 'px';
+}
+
+function measure() {
+  // Cel podróży: miejsce, w którym latarka Problemu stoi po przyklejeniu, w chwili przyklejenia.
+  // Przyklejenie następuje, gdy nagłówek Problemu dochodzi do połowy ekranu (CSS: kontener wyciągnięty o 50svh).
+  const a = heroFl.getBoundingClientRect(), b = probFl.getBoundingClientRect();
+  const stickAt = probTitle.getBoundingClientRect().top + scrollY - innerHeight / 2;   // scroll zapalenia
+  const pinnedY = (b.top + b.height / 2) - probPin.getBoundingClientRect().top;       // środek latarki na przyklejonym ekranie
+  geo = {
+    dx: (b.left + b.width / 2) - (a.left + a.width / 2 - tx),
+    dy: (pinnedY + stickAt) - (a.top + a.height / 2 + scrollY - ty),
+    k: probFl.querySelector('.d-fl--problem').offsetWidth / heroFl.querySelector('.d-fl--hero').offsetWidth,
+    rot: -68.25 - -9.58,             // obrót grupy: Hero −9.58° → Problem −68.25°
+    span: Math.max(1, stickAt),      // podróż kończy się przy przyklejeniu
+  };
+}
+
+function setTravel(v) {
+  e = v; tx = geo.dx * e; ty = geo.dy * e;
+  hero.style.setProperty('--tx', tx.toFixed(2) + 'px');
+  hero.style.setProperty('--ty', ty.toFixed(2) + 'px');
+  hero.style.setProperty('--e', e.toFixed(4));
+  hero.style.setProperty('--trot', (geo.rot * e).toFixed(3) + 'deg');
+  hero.style.setProperty('--tsc', (1 + (geo.k - 1) * e).toFixed(4));
+  hero.classList.toggle('is-traveling', e > 0.02);
+}
+
+function light(on, instant) {
+  lit = on;
+  hero.classList.toggle('is-arrived', on);
+  problem.classList.toggle('is-lit', on);
+  probBeam.getAnimations().forEach((a) => a.cancel());
+  probBeam.style.opacity = on ? '1' : '0';
+  if (on && !instant) probBeam.animate(FX.switchOn.frames, { duration: FX.switchOn.duration });
+  if (!on) { probAim.reset(); problem.style.setProperty('--aim', '0deg'); }
+}
+
+function applyMode() {
+  const on = travelOn();
+  d.classList.toggle('travel', on);
+  exitTrack.Ps = null; exitTrack.key = -1; travelTrack.Ps = null;
+  if (on) { geo = null; fresh = true; light(false, true); return; }
+  ['--tx', '--ty', '--e', '--trot', '--tsc'].forEach((p) => hero.style.removeProperty(p));
+  geo = null; tx = ty = e = 0;
+  paintHeroExit(0);                                   // na mobile Hero się nie chowa
+  hero.classList.remove('is-arrived', 'is-traveling');
+  lit = true; problem.classList.add('is-lit'); probBeam.style.opacity = '';
+}
+
+/* ---------- celowanie: Hero (przed podróżą) i Problem (po zapaleniu) ---------- */
+const heroAim = makeAimer({ el: heroFl, host: hero, rest: -142, max: 22.5,
+  active: () => finePointer && !reduced && e < 0.02 && scrollY < hero.offsetHeight });
+const probAim = makeAimer({ el: probFl, host: problem, rest: 159.2, max: 25,
+  active: () => finePointer && !reduced && lit && (() => { const r = problem.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; })() });
+if (finePointer && !reduced) {
+  addEventListener('pointermove', (ev) => { heroAim.move(ev.clientX, ev.clientY); probAim.move(ev.clientX, ev.clientY); }, { passive: true });
+  d.addEventListener('mouseleave', () => { heroAim.reset(); probAim.reset(); });
+  setInterval(() => { heroAim.tick(); probAim.tick(); }, 1000 / 8);
+}
+
+/* ---------- klik ---------- */
+wirePress(hero, heroFl, () => !introRunning() && e < 0.02, () => {
+  if (running(heroBeam)) return;
+  placeHeroBeam();
+  heroBeam.animate(FX.heroFlicker.frames, { duration: FX.heroFlicker.duration });
+});
+wirePress(problem, probFl, () => !introRunning() && lit, () => {
+  if (running(probBeam)) return;
+  probBeam.animate(FX.litFlicker.frames, { duration: FX.litFlicker.duration });
+});
+
+/* ---------- pętla: jeden zegar dla wszystkiego, co zależy od scrolla ---------- */
+const travelTrack = makeTrack(() => (geo ? clamp01(scrollY / geo.span) : 0));   // podróż: do przyklejenia latarki
+
+function frame(driving, dt) {
+  nav.classList.toggle('is-scrolled', scrollY > 8);
+  if (travelOn()) {
+    const pe = sync(exitTrack, driving, dt);
+    if (pe !== exitTrack.key) { exitTrack.key = pe; paintHeroExit(pe); }
+
+    if (!geo) { measure(); travelTrack.Ps = null; travelTrack.key = -1; }
+    const pt = sync(travelTrack, driving, dt);
+    if (fresh || pt !== travelTrack.key) { travelTrack.key = pt; setTravel(pt * pt * (3 - 2 * pt)); }   // smoothstep
+    if (!lit && e >= 0.995) light(true, fresh);
+    else if (lit && e < 0.985) light(false);
+    fresh = false;
+  }
+  for (const t of wordTracks) {
+    const p = sync(t, driving, dt);
+    if (p !== t.key) { t.key = p; paintWords(t, p); }
+  }
+}
+
+let last = 0;
+function loop(ts) {
+  const dt = Math.min(0.05, (ts - last) / 1000 || 0.016); last = ts;
+  const driving = ss.step(dt);
+  if (!introRunning()) frame(driving, dt);
+  requestAnimationFrame(loop);
+}
+
+/* ---------- start ---------- */
+applyMode();
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+  splitAll(); placeHeroBeam();
+  requestAnimationFrame(loop);
+});
+let rt;
+addEventListener('resize', () => {
+  clearTimeout(rt);
+  rt = setTimeout(() => { splitAll(); geo = null; fresh = true; placeHeroBeam(); }, 150);
+});
+desktopMq.addEventListener('change', () => { applyMode(); placeHeroBeam(); });
+</script>
+</body>
+</html>

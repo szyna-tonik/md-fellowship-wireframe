@@ -36,6 +36,23 @@ Wszystko w nawiasach kwadratowych czeka na dane: `[DATA]`, `[TEMATY PRELEKCJI]`,
 
 Wszystkie animacje wyłączają się przy `prefers-reduced-motion`.
 
+## design.html — wdrożenie designu (w toku)
+
+Na tych samych sekcjach co wireframe: nawigacja, Hero, Problem i „Czego się nauczysz” według Figmy, reszta strony jeszcze w wersji wireframe.
+
+- intro (stan Preload → Hero), latarka celująca za kursorem, mruganie snopem na klik,
+- przejście Hero → Problem sterowane scrollem: latarka jedzie do sekcji Problem, zapala się i zostaje przyklejona, tekst wjeżdża słowo po słowie,
+- smooth scroll: `design-assets/js/smooth-scroll.js`, postęp sekcji: `design-assets/js/scroll-sweep.js`,
+- raster „Riso” na zdjęciach: shader z Figmy przez WebGPU (bez WebGPU zostaje zwykłe zdjęcie).
+
+Strona korzysta z modułu JS, więc trzeba ją otwierać przez serwer, nie z dysku:
+
+```bash
+python3 -m http.server 4173
+```
+
+**Proxima Nova** (licencja komercyjna) nie jest w repozytorium — pliki trzymamy lokalnie w `design-assets/fonts/proxima-nova/`. Bez nich strona używa kroju zastępczego.
+
 ## Tokeny
 
 Kolory wyłącznie przez zmienne na `:root` — po zamknięciu palety podmieniamy zmienne, nie plik. `--accent` w wireframie = kolor tekstu.
