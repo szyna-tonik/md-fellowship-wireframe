@@ -398,7 +398,7 @@ main { container-type: inline-size; }
 }
 .d-nav__links a { display: flex; align-items: center; padding: 7px 16px; }
 .d-nav__actions { display: flex; align-items: center; gap: 8px; }
-.d-nav__cta { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 16px; background: var(--c-blue-100); }
+.d-nav__cta { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 16px; background: var(--c-white); }
 .d-nav__toggle { display: none; }
 .d-nav__mobile { display: none; }
 
@@ -509,16 +509,21 @@ main { container-type: inline-size; }
 .d-hero__beam { position: absolute; left: 0; top: 0; width: calc(647.816 * var(--du)); height: calc(684.142 * var(--du));
   display: flex; align-items: center; justify-content: center;
   pointer-events: none; opacity: 0; }
-.d-fl--hero .d-fl__beam { position: absolute; left: calc(-1602.672 * var(--du)); top: calc(-1569.689 * var(--du));
-  width: calc(1780.516 * var(--du)); height: calc(2148.571 * var(--du)); display: flex; align-items: center; justify-content: center; }
-.d-fl--hero .d-fl__beam img { flex: none; width: calc(1850.905 * var(--du)); height: calc(1125.583 * var(--du)); }
+/* snop latarki: płaski kształt bez gradientu, odsunięty od głowicy (makieta z października).
+   beam-flat.svg jest w układzie grupy latarki z Problemu; w Hero ta sama latarka w skali 1/0.77709 */
+.d-fl__beam { position: absolute; pointer-events: none; }
+.d-fl__beam img { display: block; width: 100%; height: 100%; }
+.d-fl--hero .d-fl__beam { left: calc(-4053.206 * var(--du)); top: calc(-3844.563 * var(--du));
+  width: calc(4114.029 * var(--du)); height: calc(3925.272 * var(--du)); }
 
 /* ---------- 1d · przejście Hero → Problem ----------
    html.travel (desktop, bez reduced-motion): latarka z Hero jedzie do pozycji latarki z Problemu,
    po dojechaniu przejmuje latarka z Problemu i zapala snop. Hero i Problem mają wspólne przycięcie,
    żeby latarka mogła wyjechać poza Hero bez poziomego scrolla. */
 html { scroll-behavior: auto; overscroll-behavior: none; }   /* smooth-scroll.js: nie łączyć z CSS smooth */
-.d-scene { position: relative; overflow: clip; background: var(--c-blue-500); }
+/* tło sceny: --bgp (0–1) ustawia skrypt przy wejściu w „Jak to działa” — płynne przejście z niebieskiego w krem, bez twardej krawędzi */
+.d-scene { position: relative; overflow: clip;
+  background: color-mix(in srgb, var(--c-cream) calc(var(--bgp, 0) * 100%), var(--c-blue-500)); }
 .d-problem { z-index: 1; }
 html.travel .d-hero { overflow: visible; }
 html.travel .d-hero.is-arrived .d-hero__flashlight { opacity: 0; }
@@ -542,14 +547,15 @@ html.travel .d-problem:not(.is-lit) .d-fl__hit { pointer-events: none; }
 /* chowanie Hero: przesunięcia w maskach liczy skrypt z pozycji scrolla (zasada ze scroll-sweep.js),
    celowo bez `transition` — przejście na zegarze dałoby podwójne opóźnienie. */
 
-/* tekst w Problemie: każde słowo podnosi się od dołu we własnej masce, słowo po słowie,
+/* tekst w Problemie i „Czego się nauczysz”: każde słowo (opisy: każda linia) podnosi się od dołu we własnej masce, po kolei,
    z synchronizacją ze scrollem jak w Colmez (okna czasowe ze scroll-sweep.js).
    Maska przez clip-path, nie overflow: przy overflow ≠ visible linia bazowa inline-block przeskakuje
    na dolną krawędź i słowa rozjechałyby się w pionie. Padding/margines robią miejsce na znaki
    diakrytyczne bez zmiany układu (GOTCHA 3 ze scroll-sweep.js). Klasy .w powstają w skrypcie,
    więc bez niego tekst wyświetla się normalnie. */
-.d-problem__text .w { display: inline-block; padding: 0.14em 0 0.24em; margin: -0.14em 0 -0.24em; clip-path: inset(0 -0.1em); }
-.d-problem__text .w__i { display: inline-block; transform: translateY(calc(100% + 0.35em)); }
+.d-reveal .w { display: inline-block; padding: 0.14em 0 0.24em; margin: -0.14em 0 -0.24em; clip-path: inset(0 -0.1em); }
+.d-reveal .w__i { display: inline-block; transform: translateY(calc(100% + 0.35em)); }
+.d-reveal .ln__i { transform: translateY(calc(100% + 0.35em)); }
 
 /* ---------- 1a · intro: stan Preload (Figma 7207:801) → Hero ----------
    html.intro          stan startowy: niebieskie tło, słowa pod maską
@@ -579,8 +585,8 @@ html.intro .d-hero__flashlight { opacity: 0; scale: 0.82; rotate: -14deg;
   transition: opacity 500ms ease 300ms, scale 1200ms cubic-bezier(0.16, 1, 0.3, 1) 300ms, rotate 1200ms cubic-bezier(0.16, 1, 0.3, 1) 300ms; }
 html.intro--spread .d-hero__flashlight { opacity: 1; scale: 1; rotate: 0deg; }
 
-html.intro .d-problem, html.intro .d-learn, html.intro .wf-zone, html.intro .footer { opacity: 0; transition: opacity 600ms ease 500ms; }
-html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .wf-zone, html.intro--spread .footer { opacity: 1; }
+html.intro .d-problem, html.intro .d-learn, html.intro .d-how, html.intro .wf-zone, html.intro .footer { opacity: 0; transition: opacity 600ms ease 500ms; }
+html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .d-how, html.intro--spread .wf-zone, html.intro--spread .footer { opacity: 1; }
 
 @media (min-width: 1024px) {
   /* Preload: grupa 1210 × 672 wyśrodkowana w ekranie (Startup/disco od 50% − 399, very/Sprint od 50% + 60).
@@ -593,21 +599,25 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 
 /* ---------- 2 · PROBLEM ---------- */
 .d-problem { position: relative; }
-.d-problem__frame { min-height: calc(1390 * var(--u)); padding: calc(105 * var(--u)) 0 calc(120 * var(--u)); }
-/* 92 px zamiast 64: szerokość bloku, odstępy i tracking w tej samej proporcji (× 1.4375), żeby linie łamały się jak w Figmie;
-   wcięcie 40 px jak w Hero */
-.d-problem__text { position: relative; z-index: 1; margin-left: 40px; width: calc(1164.375 * var(--u));
-  display: flex; flex-direction: column; gap: calc(46 * var(--u)); }
-.d-problem__text > * { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(92 * var(--u)); line-height: 1.1;
-  letter-spacing: calc(-1.84 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+.d-problem__frame { min-height: calc(1390 * var(--u)); padding: calc(105 * var(--u)) 0 calc(120 * var(--u));
+  display: flex; flex-direction: column; }
+/* 76 px zamiast 64: szerokość bloku i tracking w tej samej proporcji (× 1.1875), żeby linie łamały się jak w Figmie;
+   tekst na krawędzi contentu: 40 px od lewej krawędzi strony jak w Hero, także gdy ramka (maks. 1920) jest wyśrodkowana;
+   odstęp między akapitami 92 px */
+.d-problem__text { position: relative; z-index: 1; margin-left: calc(40px - (100cqw - 1496 * var(--u)) / 2); width: calc(961.875 * var(--u));
+  display: flex; flex-direction: column; gap: calc(92 * var(--u)); }
+.d-problem__text > * { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(76 * var(--u)); line-height: 1.1;
+  letter-spacing: calc(-1.52 * var(--u)); text-transform: uppercase; color: var(--c-black); }
 
 /* Przyklejane warstwy latarki (desktop): kontener 100svh wyciągnięty 50svh w górę, więc przykleja się
    dokładnie wtedy, gdy nagłówek sekcji dochodzi do połowy ekranu — wtedy latarka z Hero kończy podróż.
    Dalej latarka stoi w tym samym miejscu ekranu, a tekst przewija się pod nią; pod koniec sekcji odjeżdża.
-   Dwie warstwy, bo tekst ma być między snopem (pod) a korpusem (nad). Marginesy się znoszą, układ bez zmian. */
-.d-problem__pin { position: sticky; top: 0; height: 100svh; pointer-events: none; }
-.d-problem__pin--beam { z-index: 0; margin: -50svh 0 -100svh; }
-.d-problem__pin--body { z-index: 2; margin: 0 0 -50svh; }
+   Dwie warstwy, bo tekst ma być między snopem (pod) a korpusem (nad). Marginesy się znoszą, układ bez zmian.
+   Obie warstwy mają identyczne marginesy (−50svh / −50svh), więc kończą przyklejenie w tym samym momencie
+   i snop nie odczepia się od latarki; ramka jest flexem, żeby marginesy sąsiadów się nie zlewały. */
+.d-problem__pin { position: sticky; top: 0; height: 100svh; margin: -50svh 0; pointer-events: none; }
+.d-problem__pin--beam { z-index: 0; }
+.d-problem__pin--body { z-index: 2; }
 .d-problem__flashlight, .d-problem__beam { position: absolute; left: calc(1350.85 * var(--u)); top: calc(354.55 * var(--u));
   width: calc(593.086 * var(--du)); height: calc(573.861 * var(--du)); translate: -50% -50%; rotate: var(--aim, 0deg);
   display: flex; align-items: center; justify-content: center; pointer-events: none; }
@@ -616,41 +626,84 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-fl--problem .d-fl__photo { position: absolute; left: calc(-0.14 * var(--du)); top: calc(-30.24 * var(--du)); width: calc(425.514 * var(--du)); height: calc(546.063 * var(--du));
   display: flex; align-items: center; justify-content: center; }
 .d-fl--problem .riso { width: calc(481.885 * var(--du)); height: calc(311.404 * var(--du)); transform: rotate(75deg); }
-.d-fl--problem .d-fl__beam { position: absolute; left: calc(-1245.42 * var(--du)); top: calc(-1219.79 * var(--du)); width: calc(1383.621 * var(--du)); height: calc(1669.633 * var(--du));
-  display: flex; align-items: center; justify-content: center; }
-.d-fl--problem .d-fl__beam img { flex: none; width: calc(1438.32 * var(--du)); height: calc(874.679 * var(--du)); }
-/* snop dłuższy (--beam-len) przy zachowanym kącie: skala wokół głowicy, czyli środka wąskiego końca
-   stożka (1425.07 × 37.5 w pliku SVG = 49.08% / −45.71% od środka obrazka) */
-.d-fl__beam img { --beam-len: 2.5;
-  transform: rotate(66.03deg) translate(49.08%, -45.71%) scale(var(--beam-len)) translate(-49.08%, 45.71%); }
+.d-fl--problem .d-fl__beam { left: calc(-3149.706 * var(--du)); top: calc(-2987.572 * var(--du));
+  width: calc(3196.971 * var(--du)); height: calc(3050.290 * var(--du)); }
 
 /* ---------- 3 · CZEGO SIĘ NAUCZYSZ ---------- */
-.d-learn { position: relative; background: var(--c-cream); overflow: clip; }
-.d-learn__frame { min-height: calc(1264 * var(--u)); padding: calc(150 * var(--u)) calc(40 * var(--u)) calc(160 * var(--u));
+/* w .d-scene razem z Hero i Problemem: tło sceny prześwituje, snop latarki z Problemu wchodzi pod tekst sekcji */
+.d-learn { position: relative; z-index: 2; }
+.d-learn__frame { min-height: calc(1264 * var(--u)); padding: calc(420 * var(--u)) calc(40 * var(--u)) calc(160 * var(--u));
   display: grid; grid-template-columns: calc(705 * var(--u)) calc(607 * var(--u)); column-gap: calc(104 * var(--u)); align-items: start; }
-.d-learn__title { grid-column: 1; grid-row: 1; margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(112 * var(--u));
+/* nagłówek przyklejony pod nawigacją, stoi w miejscu, gdy lista przewija się obok */
+.d-learn__title { position: sticky; top: calc(56px + 80 * var(--u)); align-self: start; grid-column: 1; grid-row: 1; margin: 0 0 0 calc(40px - 40 * var(--u) - (100cqw - 1496 * var(--u)) / 2); font-family: var(--f-display); font-weight: 400; font-size: calc(112 * var(--u));
   line-height: 1.1; letter-spacing: calc(-2.24 * var(--u)); text-transform: uppercase; color: var(--c-black); }
 .d-learn__list { grid-column: 2; grid-row: 1; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: calc(80 * var(--u)); }
 
 .d-skill__num { position: relative; isolation: isolate; display: block; box-sizing: border-box;
   width: calc(42 * var(--t)); height: calc(37 * var(--t)); padding: calc(6 * var(--t)) 0 0 calc(10 * var(--t)); margin-bottom: calc(16 * var(--t));
-  font-family: var(--f-display); font-weight: 400; font-size: calc(24 * var(--t)); line-height: 1;
+  font-family: var(--f-display); font-weight: 400; font-size: calc(24.93 * var(--t)); line-height: 1;
   letter-spacing: calc(-0.48 * var(--t)); text-transform: uppercase; color: var(--c-black); }
 .d-skill__num::before { content: ""; position: absolute; z-index: -1; left: calc(0.5 * var(--t)); top: calc(0.5 * var(--t));
   width: calc(41.5 * var(--t)); height: calc(36 * var(--t)); background: url("design-assets/num-bracket.svg") no-repeat 0 0 / 100% 100%; }
 .d-skill:nth-child(even) .d-skill__num { padding-top: calc(7 * var(--t)); }
 .d-skill:nth-child(even) .d-skill__num::before { background-image: url("design-assets/num-bracket-alt.svg"); transform: scaleX(-1); }
 .d-skill:nth-child(3) .d-skill__num { padding-left: calc(9 * var(--t)); }
-.d-skill__title { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(32 * var(--u)); line-height: 1;
+/* rozmiary z Figmy 7244:95 (ramka 1440: numer 24, tytuł 40, opis 24 px → × 1496/1440) */
+.d-skill__title { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(41.56 * var(--u)); line-height: 1;
   letter-spacing: calc(-0.64 * var(--u)); text-transform: uppercase; color: var(--c-black); }
-.d-skill__desc { margin-top: calc(24 * var(--u)); }
+.d-skill__desc { margin-top: calc(24 * var(--u)); font-size: max(16px, calc(24.93 * var(--u))); }
 
-.d-learn__cap { position: absolute; left: calc(101 * var(--u)); top: calc(303 * var(--u));
-  width: calc(584.037 * var(--du)); height: calc(440.543 * var(--du));
-  display: flex; align-items: center; justify-content: center; pointer-events: none; }
-.d-cap { position: relative; flex: none; width: calc(524.989 * var(--du)); height: calc(338.506 * var(--du)); transform: rotate(-12.04deg); }
-.d-cap__shape { position: absolute; left: 0; top: 0; width: calc(524.989 * var(--du)); height: calc(338.506 * var(--du)); }
-.d-cap .riso { position: absolute; left: calc(32.09 * var(--du)); top: calc(15.88 * var(--du)); width: calc(484.449 * var(--du)); height: calc(310.804 * var(--du)); }
+
+/* ---------- 4 · JAK TO DZIAŁA (Figma 7254:1529, ramka 1440 → jednostki u = px · 1496/1440) ----------
+   Scrollytelling: trzy kroki (tekst 543u) jeden pod drugim w lewej kolumnie, każdy wysokości ekranu z tekstem
+   wyśrodkowanym w pionie; po prawej jedno zdjęcie 757u przyklejone na środku ekranu, w którym kadry morfują
+   między sobą (raster riso rozsypuje się w kropki i układa w następne zdjęcie — skrypt).
+   Na dużym ekranie (≥ 1600 px) zdjęcie o 10% większe — przy 1440 nie ma na to miejsca obok tekstu.
+   Odstęp od sekcji wyżej 2× (160 + 384). */
+.d-how { position: relative; z-index: 2; }
+.d-how__frame { padding: calc(384 * var(--u)) 40px calc(160 * var(--u)); }
+.d-how__title { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(112 * var(--u));
+  line-height: 1.1; letter-spacing: calc(-2.24 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+.d-how__rows { display: flex; align-items: flex-start; justify-content: space-between; gap: calc(60 * var(--u)); margin-top: calc(46 * var(--u)); }
+.d-how__steps { flex: none; width: calc(543 * var(--u)); }
+.d-how__step { box-sizing: border-box; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: calc(40 * var(--u)) 0; }
+.d-how__media { flex: none; position: sticky; top: calc(50vh - 281 * var(--u)); }
+@media (min-width: 1600px) { .d-how__media { top: calc(50vh - 309.1 * var(--u)); } }
+/* plakietka z terminem: czarny kształt z Figmy (7240:1061 / 1148 / 1154), biały tekst */
+.d-how__tag { display: block; box-sizing: border-box; padding-left: calc(13.38 * var(--u));
+  font-family: var(--f-display); font-weight: 400; font-size: calc(24.93 * var(--u)); line-height: normal;
+  letter-spacing: calc(-0.48 * var(--u)); text-transform: uppercase; white-space: nowrap; color: var(--c-white);
+  background: no-repeat 0 0 / 100% auto; }
+.d-how__tag--1 { width: calc(168.32 * var(--u)); height: calc(52.98 * var(--u)); padding-top: calc(8.83 * var(--u));
+  background-image: url("design-assets/how-tag-1.svg"); background-position: 0 calc(0.52 * var(--u)); }
+.d-how__tag--2 { width: calc(202.6 * var(--u)); height: calc(50.9 * var(--u)); padding-top: calc(8.31 * var(--u));
+  background-image: url("design-assets/how-tag-2.svg"); }
+/* 3: szerokość od tekstu (+ zapas na skośną prawą krawędź), kształt rozciągnięty w poziomie — stała szerokość z Figmy
+   nie mieściła napisu w Proximie z przeglądarki */
+.d-how__tag--3 { width: max-content; height: calc(52.98 * var(--u)); padding-top: calc(10.39 * var(--u)); padding-right: calc(26 * var(--u));
+  background-image: url("design-assets/how-tag-3.svg"); background-position: 0 calc(0.52 * var(--u)); background-size: 100% calc(50.5 * var(--u)); }
+.d-how__step .d-skill__title { margin-top: calc(16 * var(--u)); }
+.d-how__desc, .d-how__fast { font-size: max(16px, calc(24.93 * var(--u))); }
+.d-how__desc { margin-top: calc(83.1 * var(--u)); }   /* Figma: 80 px między tytułem a opisem */
+.d-how__fast { margin-top: calc(16 * var(--u)); font-weight: 600; }
+
+/* zdjęcie: ramka 757 × 562 (jak w Figmie); gruba czarna obwódka to polygon SVG z obrysem 24 px, z którego maska
+   (kształt okna) zostawia tylko zewnętrzną połowę — 12 px pierścień, jak obrys „outside” w Figmie. Pierścień leży
+   pod oknem i nigdy nie prześwituje przez raster (w trakcie morfu okno nie ma papieru). Skrypt skaluje go wokół
+   środka: schowany pod kadrem (0.95), gdy zdjęcie się formuje lub rozsypuje, wysuwa się spod niego, gdy jest gotowe. */
+.d-how__photo { position: relative; flex: none; width: calc(757 * var(--u)); aspect-ratio: 757 / 562; }
+@media (min-width: 1600px) { .d-how__photo { width: calc(832.7 * var(--u)); } }
+.d-how__shape { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+.d-how__outline { fill: var(--c-black); stroke: var(--c-black); stroke-width: 24; stroke-linejoin: miter; stroke-miterlimit: 4;
+  transform-box: view-box; transform-origin: 50% 50%; }
+.d-how__window { position: absolute; left: 1.7173%; top: 2.3132%; width: 96.631%; height: 97.954%; overflow: hidden;
+  clip-path: polygon(95.215% 94.428%, 100% 67.575%, 97.334% 11.353%, 90.084% 3.633%, 64.32% 0%, 7.903% 4.029%,
+    0% 13.806%, 1.094% 36.149%, 0% 86.285%, 10.253% 100%, 76.828% 97.457%); }
+.d-how__window .riso { position: absolute; inset: 0; }
+.d-how__window .riso > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.d-how__window .riso > img + img { visibility: hidden; }   /* bez WebGPU: widać pierwsze zdjęcie */
+/* zanim riso się narysuje (albo bez WebGPU): zdjęcie w odcieniach szarości, wejście przez opacity ze skryptu */
+.d-how__window .riso > img { filter: grayscale(1) contrast(1.1); }
 
 /* ---------- mobile (brak projektu w Figmie — układ tymczasowy) ---------- */
 @media (max-width: 1023px) {
@@ -659,7 +712,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-nav__bar { padding: 0 20px; }
   .d-nav nav { display: none; }
   .d-nav__toggle { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 32px; padding: 0 10px;
-    background: var(--c-blue-100); border: 0; cursor: pointer; }
+    background: var(--c-white); border: 0; cursor: pointer; }
   .d-nav__toggle span { display: block; height: 2px; background: var(--c-black); }
   .d-nav__mobile.is-open { display: block; background: var(--c-blue-100); padding: 8px 20px 16px; }
   .d-nav__mobile ul { list-style: none; margin: 0; padding: 0; }
@@ -689,11 +742,19 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-problem__flashlight, .d-problem__beam { --du: calc(var(--m) * 0.42); left: calc(330 * var(--m)); top: calc(96 * var(--m)); }
 
   .d-learn__frame { min-height: 0; display: flex; flex-direction: column; padding: calc(72 * var(--m)) calc(20 * var(--m)) calc(80 * var(--m)); }
-  .d-learn__title { order: 1; font-size: calc(64 * var(--m)); letter-spacing: calc(-1.28 * var(--m)); }
-  .d-learn__cap { order: 2; position: relative; left: auto; top: auto; --du: calc(var(--m) * 0.6); margin: calc(-12 * var(--m)) auto calc(24 * var(--m)); }
+  .d-learn__title { position: static; order: 1; margin-left: 0; font-size: calc(64 * var(--m)); letter-spacing: calc(-1.28 * var(--m)); }
   .d-learn__list { order: 3; gap: calc(44 * var(--m)); }
-  .d-skill__title { font-size: calc(26 * var(--m)); letter-spacing: calc(-0.52 * var(--m)); }
+  .d-skill__title { font-size: calc(34 * var(--m)); letter-spacing: calc(-0.68 * var(--m)); }
   .d-skill__desc { margin-top: 16px; }
+
+  .d-how__frame { padding: calc(72 * var(--m)) calc(20 * var(--m)) calc(80 * var(--m)); }
+  .d-how__title { font-size: calc(64 * var(--m)); letter-spacing: calc(-1.28 * var(--m)); }
+  .d-how__rows { flex-direction: column; align-items: stretch; gap: calc(24 * var(--m)); margin-top: calc(32 * var(--m)); }
+  .d-how__steps { width: auto; }
+  .d-how__step { min-height: 0; padding: calc(28 * var(--m)) 0; --u: calc(var(--m) * 0.8); }   /* plakietka i odstępy w skali mobile */
+  .d-how__media { position: static; }
+  .d-how__photo { width: 100%; }
+  .d-how__desc { margin-top: calc(32 * var(--m)); }
 }
 </style>
 </head>
@@ -735,7 +796,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   <div class="d-frame d-hero__frame">
     <div class="d-hero__beam" aria-hidden="true">
       <div class="d-fl d-fl--hero">
-        <div class="d-fl__beam"><img src="design-assets/problem-beam.svg" width="1438.32" height="874.679" alt=""></div>
+        <div class="d-fl__beam"><img src="design-assets/beam-flat.svg" width="3196.97" height="3050.29" alt=""></div>
       </div>
     </div>
     <h1 class="d-hero__title"><span class="d-hero__w d-hero__w--1"><span class="d-hero__wi">Startup</span></span> <span class="d-hero__w d-hero__w--2"><span class="d-hero__wi">disco</span></span><span class="d-hero__w d-hero__w--3"><span class="d-hero__wi">very</span></span> <span class="d-hero__w d-hero__w--4"><span class="d-hero__wi">Sprint</span></span></h1>
@@ -754,7 +815,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     </div>
     <div class="d-tags d-intro-in" style="--intro-delay: 500ms">
       <p class="d-tags__row d-mask"><span class="d-tag d-tag--free d-mask__i">Bezpłatnie</span><span class="d-tag d-tag--age d-mask__i">18–24 lata</span></p>
-      <p class="d-mask"><span class="d-tag d-tag--date d-mask__i">12–13 listopada 2026 + 1-mc online</span></p>
+      <p class="d-mask"><span class="d-tag d-tag--date d-mask__i">12–13 listopada 2026 + 1 m-c online</span></p>
       <p class="d-mask"><span class="d-tag d-tag--place d-mask__i">Google for Startups Campus Warsaw</span></p>
     </div>
   </div>
@@ -767,7 +828,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     <div class="d-problem__pin d-problem__pin--beam" aria-hidden="true">
       <div class="d-problem__beam">
         <div class="d-fl d-fl--problem">
-          <div class="d-fl__beam"><img src="design-assets/problem-beam.svg" width="1438.32" height="874.679" alt=""></div>
+          <div class="d-fl__beam"><img src="design-assets/beam-flat.svg" width="3196.97" height="3050.29" alt=""></div>
         </div>
       </div>
     </div>
@@ -791,81 +852,81 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   </div>
 </section>
 
-</div><!-- /d-scene -->
 
 <!-- 3. CZEGO SIĘ NAUCZYSZ (Figma 7207:879) -->
 <section class="d-learn" id="nauczysz">
   <div class="d-frame d-learn__frame">
-    <h2 class="d-learn__title">Czego się nauczysz?</h2>
+    <h2 class="d-learn__title d-reveal" data-split="words">Czego się nauczysz?</h2>
     <ol class="d-learn__list">
       <li class="d-skill">
-        <span class="d-skill__num" aria-hidden="true">01</span>
-        <h3 class="d-skill__title">Prowadzić discovery calle</h3>
-        <p class="d-body d-skill__desc">Zapytasz „kupiłbyś to?”, każdy powie, że tak. I nic z tego nie wynika. Nauczymy cię pytać tak, żeby usłyszeć prawdę, a nie uprzejmości.</p>
+        <span class="d-skill__num d-reveal" data-split="words" aria-hidden="true">01</span>
+        <h3 class="d-skill__title d-reveal" data-split="words">Prowadzić discovery calle</h3>
+        <p class="d-body d-skill__desc d-reveal" data-split="lines">Zapytasz „kupiłbyś to?”, każdy powie, że tak. I nic z tego nie wynika. Nauczymy cię pytać tak, żeby usłyszeć prawdę, a nie uprzejmości.</p>
       </li>
       <li class="d-skill">
-        <span class="d-skill__num" aria-hidden="true">02</span>
-        <h3 class="d-skill__title">Odróżniać lekarstwo od witaminy</h3>
-        <p class="d-body d-skill__desc">Witamina to „fajnie by było”. Lekarstwo to „potrzebuję tego na wczoraj”. Za pierwsze ludzie płacą niechętnie, za drugie od ręki.</p>
+        <span class="d-skill__num d-reveal" data-split="words" aria-hidden="true">02</span>
+        <h3 class="d-skill__title d-reveal" data-split="words">Odróżniać lekarstwo od witaminy</h3>
+        <p class="d-body d-skill__desc d-reveal" data-split="lines">Witamina to „fajnie by było”. Lekarstwo to „potrzebuję tego na wczoraj”. Za pierwsze ludzie płacą niechętnie, za drugie od ręki.</p>
       </li>
       <li class="d-skill">
-        <span class="d-skill__num" aria-hidden="true">03</span>
-        <h3 class="d-skill__title">Pisać wiadomości, na które ktoś odpisze</h3>
-        <p class="d-body d-skill__desc">Twój mail ląduje obok 50 innych, w większości pisanych przez AI. Jeśli brzmisz jak wszyscy, lądujesz w archiwum.</p>
+        <span class="d-skill__num d-reveal" data-split="words" aria-hidden="true">03</span>
+        <h3 class="d-skill__title d-reveal" data-split="words">Pisać wiadomości, na które ktoś odpisze</h3>
+        <p class="d-body d-skill__desc d-reveal" data-split="lines">Twój mail ląduje obok 50 innych, w większości pisanych przez AI. Jeśli brzmisz jak wszyscy, lądujesz w archiwum.</p>
       </li>
       <li class="d-skill">
-        <span class="d-skill__num" aria-hidden="true">04</span>
-        <h3 class="d-skill__title">Stawiać MVP w kilka godzin</h3>
-        <p class="d-body d-skill__desc">MVP to nie okrojona wersja 1.0. To najtańszy sposób, żeby sprawdzić, czy ktoś zapłaci. Czasem wystarczy arkusz w Excelu.</p>
+        <span class="d-skill__num d-reveal" data-split="words" aria-hidden="true">04</span>
+        <h3 class="d-skill__title d-reveal" data-split="words">Stawiać MVP w kilka godzin</h3>
+        <p class="d-body d-skill__desc d-reveal" data-split="lines">MVP to nie okrojona wersja 1.0. To najtańszy sposób, żeby sprawdzić, czy ktoś zapłaci. Czasem wystarczy arkusz w Excelu.</p>
       </li>
     </ol>
-    <div class="d-learn__cap" aria-hidden="true">
-      <div class="d-cap">
-        <img class="d-cap__shape" src="design-assets/grad-cap-shape.svg" width="524.989" height="338.506" alt="">
-        <div class="riso" data-fit="fill" data-design-width="484.449" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":7,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-grad-cap.png" width="484.449" height="310.804" alt=""></div>
+  </div>
+</section>
+
+<!-- 4. JAK TO DZIAŁA — sekcja scrollowana -->
+<section class="d-how" id="jak">
+  <div class="d-how__frame">
+    <h2 class="d-how__title d-reveal" data-split="words">Jak to działa</h2>
+    <div class="d-how__rows">
+      <div class="d-how__steps">
+        <article class="d-how__step">
+          <span class="d-how__tag d-how__tag--1 d-reveal" data-split="words">12–13 listopada</span>
+          <h3 class="d-skill__title d-reveal" data-split="words">Sprint w Warszawie.</h3>
+          <p class="d-body d-how__desc d-reveal" data-split="lines">Dwa dni na Google for Startups Campus. Krótkie prelekcje founderów o [TEMATY PRELEKCJI], a między nimi dużo czasu na własną robotę i rozmowy z mentorami.</p>
+        </article>
+        <article class="d-how__step">
+          <span class="d-how__tag d-how__tag--2 d-reveal" data-split="words">Kolejne 4 tygodnie</span>
+          <h3 class="d-skill__title d-reveal" data-split="words">4 tygodnie w terenie.</h3>
+          <p class="d-body d-how__desc d-reveal" data-split="lines">Dzwonisz, piszesz, umawiasz się i słuchasz. Nie robisz tego w pojedynkę: masz grupę na WhatsAppie i kilka spotkań online.</p>
+        </article>
+        <article class="d-how__step">
+          <span class="d-how__tag d-how__tag--3 d-reveal" data-split="words">13 grudnia · deadline rekrutacji</span>
+          <h3 class="d-skill__title d-reveal" data-split="words">Fast-track do MD Fellowship.</h3>
+          <p class="d-body d-how__desc d-reveal" data-split="lines">Masz problem, który chcesz rozwiązać? Aplikuj do MD Fellowship i zbudujmy na nim firmę.</p>
+          <p class="d-body d-how__fast d-reveal" data-split="lines">Weźmiesz udział w min. 80% spotkań? Wskakujesz od razu do drugiego etapu rekrutacji.</p>
+        </article>
+      </div>
+      <div class="d-how__media">
+        <div class="d-how__photo" aria-hidden="true">
+          <svg class="d-how__shape" viewBox="0 0 757 562" overflow="visible">
+            <defs><mask id="how-ring" maskUnits="userSpaceOnUse" x="-60" y="-60" width="877" height="682">
+              <rect x="-60" y="-60" width="877" height="682" fill="#fff"/>
+              <polygon points="709.5,532.8 744.5,385 725,75.5 672,33 483.5,13 70.8,35.2 13,89 21,212 13,488 88,563.5 575,549.5" fill="#000"/>
+            </mask></defs>
+            <g mask="url(#how-ring)"><polygon class="d-how__outline" points="709.5,532.8 744.5,385 725,75.5 672,33 483.5,13 70.8,35.2 13,89 21,212 13,488 88,563.5 575,549.5"/></g>
+          </svg>
+          <div class="d-how__window">
+            <div class="riso" data-fit="cover" data-design-width="731" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-photo-1.jpg" width="1620" height="1080" alt=""><img src="design-assets/how-photo-2.jpg" width="1620" height="1080" alt=""><img src="design-assets/how-photo-3.jpg" width="1620" height="1080" alt=""></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+</div><!-- /d-scene -->
 
 <div class="wf-zone">
 
-<!-- 4. JAK TO DZIAŁA — sekcja scrollowana -->
-<section class="section" id="jak">
-  <div class="wrap">
-    <h2>Jak to działa</h2>
-    <div class="sc-grid">
-      <div class="sc-media" aria-hidden="true">
-        <div class="sc-sticky">
-          <div class="sc-frame">
-            <div class="box sc-img is-active"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE — SPRINT NA CAMPUSIE</span></div>
-            <div class="box sc-img"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE — ROZMOWY Z KLIENTAMI</span></div>
-            <div class="box sc-img"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE — MD FELLOWSHIP</span></div>
-          </div>
-          <p class="sc-progress" id="sc-progress">01 / 03</p>
-        </div>
-      </div>
-      <div class="sc-steps">
-        <article class="sc-step is-active">
-          <span class="sc-time">12–13 listopada</span>
-          <h3>Sprint w Warszawie.</h3>
-          <p class="sc-desc">Dwa dni na Google for Startups Campus. Krótkie prelekcje founderów o [TEMATY PRELEKCJI], a między nimi dużo czasu na własną robotę i rozmowy z mentorami.</p>
-        </article>
-        <article class="sc-step">
-          <span class="sc-time">Kolejne 4 tygodnie</span>
-          <h3>4 tygodnie w terenie.</h3>
-          <p class="sc-desc">Dzwonisz, piszesz, umawiasz się i słuchasz. Nie robisz tego w pojedynkę: masz grupę na WhatsAppie i kilka spotkań online.</p>
-        </article>
-        <article class="sc-step">
-          <span class="sc-time">13 grudnia · deadline rekrutacji</span>
-          <h3>Fast-track do MD Fellowship.</h3>
-          <p class="sc-desc">Masz problem, który chcesz rozwiązać? Aplikuj do MD Fellowship i zbudujmy na nim firmę.</p>
-          <p class="sc-fast">Weźmiesz udział w min. 80% spotkań? Wskakujesz od razu do drugiego etapu rekrutacji.</p>
-        </article>
-      </div>
-    </div>
-  </div>
-</section>
 <!-- 5. TAK TO WYGLĄDA W PRAKTYCE -->
 <section class="section" id="praktyka">
   <div class="wrap">
@@ -1228,24 +1289,6 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     }
   });
 
-  /* ---------- jak to działa: stan sterowany scrollem ---------- */
-  var scSteps = Array.prototype.slice.call(document.querySelectorAll('.sc-step'));
-  var scImgs = Array.prototype.slice.call(document.querySelectorAll('.sc-img'));
-  var scProgress = document.getElementById('sc-progress');
-  function scSet(i) {
-    scSteps.forEach(function (s, j) { s.classList.toggle('is-active', j === i); });
-    scImgs.forEach(function (im, j) { im.classList.toggle('is-active', j === i); });
-    scProgress.textContent = '0' + (i + 1) + ' / 0' + scSteps.length;
-  }
-  if ('IntersectionObserver' in window) {
-    var scIO = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) scSet(scSteps.indexOf(en.target));
-      });
-    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-    scSteps.forEach(function (s) { scIO.observe(s); });
-  }
-
   /* ---------- reels: karuzela center-mode ---------- */
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var vp = document.getElementById('car-viewport');
@@ -1335,10 +1378,11 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 <script>
 /* =====================================================================
    Efekt „Riso” z Figmy (CodeComponent ab4f9935…) — setup/render/manifest
-   skopiowane bez zmian z eksportu Figma MCP (pominięte tylko defineProperties —
-   metadane panelu Figmy, w eksporcie oznaczone jako no-op). Poniżej cienki host WebGPU,
-   który podaje efektowi zdjęcie jako teksturę wejściową i canvas jako wyjście.
-   Bez WebGPU zostaje zwykłe zdjęcie (bez rastra).
+   skopiowane z eksportu Figma MCP (pominięte tylko defineProperties — metadane panelu Figmy,
+   w eksporcie oznaczone jako no-op) i rozszerzone o MORF między dwoma zdjęciami (sekcja „Jak to działa”):
+   druga tekstura wejściowa (binding 3) i uniform `morph` = (t, pulse). Przy t = 0 wynik jest identyczny
+   z oryginałem, więc latarki renderują się bez zmian. Poniżej cienki host WebGPU, który podaje
+   efektowi zdjęcie jako teksturę wejściową i canvas jako wyjście. Bez WebGPU zostaje zwykłe zdjęcie.
    ===================================================================== */
 var RisoEffect = (function () {
 function setup(device, frame) {
@@ -1352,10 +1396,13 @@ struct Uniforms {
   misregistration: vec4f,
   dotScale: vec4f,
   grain: vec4f,
+  morph: vec4f,
+  reveal: vec4f,
 };
 @group(0) @binding(0) var<uniform> u: Uniforms;
 @group(0) @binding(1) var samp: sampler;
 @group(0) @binding(2) var inputTex: texture_2d<f32>;
+@group(0) @binding(3) var inputTexB: texture_2d<f32>;
 
 struct VsIn {
   @location(0) pos: vec2f,
@@ -1368,6 +1415,9 @@ struct VsOut {
 
 fn sampleInput(p: vec2f) -> vec4f {
   return textureSampleLevel(inputTex, samp, clamp(p, vec2f(0.0), vec2f(1.0)), 0.0);
+}
+fn sampleInputB(p: vec2f) -> vec4f {
+  return textureSampleLevel(inputTexB, samp, clamp(p, vec2f(0.0), vec2f(1.0)), 0.0);
 }
 
 // Like sampleInput but returns transparent (premultiplied zero) outside the
@@ -1409,6 +1459,86 @@ fn hash21(p: vec2f) -> f32 {
 
 }
 
+// gładki szum wartościowy (0–1) — organiczne pole, które steruje wyłanianiem się kropek i formowaniem zdjęcia
+fn vnoise(p: vec2f) -> f32 {
+  let i = floor(p);
+  let f = fract(p);
+  let w = f * f * (3.0 - 2.0 * f);
+  let a = hash21(i);
+  let b = hash21(i + vec2f(1.0, 0.0));
+  let c = hash21(i + vec2f(0.0, 1.0));
+  let d = hash21(i + vec2f(1.0, 1.0));
+  return mix(mix(a, b, w.x), mix(c, d, w.x), w.y);
+}
+
+// ---- WEJŚCIE ZDJĘCIA: raster, który najpierw jest luźną chmurą kropek, a potem układa się w zdjęcie ----
+// Dla piksela px sprawdzamy własną komórkę rastra i 8 sąsiednich (kropki w fazie „chmury” drżą poza siatką).
+// Każda komórka ma: losowy próg (hash), wartość pola szumu (skupiska) i z tego:
+//   appear — czy kropka już się pojawiła (a: 0 → 1, skupiska wyłaniają się jako pierwsze, potem reszta),
+//   form   — czy kropka już „wie” o zdjęciu (f: 0 → 1, plamami po polu szumu); do tego momentu jej promień
+//            to organiczna plamka farby, potem promień z jasności zdjęcia (rImg) jak w oryginale.
+// Przy a = f = 1 wynik jest identyczny z oryginalnym halftone (drżenie 0, pełne appear/form).
+// t (0–1): fala morfu A → B idąca od środka na brzeg (pas o szerokości MB); komórka, którą mija, przechodzi
+// zdjęcie A → plamka farby (poza siatką) → zdjęcie B, bez cofania: przy t = 0 wszystko jest A, przy t = 1 wszystko B.
+fn inkDot(px0: vec2f, angle: f32, dotSz: f32, rA: f32, rB: f32, dims: vec2f, a: f32, f: f32, cc0: f32, t: f32) -> f32 {
+  let c = cos(angle);
+  let s = sin(angle);
+  // siatka liczona od ŚRODKA okna: gdy komórki rosną/maleją (c), raster skaluje się wokół środka, a nie wokół
+  // lewego górnego rogu — inaczej kropki przy tym rogu stoją w miejscu i „układają się” pierwsze
+  let px = px0 - dims * 0.5;
+  let rot = vec2f(px.x * c - px.y * s, px.x * s + px.y * c);
+  let cell = rot / dotSz;
+  let base = floor(cell);
+  let jit0 = (1.0 - f) * (1.0 - 0.5 * a);
+  let fieldScale = vec2f(dims.x / max(dims.y, 1.0), 1.0) * 3.2;
+  var cov = 0.0;
+  for (var j = -1; j <= 1; j++) {
+    for (var i = -1; i <= 1; i++) {
+      let id = base + vec2f(f32(i), f32(j));
+      let h = hash21(id + vec2f(0.37, 0.11));
+      let h2 = hash21(id + vec2f(5.3, 2.7));
+      // drżenie: kropka poza środkiem komórki, kierunek losowy i obracający się wraz z postępem
+      let ang = h * 6.2832 + (a + cc0) * (1.0 + 2.0 * h2) * 4.0;
+      let cc0_ = (id + 0.5) * dotSz;
+      let c0 = vec2f(cc0_.x * c + cc0_.y * s, -cc0_.x * s + cc0_.y * c);
+      let cuv0 = (c0 + dims * 0.5) / dims;
+      let asp0 = vec2f(dims.x / max(dims.y, 1.0), 1.0);
+      let dc0 = length((cuv0 - 0.5) * asp0) / (0.5 * length(asp0));
+      let MB0 = 0.38;
+      let ph0 = clamp((t * (1.0 + MB0) - (0.2 * h + 0.5 * dc0 + 0.3 * 0.5)) / MB0, 0.0, 1.0);
+      let jit = min(1.0, jit0 + 0.6 * sin(ph0 * 3.14159));
+      let off = vec2f(cos(ang), sin(ang)) * jit * dotSz * (0.25 + 0.55 * h2);
+      let cc = (id + 0.5) * dotSz + off;
+      let center = vec2f(cc.x * c + cc.y * s, -cc.x * s + cc.y * c);
+      let dist = length(px - center);
+      let cuv = (center + dims * 0.5) / dims;
+      // odległość od środka okna (0 środek, 1 narożnik): formowanie i pojawianie idą od środka, rozsypywanie od brzegów
+      let asp = vec2f(dims.x / max(dims.y, 1.0), 1.0);
+      let dc = length((cuv - 0.5) * asp) / (0.5 * length(asp));
+      // pole skupisk, dryfuje z postępem — chmura kropek żyje, póki się nie uformuje
+      let nzA = clamp((vnoise(cuv * fieldScale + vec2f(a * 1.4 + cc0 * 0.9, -a * 0.9 - cc0 * 0.6)) - 0.2) / 0.6, 0.0, 1.0);
+      let thA = 0.2 * h + 0.4 * nzA + 0.4 * dc;
+      let nzF = clamp((vnoise(cuv * fieldScale * 0.8 + vec2f(2.5 - f * 0.6, 7.1 + f * 0.4)) - 0.2) / 0.6, 0.0, 1.0);
+      let thF = 0.25 * h + 0.35 * nzF + 0.4 * dc;
+      let form = smoothstep(thF, thF + 0.3, f * 1.3);
+      // chmura nigdy nie wypełnia całego okna (przy a = 1 ok. 1/4 komórek wciąż pusta) — brakujące kropki
+      // dochodzą dopiero z formowaniem zdjęcia, więc kształt okna nie zdradza się jako jednolity „śnieg”
+      let appear = max(smoothstep(thA, thA + 0.28, a), form);
+      let nzS = vnoise(cuv * fieldScale * 2.2 + vec2f(9.3, 4.4));
+      let rInk = dotSz * (0.10 + 0.28 * nzS + 0.12 * h2);
+      // fala morfu: faza komórki 0 (jeszcze A) … 0.5 (plamka) … 1 (już B)
+      let MB = 0.38;
+      let thM = 0.2 * h + 0.3 * nzF + 0.5 * dc;
+      let ph = clamp((t * (1.0 + MB) - thM) / MB, 0.0, 1.0);
+      let wob = sin(ph * 3.14159);
+      let rImg = select(rA, rB, ph >= 0.5);
+      let r = mix(rInk, rImg, form * (1.0 - wob)) * (appear * (1.4 - 0.4 * appear));
+      cov = max(cov, select(0.0, 1.0, dist < r));
+    }
+  }
+  return cov;
+}
+
 @vertex fn vs_main(in: VsIn) -> VsOut {
   var out: VsOut;
   out.position = vec4f(in.pos, 0.0, 1.0);
@@ -1422,7 +1552,14 @@ fn hash21(p: vec2f) -> f32 {
   let dims = max(u.frameData.yz, vec2f(1.0));
   let inputDims = max(u.inputDimsData.xy, vec2f(1.0));
   let inputTexel = vec2f(1.0) / inputDims;
-  let uv = outputUv;
+  // ---- WEJŚCIE ZDJĘCIA (reveal): treść pomniejszona do skali s wokół środka, raster zostaje w pikselach ekranu.
+  // c = 1 na starcie: kropki rastra kilka razy większe i dwie warstwy farby mocno rozjechane (jak nadruk, który
+  // jeszcze nie wszedł w pasowanie); gdy zdjęcie rośnie, kropki maleją do normy, a warstwy się pasują.
+  let s = max(u.reveal.x, 0.001);
+  let c = u.reveal.y;
+  let revA = u.reveal.z;   // 0 → 1: kropki się pojawiają
+  let revF = u.reveal.w;   // 0 → 1: kropki układają się w zdjęcie, papier wypełnia okno
+  let uv = 0.5 + (outputUv - 0.5) / s;
   // texel and aspect are input-relative to match uv. Zoom fills rescale texel
   // alongside their uv redefinition below (see zoomLocal).
   let texel = inputTexel;
@@ -1432,26 +1569,46 @@ fn hash21(p: vec2f) -> f32 {
   let misregistration = u.misregistration.x;
   let dotScale = u.dotScale.x;
   let grain = u.grain.x;
-  let inputColor = sampleInput(uv);
-  // Sample input at base UV and offset UV for misregistration
-  let px = uv * dims;
-  let offsetUv = clamp((px + vec2f(misregistration, misregistration * 0.5)) / dims, vec2f(0.0), vec2f(1.0));
-  let baseColor = sampleInput(uv);
-  let offsetColor = sampleInput(offsetUv);
-  // Luminance for each sample
-  let lum1 = dot(baseColor.rgb, vec3f(0.299, 0.587, 0.114));
-  let lum2 = dot(offsetColor.rgb, vec3f(0.299, 0.587, 0.114));
+  // ---- MORF A → B (t = 0: tylko A, jak w oryginale) ----
+  // Jedna fala ze środka na brzeg (inkDot): każda komórka rastra, którą mija, przechodzi A → plamka → B.
+  // Papier pod kropkami znika w pasie fali i wraca za nią. Do tego globalny puls c (grubszy, rozjechany raster).
+  let t = u.morph.x;
+  let pulse = u.morph.y;
+  let L = vec3f(0.299, 0.587, 0.114);
+  let colA = sampleInput(uv);
+  let colB = sampleInputB(uv);
+  let lumA = dot(colA.rgb, L);
+  let lumB = dot(colB.rgb, L);
+  let dotScaleL = dotScale * (1.0 + 1.2 * pulse + 4.0 * c);
+  let misL = misregistration + dotScale * (2.5 * pulse + 6.0 * c);
+  let inputA = max(colA.a, colB.a * step(0.001, t));
+  let inputColor = vec4f(0.0, 0.0, 0.0, inputA);
+  // Sample input at base UV and offset UV for misregistration (siatka rastra i przesunięcie w px ekranu)
+  let px = outputUv * dims;
+  let offsetUvOut = clamp((px + vec2f(misL, misL * 0.5)) / dims, vec2f(0.0), vec2f(1.0));
+  let offsetUv = 0.5 + (offsetUvOut - 0.5) / s;
+  let offA = sampleInput(offsetUv);
+  let offB = sampleInputB(offsetUv);
+  let lumA2 = dot(offA.rgb, L);
+  let lumB2 = dot(offB.rgb, L);
   // Halftone screens at classic print angles
   let angle1 = radians(45.0);
   let angle2 = radians(75.0);
-  let dist1 = halftone(px, angle1, dotScale);
-  let dist2 = halftone(px, angle2, dotScale);
-  // Dot radius based on luminance (darker = bigger dot)
-  let r1 = (1.0 - lum1) * dotScale * 0.5;
-  let r2 = (1.0 - lum2) * dotScale * 0.5;
-  // Dot coverage: 1 inside the dot, 0 outside
-  let dot1 = select(0.0, 1.0, dist1 < r1);
-  let dot2 = select(0.0, 1.0, dist2 < r2);
+  // Dot radius based on luminance (darker = bigger dot), osobno dla kadru A i B
+  let r1A = (1.0 - lumA) * dotScaleL * 0.5;
+  let r1B = (1.0 - lumB) * dotScaleL * 0.5;
+  let r2A = (1.0 - lumA2) * dotScaleL * 0.5;
+  let r2B = (1.0 - lumB2) * dotScaleL * 0.5;
+  // Dot coverage: 1 inside the dot, 0 outside (z fazą chmury kropek, formowania i fali morfu — inkDot)
+  let dot1 = inkDot(px, angle1, dotScaleL, r1A, r1B, dims, revA, revF, c, t);
+  let dot2 = inkDot(px, angle2, dotScaleL, r2A, r2B, dims, revA, revF, c, t);
+  // papier pod kropkami wypełnia okno plamami, gdy zdjęcie się formuje; wcześniej kropki leżą wprost na tle
+  let aspP = vec2f(dims.x / max(dims.y, 1.0), 1.0);
+  let nzP = vnoise(outputUv * aspP * 2.6 + vec2f(11.0, 3.0) - revF * 0.5);
+  let dcP = length((outputUv - 0.5) * aspP) / (0.5 * length(aspP));
+  let MBP = 0.38;
+  let phP = clamp((t * (1.0 + MBP) - (0.25 * nzP + 0.75 * dcP)) / MBP, 0.0, 1.0);
+  let paperA = smoothstep(0.0, 0.6, revF * 1.1 - 0.5 * (0.5 * nzP + 0.5 * dcP)) * (1.0 - sin(phP * 3.14159));
   // Compose two ink layers — multiply blend (overprint)
   let ink1 = color1.rgb * dot1;
   let ink2 = color2.rgb * dot2;
@@ -1467,7 +1624,8 @@ fn hash21(p: vec2f) -> f32 {
   // Shadow density boost
   let luminance = dot(result, vec3f(0.299, 0.587, 0.114));
   result = result * (0.85 + 0.15 * luminance);
-  return vec4f(result * inputColor.a, inputColor.a);
+  let alpha = max(max(dot1, dot2), paperA) * inputColor.a;
+  return vec4f(result * alpha, alpha);
 }
 `;
     frame.state.module = device.createShaderModule({ code: wgsl });
@@ -1488,7 +1646,7 @@ fn hash21(p: vec2f) -> f32 {
     ]);
     frame.state.quad.unmap();
     frame.state.uniformBuf = device.createBuffer({
-        size: 112,
+        size: 144,
         usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     });
     frame.state.sampler = device.createSampler({
@@ -1611,10 +1769,14 @@ function render(device, frame) {
         numberParam("misregistration", 4), 0, 0, 0,
         numberParam("dotScale", 8), 0, 0, 0,
         numberParam("grain", 0.15), 0, 0, 0,
+        finiteNumber((params.morph || {}).t, 0), finiteNumber((params.morph || {}).pulse, 0), 0, 0,
+        finiteNumber((params.reveal || {}).s, 1), finiteNumber((params.reveal || {}).c, 0),
+        finiteNumber((params.reveal || {}).a, 1), finiteNumber((params.reveal || {}).f, 1),
     ]));
     var inputView = frame.input != null
         ? frame.input.createView()
         : frame.state.placeholder.createView();
+    var inputViewB = frame.inputB != null ? frame.inputB.createView() : inputView;
     var outputFormat = frame.output.format;
     if (frame.state.pipeline == null || frame.state.pipelineFormat !== outputFormat) {
         frame.state.pipeline = device.createRenderPipeline({
@@ -1645,6 +1807,7 @@ function render(device, frame) {
             { binding: 0, resource: { buffer: frame.state.uniformBuf } },
             { binding: 1, resource: frame.state.sampler },
             { binding: 2, resource: inputView },
+            { binding: 3, resource: inputViewB },
         ],
     });
     var encoder = device.createCommandEncoder();
@@ -1685,10 +1848,27 @@ return { setup: setup, render: render, manifest: manifest };
   var format = navigator.gpu.getPreferredCanvasFormat();
   var items = [];
 
+  // img.decode() w karcie otwartej w tle potrafi nigdy się nie rozstrzygnąć (Chrome odkłada dekodowanie) —
+  // po 1,5 s wystarczy, że obraz jest wczytany; drawImage zdekoduje go synchronicznie
+  function ready(img) {
+    var onLoaded = function (resolve) {
+      var f = function () { resolve(img.naturalWidth > 0); };
+      if (img.complete) f();
+      else { img.addEventListener('load', f, { once: true }); img.addEventListener('error', f, { once: true }); }
+    };
+    return new Promise(function (resolve) {
+      var timer = setTimeout(function () { onLoaded(resolve); }, 1500);
+      img.decode().then(function () { clearTimeout(timer); resolve(true); }, function () { clearTimeout(timer); onLoaded(resolve); });
+    });
+  }
+
   for (var i = 0; i < nodes.length; i++) {
     var el = nodes[i];
-    var img = el.querySelector('img');
-    try { await img.decode(); } catch (e) { continue; }
+    var imgs = Array.prototype.slice.call(el.querySelectorAll('img'));
+    var img = imgs[0];
+    var okAll = true;
+    for (var j = 0; j < imgs.length; j++) if (!(await ready(imgs[j]))) okAll = false;
+    if (!okAll) continue;
     var canvas = document.createElement('canvas');
     canvas.className = 'riso__canvas';
     canvas.setAttribute('aria-hidden', 'true');
@@ -1698,7 +1878,9 @@ return { setup: setup, render: render, manifest: manifest };
     ctx.configure({ device: device, format: format, alphaMode: 'premultiplied' });
     var frame = { state: {}, params: {} };
     RisoEffect.setup(device, frame);
-    items.push({ el: el, img: img, canvas: canvas, ctx: ctx, frame: frame, input: null, params: JSON.parse(el.dataset.riso) });
+    var item = { el: el, img: img, imgs: imgs, canvas: canvas, ctx: ctx, frame: frame, input: null, inputs: [], index: 0, params: JSON.parse(el.dataset.riso) };
+    el.__riso = item;
+    items.push(item);
   }
 
   function draw(it) {
@@ -1708,23 +1890,27 @@ return { setup: setup, render: render, manifest: manifest };
     var W = Math.max(1, Math.round(cssW * dpr)), H = Math.max(1, Math.round(cssH * dpr));
     it.canvas.width = W; it.canvas.height = H;
 
-    // zdjęcie wpasowane jak w Figmie (cover albo fill) do rozmiaru wyjścia
-    var src = document.createElement('canvas');
-    src.width = W; src.height = H;
-    var g = src.getContext('2d');
-    var iw = it.img.naturalWidth, ih = it.img.naturalHeight;
-    if (it.el.dataset.fit === 'cover') {
-      var sc = Math.max(W / iw, H / ih), dw = iw * sc, dh = ih * sc;
-      g.drawImage(it.img, (W - dw) / 2, (H - dh) / 2, dw, dh);
-    } else {
-      g.drawImage(it.img, 0, 0, W, H);
-    }
-    if (it.input) it.input.destroy();
-    it.input = device.createTexture({
-      size: [W, H], format: 'rgba8unorm',
-      usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+    // zdjęcie (albo kilka — kadry do morfu) wpasowane jak w Figmie (cover albo fill) do rozmiaru wyjścia
+    it.inputs.forEach(function (t) { t.destroy(); });
+    it.inputs = it.imgs.map(function (img) {
+      var src = document.createElement('canvas');
+      src.width = W; src.height = H;
+      var g = src.getContext('2d');
+      var iw = img.naturalWidth, ih = img.naturalHeight;
+      if (it.el.dataset.fit === 'cover') {
+        var sc = Math.max(W / iw, H / ih), dw = iw * sc, dh = ih * sc;
+        g.drawImage(img, (W - dw) / 2, (H - dh) / 2, dw, dh);
+      } else {
+        g.drawImage(img, 0, 0, W, H);
+      }
+      var tex = device.createTexture({
+        size: [W, H], format: 'rgba8unorm',
+        usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+      });
+      device.queue.copyExternalImageToTexture({ source: src }, { texture: tex, premultipliedAlpha: true }, [W, H]);
+      return tex;
     });
-    device.queue.copyExternalImageToTexture({ source: src }, { texture: it.input, premultipliedAlpha: true }, [W, H]);
+    it.input = it.inputs[Math.min(it.index, it.inputs.length - 1)];
 
     // parametry z Figmy są w px ramki projektu — przeliczamy na px urządzenia,
     // żeby raster wyglądał tak samo przy każdej szerokości ekranu
@@ -1744,10 +1930,28 @@ return { setup: setup, render: render, manifest: manifest };
 
   function drawAll() { items.forEach(draw); }
   drawAll();
+
+  // ponowny render jednego elementu z innymi parametrami wejścia (reveal) i ewentualnie innym kadrem (index —
+  // które z kilku zdjęć elementu ma być źródłem rastra) — tylko uniformy, bez wgrywania tekstury;
+  // zwraca false, dopóki element nie ma jeszcze rastra (wtedy strona robi zastępczą animację w CSS)
+  window.risoSet = function (el, reveal, index, indexB, t) {
+    var it = el.__riso;
+    if (!it || !it.inputs.length) return false;
+    it.index = Math.min(index || 0, it.inputs.length - 1);
+    it.input = it.inputs[it.index];
+    it.frame.input = it.input;
+    it.frame.inputB = t > 0 ? it.inputs[Math.min(indexB || 0, it.inputs.length - 1)] : null;
+    it.frame.params.morph = { t: t || 0, pulse: 0 };
+    it.frame.params.reveal = reveal;
+    it.frame.output = it.ctx.getCurrentTexture();
+    RisoEffect.render(device, it.frame);
+    return true;
+  };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawAll);
   var t;
   window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(drawAll, 120); });
   device.lost.then(function () { items.forEach(function (it) { it.el.classList.remove('is-riso'); }); });
+
 })();
 </script>
 
@@ -1921,7 +2125,7 @@ function paintHeroExit(P) {
   for (const it of exitItems) paintMask(it.el, easeInOut(seg(P, it.at, it.at + EXIT.rise)), -1);
 }
 
-// tekst w Problemie: każdy blok ma własny postęp (trackProgress), słowa podnoszą się po kolei.
+// tekst w Problemie i „Czego się nauczysz”: każdy blok ma własny postęp (trackProgress), słowa (opisy: linie) podnoszą się po kolei.
 // Okna jak w Colmez (createSweep): start + (i / n) · spread, wjazd przez `rise` z easeOut.
 // Jednostki postępu bloku: 0 = góra bloku na dole ekranu, 1 = dół bloku nad górą ekranu.
 const WORDS = { start: 0.02, spread: 0.26, rise: 0.07 };
@@ -1934,8 +2138,8 @@ function paintWords(t, P) {
   });
 }
 function buildWordTracks() {
-  wordTracks = [...document.querySelectorAll('.d-reveal[data-split="words"]')].map((block) =>
-    Object.assign(makeTrack(() => trackProgress(block)), { words: [...block.querySelectorAll('.w__i')] }));
+  wordTracks = [...document.querySelectorAll('.d-reveal')].map((block) =>
+    Object.assign(makeTrack(() => trackProgress(block)), { words: [...block.querySelectorAll('.w__i, .ln__i')] }));
 }
 
 function collect() {   // po podziale na linie (start i każda zmiana rozmiaru)
@@ -1954,15 +2158,25 @@ function collect() {   // po podziale na linie (start i każda zmiana rozmiaru)
    8 klatek/s, co klatkę 35% pozostałej drogi, kąt co 4° z drganiem ±1,2°,
    miękki limit wychylenia ±max od pozycji z projektu */
 const shortest = (from, to) => from + (((to - from) % 360 + 540) % 360 - 180);
-function makeAimer({ el, host, rest, max, active }) {
+// mode 'aim'  — latarka obraca się w stronę kursora (Problem: celowanie snopem w tekst)
+// mode 'tilt' — wychylenie proporcjonalne do odległości kursora od osi latarki, po obu stronach
+//               tak samo mocne (Hero: kursor nad osią podnosi głowicę, pod osią ją opuszcza);
+//               `reach` = ułamek szerokości ekranu, przy którym wychylenie dochodzi do ~76% max
+function makeAimer({ el, host, rest, max, active, mode = 'aim', reach = 0.35 }) {
   const STEP = 4, FOLLOW = 0.35, JITTER = 1.2;
+  const nx = -Math.sin(rest * Math.PI / 180), ny = Math.cos(rest * Math.PI / 180);   // prostopadła do osi
   let target = 0, current = 0, shown = 0;
   return {
     move(x, y) {
       if (!active()) return;
       const r = el.getBoundingClientRect();
-      const a = Math.atan2(y - (r.top + r.height / 2), x - (r.left + r.width / 2)) * 180 / Math.PI;
-      target = max * Math.tanh(shortest(0, a - rest) / max);
+      const dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height / 2);
+      if (mode === 'tilt') {
+        target = max * Math.tanh((dx * nx + dy * ny) / (innerWidth * reach));
+      } else {
+        const a = Math.atan2(dy, dx) * 180 / Math.PI;
+        target = max * Math.tanh(shortest(0, a - rest) / max);
+      }
     },
     tick() {
       if (introRunning()) return;
@@ -1985,6 +2199,7 @@ const FX = reduced ? {
   heroFlicker: { frames: [{ opacity: 0 }, { opacity: 0.9, offset: 0.3 }, { opacity: 0.9, offset: 0.7 }, { opacity: 0 }], duration: 1400 },
   litFlicker:  { frames: [{ opacity: 1 }, { opacity: 0.5, offset: 0.4 }, { opacity: 1 }], duration: 800 },
   switchOn:    { frames: [{ opacity: 0 }, { opacity: 1 }], duration: 400 },
+  switchOff:   { frames: [{ opacity: 1 }, { opacity: 0 }], duration: 400 },
 } : {
   // Hero: zgaszona → dwa błyski → świeci → gaśnie
   heroFlicker: { frames: [
@@ -1995,6 +2210,10 @@ const FX = reduced ? {
   litFlicker: { frames: [
     { opacity: 1, offset: 0, easing: S }, { opacity: 0, offset: 0.03, easing: S }, { opacity: 0.7, offset: 0.16, easing: S },
     { opacity: 0, offset: 0.24, easing: S }, { opacity: 1, offset: 0.5, easing: S }, { opacity: 1, offset: 1 } ], duration: 900 },
+  // zgaszenie w „Czego się nauczysz”: mrugnięcie → gaśnie
+  switchOff: { frames: [
+    { opacity: 1, offset: 0, easing: S }, { opacity: 0, offset: 0.08, easing: S }, { opacity: 0.8, offset: 0.24, easing: S },
+    { opacity: 0, offset: 0.34, easing: S }, { opacity: 0.5, offset: 0.56, easing: S }, { opacity: 0, offset: 0.66 }, { opacity: 0, offset: 1 } ], duration: 900 },
   // zapalenie po dojechaniu latarki
   switchOn: { frames: [
     { opacity: 0, offset: 0, easing: S }, { opacity: 1, offset: 0.06, easing: S }, { opacity: 0, offset: 0.16, easing: S },
@@ -2067,7 +2286,7 @@ function applyMode() {
 }
 
 /* ---------- celowanie: Hero (przed podróżą) i Problem (po zapaleniu) ---------- */
-const heroAim = makeAimer({ el: heroFl, host: hero, rest: -142, max: 22.5,
+const heroAim = makeAimer({ el: heroFl, host: hero, rest: -142, max: 22.5, mode: 'tilt',
   active: () => finePointer && !reduced && e < 0.02 && scrollY < hero.offsetHeight });
 const probAim = makeAimer({ el: probFl, host: problem, rest: 159.2, max: 25,
   active: () => finePointer && !reduced && lit && (() => { const r = problem.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; })() });
@@ -2083,10 +2302,83 @@ wirePress(hero, heroFl, () => !introRunning() && e < 0.02, () => {
   placeHeroBeam();
   heroBeam.animate(FX.heroFlicker.frames, { duration: FX.heroFlicker.duration });
 });
-wirePress(problem, probFl, () => !introRunning() && lit, () => {
+wirePress(problem, probFl, () => !introRunning() && lit && !beamOut, () => {
   if (running(probBeam)) return;
   probBeam.animate(FX.litFlicker.frames, { duration: FX.litFlicker.duration });
 });
+
+/* ---------- zgaszenie snopu w „Czego się nauczysz” ----------
+   Gdy nagłówek sekcji dochodzi do ~1/3 wysokości ekranu, snop gaśnie z mrugnięciem; przy powrocie w górę zapala się znowu.
+   Osobny element (obrazek snopu), żeby nie mieszać się z zapaleniem po podróży i z mrugnięciem po kliknięciu. */
+const learnTitle = document.querySelector('.d-learn__title');
+const probBeamImg = probBeam.querySelector('img');
+let beamOut = false;
+function checkBeamOut() {
+  const y = learnTitle.getBoundingClientRect().top / innerHeight;
+  // gaśnie, gdy nagłówek „Czego się nauczysz?” wchodzi w dolną ćwierć ekranu (~73% wysokości); histereza, żeby nie migało
+  const out = beamOut ? y < 0.83 : y < 0.73;
+  if (out === beamOut) return;
+  beamOut = out;
+  probBeamImg.getAnimations().forEach((a) => a.cancel());
+  probBeamImg.style.opacity = out ? '0' : '';
+  const fx = out ? FX.switchOff : FX.switchOn;
+  probBeamImg.animate(fx.frames, { duration: fx.duration });
+}
+
+/* ---------- tło sceny: niebieski → krem przy wejściu w „Jak to działa” ----------
+   0, gdy góra sekcji jest na dole ekranu; 1, gdy dochodzi do 30% wysokości ekranu */
+const scene = document.querySelector('.d-scene');
+const howSec = document.querySelector('.d-how');
+let bgp = -1;
+function paintSceneBg() {
+  const p = clamp01((innerHeight - howSec.getBoundingClientRect().top) / (innerHeight * 0.7));
+  const v = Math.round(p * 1000) / 1000;
+  if (v !== bgp) { bgp = v; scene.style.setProperty('--bgp', v); }
+}
+
+/* ---------- „Jak to działa”: jedno przyklejone zdjęcie, kadry morfują przy scrollu ----------
+   Postęp bierzemy z kroków tekstu (trackProgress każdego .d-how__step: 0 = góra kroku na dole ekranu,
+   1 = dół kroku nad górą; krok wysokości ekranu jest wyśrodkowany przy 0.5). Wszystko w shaderze
+   (uniform reveal = s, c, a, f) i w jednym elemencie .riso z trzema zdjęciami (risoSet z indeksem kadru):
+     wejście (krok 1):  a 2–30% — kropki wyłaniają się z niczego wprost na tle (skupiska wg pola szumu, drżenie poza
+                        siatką, rozmiar plamek farby); f 22–50% — plama po plamie łapią jasność zdjęcia, pod nimi
+                        wypełnia się papier; c 14–50% — raster z grubego i rozjechanego gęstnieje do normy;
+                        pierścień obrysu wysuwa się spod kadru 46–58%, gdy zdjęcie jest już uformowane;
+     morf k → k+1 (krok k+1, 14–46%): jedna fala ze środka na brzeg (uniform morph.t, shader ma oba kadry):
+                        komórka rastra, którą mija, przechodzi kadr k → plamka farby poza siatką → kadr k+1, papier
+                        znika w pasie fali i wraca za nią; nic się nie cofa. c pulsuje łagodnie (grubszy raster).
+                        Pierścień obrysu zostaje.
+   Bez rastra (WebGPU) zostaje pierwsze zdjęcie z przenikaniem. Przy prefers-reduced-motion kadr stoi od razu
+   uformowany i zmienia się skokowo w połowie morfu. */
+const howSteps = [...document.querySelectorAll('.d-how__step')];
+const howPhoto = (() => {
+  const el = document.querySelector('.d-how__photo');
+  if (!el) return null;
+  return { el, riso: el.querySelector('.riso'), outline: el.querySelector('.d-how__outline'),
+    tracks: howSteps.map((st) => makeTrack(() => trackProgress(st))), key: '' };
+})();
+const MORPH = { start: 0.14, end: 0.46 };
+function paintHowPhoto(Ps) {
+  const it = howPhoto;
+  // wejście pierwszego kadru
+  let a = reduced ? 1 : seg(Ps[0], 0.02, 0.30);
+  let f = reduced ? 1 : seg(Ps[0], 0.22, 0.50);
+  let c = reduced ? 0 : 1 - easeOut(seg(Ps[0], 0.14, 0.50));
+  let o = reduced ? 1 : easeOut(seg(Ps[0], 0.46, 0.58));
+  let index = 0, indexB = 0, t = 0;
+  // morfy: ostatni rozpoczęty decyduje o kadrze
+  for (let k = 1; k < Ps.length; k++) {
+    const m = seg(Ps[k], MORPH.start, MORPH.end);
+    if (m <= 0) break;
+    if (reduced) { index = m >= 0.5 ? k : k - 1; t = 0; continue; }
+    a = 1; f = 1; o = 1;
+    if (m >= 1) { index = k; indexB = k; t = 0; c = 0; }
+    else { index = k - 1; indexB = k; t = easeInOut(m); c = 0.6 * Math.sin(m * Math.PI); }
+  }
+  it.outline.style.transform = 'scale(' + (0.95 + 0.05 * o).toFixed(4) + ')';
+  if (window.risoSet && window.risoSet(it.riso, { s: 1, c, a, f }, index, indexB, t)) { if (it.riso.style.opacity) it.riso.style.opacity = ''; }
+  else it.riso.style.opacity = (index === 0 ? f : 1).toFixed(3);
+}
 
 /* ---------- pętla: jeden zegar dla wszystkiego, co zależy od scrolla ---------- */
 const travelTrack = makeTrack(() => (geo ? clamp01(scrollY / geo.span) : 0));   // podróż: do przyklejenia latarki
@@ -2103,6 +2395,13 @@ function frame(driving, dt) {
     if (!lit && e >= 0.995) light(true, fresh);
     else if (lit && e < 0.985) light(false);
     fresh = false;
+  }
+  checkBeamOut();
+  paintSceneBg();
+  if (howPhoto) {
+    const Ps = howPhoto.tracks.map((t) => sync(t, driving, dt));
+    const key = Ps.map((p) => p.toFixed(4)).join();
+    if (key !== howPhoto.key) { howPhoto.key = key; paintHowPhoto(Ps); }
   }
   for (const t of wordTracks) {
     const p = sync(t, driving, dt);
