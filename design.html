@@ -411,6 +411,15 @@ main { container-type: inline-size; }
   line-height: 0.9; letter-spacing: calc(-0.44 * var(--u)); text-transform: uppercase; text-decoration: none;
 }
 
+/* przycisk w Hero (Figma 7263:1656): biały kształt z obrysem „[[”, napis w Antonie i zielona plakietka ze strzałką;
+   wymiary z Figmy × 0.932 — ta sama skala co tagi (56 / 60.11) */
+.d-btn--shape { width: calc(207.6 * var(--u)); height: calc(70.8 * var(--u)); padding: 0; gap: calc(22.4 * var(--u));
+  background: url("design-assets/btn-aplikuj.svg") no-repeat 0 0 / 100% 100%;
+  font-family: var(--f-display); font-weight: 400; font-size: calc(32 * var(--u)); line-height: 1; letter-spacing: calc(-0.64 * var(--u)); }
+.d-btn__arrow { display: inline-flex; align-items: center; justify-content: center; width: calc(26.1 * var(--u)); height: calc(22.4 * var(--u));
+  background: url("design-assets/btn-arrow.svg") no-repeat 0 0 / 100% 100%;
+  font-family: var(--f-body); font-weight: 600; font-size: calc(22.4 * var(--u)); line-height: 0.9; }
+
 /* ---------- tekst ---------- */
 .d-body {
   font-family: var(--f-body); font-weight: 500; font-size: max(16px, calc(22 * var(--u)));
@@ -430,6 +439,8 @@ main { container-type: inline-size; }
   background-image: url("design-assets/tag-bezplatnie.svg"); background-size: calc(158.4 * var(--t)) calc(56 * var(--t)); }
 .d-tag--age   { width: calc(154 * var(--t)); padding: calc(12 * var(--t)) 0 0 calc(13 * var(--t));
   background-image: url("design-assets/tag-wiek.svg"); background-size: calc(153.6 * var(--t)) calc(56 * var(--t)); }
+.d-tag--seats { width: calc(154 * var(--t)); padding: calc(12 * var(--t)) 0 0 calc(13 * var(--t));
+  background-image: url("design-assets/tag-wiek.svg"); background-size: calc(153.6 * var(--t)) calc(56 * var(--t)); }   /* ten sam kształt co wiek (Figma 7263:1679) */
 .d-tag--date  { width: calc(470 * var(--t)); height: calc(57 * var(--t)); padding: calc(12 * var(--t)) 0 0 calc(12 * var(--t));
   background-image: url("design-assets/tag-data.svg"); background-size: calc(449.024 * var(--t)) calc(56 * var(--t)); background-position: 0 calc(0.21 * var(--t)); }
 .d-tag--place { width: calc(492 * var(--t)); height: calc(57 * var(--t)); padding: calc(13 * var(--t)) 0 0 calc(14 * var(--t));
@@ -686,6 +697,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-how__desc, .d-how__fast { font-size: max(16px, calc(24.93 * var(--u))); }
 .d-how__desc { margin-top: calc(83.1 * var(--u)); }   /* Figma: 80 px między tytułem a opisem */
 .d-how__fast { margin-top: calc(16 * var(--u)); font-weight: 600; }
+.d-how__list { margin: calc(8 * var(--u)) 0 0; padding-left: 1.2em; font-size: max(16px, calc(24.93 * var(--u))); }
+.d-how__list li + li { margin-top: calc(4 * var(--u)); }
 
 /* zdjęcie: ramka 757 × 562 (jak w Figmie); gruba czarna obwódka to polygon SVG z obrysem 24 px, z którego maska
    (kształt okna) zostawia tylko zewnętrzną połowę — 12 px pierścień, jak obrys „outside” w Figmie. Pierścień leży
@@ -705,6 +718,53 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 /* zanim riso się narysuje (albo bez WebGPU): zdjęcie w odcieniach szarości, wejście przez opacity ze skryptu */
 .d-how__window .riso > img { filter: grayscale(1) contrast(1.1); }
 
+
+/* ---------- 5 · ZOBACZ, JAK ROBILI TO INNI (Figma 7243:48, ramka 1440 → u = px · 1496/1440) ----------
+   Karuzela center-mode: aktywny kafelek 280 (9:16), boczne 230 i 53 niżej, odstęp 44, wokół aktywnego 106.5.
+   Pod aktywnym biały kształt z obrysem (wektor z Figmy), wyłania się, gdy kafelek staje się aktywny.
+   Typografia wszystkich kafelków jak w środkowym: tytuł Anton 24, podpis 16. Pozycję toru liczy skrypt. */
+.d-reels { position: relative; z-index: 2; padding: calc(116.4 * var(--u)) 0 calc(118.9 * var(--u)); }
+.d-reels__head { display: flex; align-items: flex-end; justify-content: space-between; gap: calc(40 * var(--u)); padding: 0 40px; }
+.d-reels__title { margin: 0; width: calc(488 * var(--u)); font-family: var(--f-display); font-weight: 400; font-size: calc(76 * var(--u));
+  line-height: 1.1; letter-spacing: calc(-1.52 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+.d-reels__ig { flex: none; display: inline-flex; align-items: center; justify-content: center; gap: calc(16.6 * var(--u));
+  width: calc(261.8 * var(--u)); height: calc(50.9 * var(--u)); margin-right: calc(276 * var(--u));
+  background: url("design-assets/reels-ig-btn.svg") no-repeat calc(0.92 * var(--u)) calc(0.6 * var(--u)) / calc(264.95 * var(--u)) calc(49.87 * var(--u));
+  font-family: var(--f-display); font-size: calc(20.78 * var(--u)); line-height: 1; letter-spacing: calc(-0.42 * var(--u));
+  text-transform: uppercase; color: var(--c-black); text-decoration: none; }
+.d-reels__ig .d-btn__arrow { width: calc(29.1 * var(--u)); height: calc(24.9 * var(--u)); font-size: calc(24.9 * var(--u)); }
+
+.d-reels__car { position: relative; margin-top: calc(26 * var(--u)); }
+.d-reels__vp { overflow: hidden; padding: calc(56 * var(--u)) 0 calc(60 * var(--u)); cursor: grab; touch-action: pan-y; }
+.d-reels__vp.is-dragging { cursor: grabbing; }
+.d-reels__track { display: flex; align-items: flex-start; gap: calc(45.7 * var(--u)); width: max-content; will-change: transform; }
+.d-reel { position: relative; flex: none; width: calc(238.9 * var(--u)); margin-top: calc(55.4 * var(--u)); user-select: none;
+  transition: width 300ms ease, margin 300ms ease; }
+.d-reel.is-active { width: calc(290.9 * var(--u)); margin: 0 calc(64.9 * var(--u)); }
+.d-reel__shape { position: absolute; z-index: 0; left: calc(-63 * var(--u)); top: calc(-46.9 * var(--u));
+  width: calc(412.1 * var(--u)); height: calc(690.5 * var(--u)); opacity: 0; transform: scale(0.9); transform-origin: 50% 40%;
+  transition: opacity 200ms ease, transform 300ms ease; pointer-events: none; }
+.d-reel__shape img { display: block; width: 100%; height: 100%; }
+.d-reel.is-active .d-reel__shape { opacity: 1; transform: none; transition-delay: 120ms; }
+.d-reel__media { position: relative; z-index: 1; aspect-ratio: 9 / 16; pointer-events: none;
+  background: #E4E4E0; border: 1px solid #BDBDB8; color: #BDBDB8; }
+.d-reel__media .box-label { background: #E4E4E0; color: #555; }
+.d-reel__title, .d-reel__meta { position: relative; z-index: 1; }
+.d-reel__title { margin: calc(18.7 * var(--u)) 0 0; font-family: var(--f-display); font-weight: 400; font-size: calc(24.93 * var(--u));
+  line-height: 1.2; letter-spacing: calc(-0.64 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+.d-reel__meta { display: flex; flex-wrap: wrap; gap: calc(7.27 * var(--u)); margin: calc(4.16 * var(--u)) 0 0;
+  font-family: var(--f-body); font-weight: 500; font-size: calc(16.62 * var(--u)); line-height: 1.1; letter-spacing: calc(-0.44 * var(--u)); color: var(--c-black); }
+
+.d-reels__arrow { position: absolute; z-index: 3; top: calc(295 * var(--u)); width: calc(58.2 * var(--u)); height: calc(58.2 * var(--u));
+  display: flex; align-items: center; justify-content: center; padding: 0; border: 0; cursor: pointer;
+  background: url("design-assets/reels-arrow.svg") no-repeat 0 0 / 100% 100%;
+  font-family: var(--f-body); font-weight: 600; font-size: calc(24.93 * var(--u)); line-height: 0.9; color: var(--c-white); }
+.d-reels__arrow--prev { left: calc(40px + 58.2 * var(--u)); transform: scaleX(-1); }   /* odbita jak w Figmie: strzałka w lewo */
+.d-reels__arrow--next { right: 40px; }
+.d-reels__arrow:disabled { opacity: 0.3; cursor: default; }
+.d-reels__arrow:focus-visible, .d-reels__ig:focus-visible { outline: 2px solid var(--c-black); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .d-reel, .d-reel__shape { transition: none; } }
+
 /* ---------- mobile (brak projektu w Figmie — układ tymczasowy) ---------- */
 @media (max-width: 1023px) {
   :root { --m: calc(min(100cqw, 600px) / 390); --t: calc(var(--m) * 0.62); }
@@ -721,6 +781,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-frame { width: 100%; }
   .d-body { font-size: 17px; letter-spacing: -0.2px; }
   .d-btn { height: 56px; padding: 0 28px; font-size: 20px; letter-spacing: -0.4px; }
+  .d-btn--shape { width: 176px; height: 60px; padding: 0; gap: 18px; font-size: 27px; letter-spacing: -0.54px; }
+  .d-btn__arrow { width: 22px; height: 19px; font-size: 18px; }
 
   .d-hero__frame { height: auto; padding: calc(56px + 24 * var(--m)) calc(20 * var(--m)) calc(48 * var(--m)); display: flex; flex-direction: column; }
   .d-tags { position: static; order: 1; }
@@ -755,6 +817,12 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-how__media { position: static; }
   .d-how__photo { width: 100%; }
   .d-how__desc { margin-top: calc(32 * var(--m)); }
+  .d-reels { --u: calc(var(--m) * 0.75); padding: calc(72 * var(--m)) 0 calc(56 * var(--m)); }
+  .d-reels__head { flex-direction: column; align-items: flex-start; gap: calc(20 * var(--m)); padding: 0 calc(20 * var(--m)); }
+  .d-reels__title { width: auto; font-size: calc(64 * var(--m)); letter-spacing: calc(-1.28 * var(--m)); }
+  .d-reels__ig { margin-right: 0; }
+  .d-reels__arrow--prev { left: calc(12 * var(--m)); }
+  .d-reels__arrow--next { right: calc(12 * var(--m)); }
 }
 </style>
 </head>
@@ -796,13 +864,13 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   <div class="d-frame d-hero__frame">
     <div class="d-hero__beam" aria-hidden="true">
       <div class="d-fl d-fl--hero">
-        <div class="d-fl__beam"><img src="design-assets/beam-flat.svg" width="3196.97" height="3050.29" alt=""></div>
+        <div class="d-fl__beam"><img src="design-assets/beam-flat.svg?v=2" width="3196.97" height="3050.29" alt=""></div>
       </div>
     </div>
     <h1 class="d-hero__title"><span class="d-hero__w d-hero__w--1"><span class="d-hero__wi">Startup</span></span> <span class="d-hero__w d-hero__w--2"><span class="d-hero__wi">disco</span></span><span class="d-hero__w d-hero__w--3"><span class="d-hero__wi">very</span></span> <span class="d-hero__w d-hero__w--4"><span class="d-hero__wi">Sprint</span></span></h1>
     <div class="d-hero__intro d-intro-in" id="hero-cta" style="--intro-delay: 560ms">
-      <p class="d-body" data-split="lines">Zanim zaczniesz budować, porozmawiaj z klientami: przez miesiąc founderzy z MD Fellowship pokażą ci, jak znaleźć problem, za którego rozwiązanie ktoś naprawdę zapłaci.</p>
-      <span class="d-mask d-mask--btn"><a class="d-btn d-mask__i" href="#aplikuj">Aplikuj</a></span>
+      <p class="d-body" data-split="lines">Zanim zaczniesz budować, porozmawiaj z klientami: pokażemy Ci, jak znaleźć problem, za którego rozwiązanie ktoś będzie gotowy zapłacić.</p>
+      <span class="d-mask d-mask--btn"><a class="d-btn d-btn--shape d-mask__i" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a></span>
     </div>
     <div class="d-hero__flashlight" aria-hidden="true">
       <div class="d-fl d-fl--hero">
@@ -814,7 +882,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       </div>
     </div>
     <div class="d-tags d-intro-in" style="--intro-delay: 500ms">
-      <p class="d-tags__row d-mask"><span class="d-tag d-tag--free d-mask__i">Bezpłatnie</span><span class="d-tag d-tag--age d-mask__i">18–24 lata</span></p>
+      <p class="d-tags__row d-mask"><span class="d-tag d-tag--free d-mask__i">Bezpłatnie</span><span class="d-tag d-tag--age d-mask__i">18–24 lata</span><span class="d-tag d-tag--seats d-mask__i">120 miejsc</span></p>
       <p class="d-mask"><span class="d-tag d-tag--date d-mask__i">12–13 listopada 2026 + 1 m-c online</span></p>
       <p class="d-mask"><span class="d-tag d-tag--place d-mask__i">Google for Startups Campus Warsaw</span></p>
     </div>
@@ -828,7 +896,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     <div class="d-problem__pin d-problem__pin--beam" aria-hidden="true">
       <div class="d-problem__beam">
         <div class="d-fl d-fl--problem">
-          <div class="d-fl__beam"><img src="design-assets/beam-flat.svg" width="3196.97" height="3050.29" alt=""></div>
+          <div class="d-fl__beam"><img src="design-assets/beam-flat.svg?v=2" width="3196.97" height="3050.29" alt=""></div>
         </div>
       </div>
     </div>
@@ -844,9 +912,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       </div>
     </div>
     <div class="d-problem__text">
-      <h2 class="d-reveal" data-split="words">Większość startupów<br>nie pada przez brak kasy.</h2>
-      <p class="d-reveal" data-split="words">Padają, bo zbudowały coś, czego nikt nie potrzebował. Miesiące pracy, logo, pitch deck… i cisza.</p>
-      <p class="d-reveal" data-split="words">Daj nam miesiąc. Pokażemy ci, jak rozmawiać z potencjalnymi klientami i znaleźć problem, który warto rozwiązać.</p>
+      <h2 class="d-reveal" data-split="words">Startupy rzadko upadają przez brak kasy czy złą technologię.</h2>
+      <p class="d-reveal" data-split="words">Najczęściej upadają, bo zbudowały coś, czego nikt nie chce.</p>
+      <p class="d-reveal" data-split="words">Daj nam miesiąc, pokażemy Ci, jak rozmawiać z potencjalnymi klientami i znaleźć problem do rozwiązania.</p>
       <p class="d-reveal" data-split="words">Przyłożysz się? Masz szansę skończyć program z pierwszymi płacącymi klientami.</p>
     </div>
   </div>
@@ -861,22 +929,22 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       <li class="d-skill">
         <span class="d-skill__num d-reveal" data-split="words" aria-hidden="true">01</span>
         <h3 class="d-skill__title d-reveal" data-split="words">Prowadzić discovery calle</h3>
-        <p class="d-body d-skill__desc d-reveal" data-split="lines">Zapytasz „kupiłbyś to?”, każdy powie, że tak. I nic z tego nie wynika. Nauczymy cię pytać tak, żeby usłyszeć prawdę, a nie uprzejmości.</p>
+        <p class="d-body d-skill__desc d-reveal" data-split="lines">Większość ludzi pyta: „Czy kupiłbyś to?”. Każdy odpowie, że tak. To bezwartościowy feedback. Pokażemy Ci, jak pytać, żeby usłyszeć prawdę.</p>
       </li>
       <li class="d-skill">
         <span class="d-skill__num d-reveal" data-split="words" aria-hidden="true">02</span>
-        <h3 class="d-skill__title d-reveal" data-split="words">Odróżniać lekarstwo od witaminy</h3>
-        <p class="d-body d-skill__desc d-reveal" data-split="lines">Witamina to „fajnie by było”. Lekarstwo to „potrzebuję tego na wczoraj”. Za pierwsze ludzie płacą niechętnie, za drugie od ręki.</p>
+        <h3 class="d-skill__title d-reveal" data-split="words">Szukać lekarstwa, nie witaminy</h3>
+        <p class="d-body d-skill__desc d-reveal" data-split="lines">Witamina to „fajnie by było”. Lekarstwo to „potrzebuję tego na wczoraj”. Za witaminy klienci płacą niechętnie, za lekarstwa od razu.</p>
       </li>
       <li class="d-skill">
         <span class="d-skill__num d-reveal" data-split="words" aria-hidden="true">03</span>
         <h3 class="d-skill__title d-reveal" data-split="words">Pisać wiadomości, na które ktoś odpisze</h3>
-        <p class="d-body d-skill__desc d-reveal" data-split="lines">Twój mail ląduje obok 50 innych, w większości pisanych przez AI. Jeśli brzmisz jak wszyscy, lądujesz w archiwum.</p>
+        <p class="d-body d-skill__desc d-reveal" data-split="lines">Twoja wiadomość ląduje w skrzynce obok 50 innych, w większości wygenerowanych przez AI. Jeśli brzmisz jak wszyscy, nikt Ci nie odpisze.</p>
       </li>
       <li class="d-skill">
         <span class="d-skill__num d-reveal" data-split="words" aria-hidden="true">04</span>
-        <h3 class="d-skill__title d-reveal" data-split="words">Stawiać MVP w kilka godzin</h3>
-        <p class="d-body d-skill__desc d-reveal" data-split="lines">MVP to nie okrojona wersja 1.0. To najtańszy sposób, żeby sprawdzić, czy ktoś zapłaci. Czasem wystarczy arkusz w Excelu.</p>
+        <h3 class="d-skill__title d-reveal" data-split="words">Budować MVP w kilka godzin</h3>
+        <p class="d-body d-skill__desc d-reveal" data-split="lines">MVP to najtańszy sposób, żeby sprawdzić, czy ktoś zapłaci. Czasem nawet bez linijki kodu.</p>
       </li>
     </ol>
   </div>
@@ -891,18 +959,22 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         <article class="d-how__step">
           <span class="d-how__tag d-how__tag--1 d-reveal" data-split="words">12–13 listopada</span>
           <h3 class="d-skill__title d-reveal" data-split="words">Sprint w Warszawie.</h3>
-          <p class="d-body d-how__desc d-reveal" data-split="lines">Dwa dni na Google for Startups Campus. Krótkie prelekcje founderów o [TEMATY PRELEKCJI], a między nimi dużo czasu na własną robotę i rozmowy z mentorami.</p>
+          <p class="d-body d-how__desc d-reveal" data-split="lines">Dwa dni na Google for Startups Campus Warsaw. Super merytoryczne prelekcje, a pomiędzy sporo czasu na indywidualną pracę i konsultacje z mentorami.</p>
+          <p class="d-body d-how__fast d-reveal" data-split="lines">Posłuchacie między innymi o:</p>
+          <ul class="d-body d-how__list">
+            <li class="d-reveal" data-split="lines">[TEMATY PRELEKCJI – do uzupełnienia]</li>
+          </ul>
         </article>
         <article class="d-how__step">
           <span class="d-how__tag d-how__tag--2 d-reveal" data-split="words">Kolejne 4 tygodnie</span>
-          <h3 class="d-skill__title d-reveal" data-split="words">4 tygodnie w terenie.</h3>
-          <p class="d-body d-how__desc d-reveal" data-split="lines">Dzwonisz, piszesz, umawiasz się i słuchasz. Nie robisz tego w pojedynkę: masz grupę na WhatsAppie i kilka spotkań online.</p>
+          <h3 class="d-skill__title d-reveal" data-split="words">Rozmowy z klientami.</h3>
+          <p class="d-body d-how__desc d-reveal" data-split="lines">Dzwonisz, piszesz, pytasz i słuchasz. Pomaga Ci w tym nasza grupa na WhatsAppie i kilka spotkań online.</p>
         </article>
         <article class="d-how__step">
-          <span class="d-how__tag d-how__tag--3 d-reveal" data-split="words">13 grudnia · deadline rekrutacji</span>
-          <h3 class="d-skill__title d-reveal" data-split="words">Fast-track do MD Fellowship.</h3>
-          <p class="d-body d-how__desc d-reveal" data-split="lines">Masz problem, który chcesz rozwiązać? Aplikuj do MD Fellowship i zbudujmy na nim firmę.</p>
-          <p class="d-body d-how__fast d-reveal" data-split="lines">Weźmiesz udział w min. 80% spotkań? Wskakujesz od razu do drugiego etapu rekrutacji.</p>
+          <span class="d-how__tag d-how__tag--3 d-reveal" data-split="words">13 grudnia</span>
+          <h3 class="d-skill__title d-reveal" data-split="words">Zakończenie Discovery Sprintu oraz fast track do MD Fellowship.</h3>
+          <p class="d-body d-how__desc d-reveal" data-split="lines">Masz już problem, który chcesz rozwiązać? Aplikuj do MD Fellowship, a pomożemy Ci zbudować na nim firmę.</p>
+          <p class="d-body d-how__fast d-reveal" data-split="lines">Wszyscy, którzy ukończą program, trafiają od razu do 2. etapu rekrutacji do MD Fellowship.</p>
         </article>
       </div>
       <div class="d-how__media">
@@ -923,63 +995,63 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   </div>
 </section>
 
+
+<!-- 5. ZOBACZ, JAK ROBILI TO INNI (Figma 7243:48) -->
+<section class="d-reels" id="praktyka">
+  <div class="d-reels__head">
+    <h2 class="d-reels__title d-reveal" data-split="words">Zobacz, jak robili to inni</h2>
+    <a class="d-reels__ig" href="https://www.instagram.com/mdfellowship"><span>Więcej na Instagramie</span><span class="d-btn__arrow" aria-hidden="true">→</span></a>
+  </div>
+  <div class="d-reels__car" id="reels-car">
+    <button type="button" class="d-reels__arrow d-reels__arrow--prev" id="car-prev" aria-label="Poprzedni reel"><span aria-hidden="true">→</span></button>
+    <div class="d-reels__vp" id="car-viewport">
+      <div class="d-reels__track" id="car-track">
+          <article class="d-reel">
+            <span class="d-reel__shape" aria-hidden="true"><img src="design-assets/reels-active-shape.svg" width="396.676" height="664.648" alt=""></span>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">Jak znalazłem problem</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+          <article class="d-reel">
+            <span class="d-reel__shape" aria-hidden="true"><img src="design-assets/reels-active-shape.svg" width="396.676" height="664.648" alt=""></span>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">Moje pierwsze discovery calle</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+          <article class="d-reel">
+            <span class="d-reel__shape" aria-hidden="true"><img src="design-assets/reels-active-shape.svg" width="396.676" height="664.648" alt=""></span>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">Zatrudniłem się u klienta</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+          <article class="d-reel">
+            <span class="d-reel__shape" aria-hidden="true"><img src="design-assets/reels-active-shape.svg" width="396.676" height="664.648" alt=""></span>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">MVP w Excelu</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+          <article class="d-reel">
+            <span class="d-reel__shape" aria-hidden="true"><img src="design-assets/reels-active-shape.svg" width="396.676" height="664.648" alt=""></span>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">[TEMAT REELSA]</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+      </div>
+    </div>
+    <button type="button" class="d-reels__arrow d-reels__arrow--next" id="car-next" aria-label="Następny reel"><span aria-hidden="true">→</span></button>
+  </div>
+</section>
+
 </div><!-- /d-scene -->
 
 <div class="wf-zone">
-
-<!-- 5. TAK TO WYGLĄDA W PRAKTYCE -->
-<section class="section" id="praktyka">
-  <div class="wrap">
-    <div class="reels-head">
-      <div class="stack" style="max-width:640px">
-        <h2>Zobacz, jak robili to inni</h2>
-        <p class="lead" style="font-weight:400">Pięcioro Fellows opowiada, jak szukali problemu, dzwonili do obcych ludzi i stawiali pierwsze MVP.</p>
-      </div>
-      <p class="reels-link"><a href="https://www.instagram.com/mdfellowship">Więcej na Instagramie →</a></p>
-    </div>
-    <div class="carousel" id="reels-car">
-      <button type="button" class="car-arrow prev" id="car-prev" aria-label="Poprzedni reel">←</button>
-      <div class="car-viewport" id="car-viewport">
-        <div class="car-track" id="car-track">
-          <article class="reel">
-            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3>Jak znalazłem problem</h3>
-            <p class="meta">[Imię], [startup]</p>
-          </article>
-          <article class="reel">
-            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3>Moje pierwsze discovery calle</h3>
-            <p class="meta">[Imię], [startup]</p>
-          </article>
-          <article class="reel">
-            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3>Zatrudniłem się u klienta</h3>
-            <p class="meta">[Imię], [startup]</p>
-          </article>
-          <article class="reel">
-            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3>MVP w Excelu</h3>
-            <p class="meta">[Imię], [startup]</p>
-          </article>
-          <article class="reel">
-            <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3>[TEMAT REELSA]</h3>
-            <p class="meta">[Imię], [startup]</p>
-          </article>
-        </div>
-      </div>
-      <button type="button" class="car-arrow next" id="car-next" aria-label="Następny reel">→</button>
-    </div>
-    <p class="reels-link-mobile"><a href="https://www.instagram.com/mdfellowship">Więcej na Instagramie →</a></p>
-  </div>
-</section>
 
 <!-- 6. WŚRÓD PRELEGENTÓW I MENTORÓW -->
 <section class="section" id="mentorzy">
   <div class="wrap">
     <div class="stack" style="max-width:860px">
       <h2>Z kim będziesz pracować</h2>
-      <p class="lead" style="font-weight:400">Ludzie, którzy sami zakładali firmy, zatrudniali, sprzedawali i zaliczali wtopy. I chętnie powiedzą, czego nie znajdziesz w poradnikach.</p>
+      <p class="lead" style="font-weight:400">Ludzie, którzy budowali firmy, zatrudniali, sprzedawali, popełniali błędy i wyciągali z nich wnioski.</p>
     </div>
   </div>
   <div class="marquee" id="mentors-marquee">
@@ -1109,14 +1181,14 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   <div class="wrap">
     <div class="stack" style="max-width:780px">
       <h2>Nie robimy konkursów. Pomagamy serio budować firmy.</h2>
-      <p class="body muted">MD Fellowship to społeczność osób 18–24, które już budują swoje pierwsze firmy. Każdy Fellow ma mentoring 1:1 z przedsiębiorcą, który przeszedł drogę od pomysłu do globalnego sukcesu.</p>
+      <p class="body muted">MD Fellowship to społeczność młodych w wieku 18–24 lat, którzy już teraz budują swoje pierwsze firmy, startupy i projekty. Każdy MD Fellow otrzymuje mentoring 1:1 od topowych przedsiębiorców, którzy przeszli drogę od pomysłu do globalnych sukcesów i potrafią przekazać praktyczną wiedzę oraz wsparcie w kluczowych momentach budowania.</p>
       <p class="meta"><a href="https://mdfellows.com/">mdfellows.com →</a> · <a href="https://www.instagram.com/mdfellowship">Instagram</a> · <a href="https://www.linkedin.com/company/md-fellowship/">LinkedIn</a></p>
     </div>
     <div class="numbers-row">
-      <div><span class="number-v">300+</span><span class="number-d">aplikacji na każdy batch</span></div>
-      <div><span class="number-v">~10</span><span class="number-d">przyjętych Fellows</span></div>
+      <div><span class="number-v">1400+</span><span class="number-d">aplikacji do MD Fellowship</span></div>
+      <div><span class="number-v">54</span><span class="number-d">Fellows</span></div>
       <div><span class="number-v">2×</span><span class="number-d">nabór w roku</span></div>
-      <div><span class="number-v">1:1</span><span class="number-d">mentoring od founderów</span></div>
+      <div><span class="number-v">1:1</span><span class="number-d">mentoring topowych przedsiębiorców</span></div>
     </div>
   </div>
 </section>
@@ -1131,7 +1203,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       <p class="body muted">Aplikuj solo albo w parze. Nie potrzebujesz pomysłu, zespołu ani umiejętności programowania. Potrzebujesz odwagi, żeby zadzwonić do obcej osoby i zapytać, co ją naprawdę boli.</p>
       <div class="cta-row">
         <a class="btn" href="#aplikuj">Aplikuj →</a>
-        <p class="cta-note">Zgłoszenia do [DATA]</p>
+        <p class="cta-note">Nabór odbywa się w sposób ciągły, a liczba miejsc jest ograniczona. Im szybciej zaaplikujesz, tym większe masz szanse, aby dostać się do programu.</p>
       </div>
     </div>
   </div>
@@ -1145,27 +1217,19 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="true" aria-controls="faq-p1" id="faq-b1">Ile to kosztuje?<span class="faq-sign" aria-hidden="true">–</span></button></h3>
-          <div class="faq-a" id="faq-p1" role="region" aria-labelledby="faq-b1">Nic, udział jest bezpłatny. Dojazd i ewentualny nocleg w Warszawie są po twojej stronie.</div>
+          <div class="faq-a" id="faq-p1" role="region" aria-labelledby="faq-b1">Nic, sam udział jest bezpłatny. W koszty wlicz jednak ewentualny nocleg i dojazd do Warszawy – są po Twojej stronie.</div>
         </div>
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p2" id="faq-b2">Do kiedy mogę aplikować?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden>Zgłoszenia przyjmujemy do [DATA]. Nie czekaj do ostatniej chwili, mamy 100 miejsc.</div>
+          <div class="faq-a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden>Nabór odbywa się w sposób ciągły, a liczba miejsc jest ograniczona. Im szybciej zaaplikujesz, tym większe masz szanse, aby dostać się do programu. Decyzję otrzymasz od nas na podany w zgłoszeniu adres e-mail.</div>
         </div>
 
-        <div class="faq-item">
-          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p3" id="faq-b3">Jak wygląda rekrutacja?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p3" role="region" aria-labelledby="faq-b3" hidden>[PROCES REKRUTACJI – do uzupełnienia przez klienta: formularz, kryteria wyboru, ewentualna rozmowa.]</div>
-        </div>
 
-        <div class="faq-item">
-          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p4" id="faq-b4">Kiedy dostanę odpowiedź?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p4" role="region" aria-labelledby="faq-b4" hidden>[DATA ODPOWIEDZI]. Odezwiemy się mailowo niezależnie od decyzji.</div>
-        </div>
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p5" id="faq-b5">Nie mam pomysłu.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p5" role="region" aria-labelledby="faq-b5" hidden>Tym lepiej, nie musisz się z żadnym rozstawać. Nauczymy cię szukać problemów, które warto rozwiązać.</div>
+          <div class="faq-a" id="faq-p5" role="region" aria-labelledby="faq-b5" hidden>Tym lepiej, bo nie musisz się z niczym rozstawać. Nauczymy Cię szukać problemów wartych rozwiązania.</div>
         </div>
 
         <div class="faq-item">
@@ -1179,8 +1243,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         </div>
 
         <div class="faq-item">
-          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p8" id="faq-b8">Nie mam doświadczenia biznesowego. Czy to problem?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p8" role="region" aria-labelledby="faq-b8" hidden>Nie. Program jest dla osób, które dopiero zaczynają. Wystarczy, że chcesz się uczyć i nie boisz się rozmawiać z ludźmi.</div>
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p8" id="faq-b8">Nie mam żadnego doświadczenia biznesowego. Czy to problem?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p8" role="region" aria-labelledby="faq-b8" hidden>Nie. Program jest właśnie dla osób, które dopiero zaczynają. Wystarczy, że chcesz się uczyć i nie boisz się rozmawiać z ludźmi.</div>
         </div>
 
         <div class="faq-item">
@@ -1195,12 +1259,12 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 
         <div class="faq-item">
           <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p11" id="faq-b11">Czy mogę uczestniczyć tylko online?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p11" role="region" aria-labelledby="faq-b11" hidden>[DO POTWIERDZENIA PRZED LAUNCHEM]</div>
+          <div class="faq-a" id="faq-p11" role="region" aria-labelledby="faq-b11" hidden>[DO UZUPEŁNIENIA]</div>
         </div>
 
         <div class="faq-item">
-          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p12" id="faq-b12">Co mi to da poza wiedzą?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
-          <div class="faq-a" id="faq-p12" role="region" aria-labelledby="faq-b12" hidden>Jeśli weźmiesz udział w min. 80% spotkań, przejdziesz od razu do drugiego etapu rekrutacji do MD Fellowship.</div>
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p12" id="faq-b12">Co mi to da?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p12" role="region" aria-labelledby="faq-b12" hidden>Jeśli się przyłożysz, zakończysz program z konkretną wizją na swoją własną firmę i pierwszymi płacącymi klientami. Dodatkowo każdy, kto ukończy Discovery Sprint, trafia od razu do 2. etapu rekrutacji do MD Fellowship.</div>
         </div>
 
       </div>
@@ -1212,10 +1276,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 <section class="section final" id="final">
   <div class="wrap">
     <div class="stack-l">
-      <h2>Najtrudniejszy jest pierwszy telefon. Resztę ogarniemy razem.</h2>
-      <p class="meta">12–13 listopada · Warszawa · bezpłatnie · 100 miejsc</p>
+      <h2>Najtrudniejsze jest, żeby się przełamać. Z resztą Ci pomożemy.</h2>
+      <p class="meta">12–13 listopada · Warszawa · bezpłatnie · 120 miejsc</p>
       <div class="cta-row"><a class="btn" href="#aplikuj">Aplikuj</a></div>
-      <p class="meta">Zgłoszenia do [DATA]</p>
     </div>
   </div>
 </section>
@@ -1249,7 +1312,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 </footer>
 
 <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
-  <p class="cta-note"><b>Bezpłatnie · 100 miejsc</b>Zgłoszenia do [DATA]</p>
+  <p class="cta-note"><b>Bezpłatnie · 120 miejsc</b>Nabór ciągły</p>
   <a class="btn btn-sm" href="#aplikuj" tabindex="-1">Aplikuj</a>
 </div>
 
@@ -1289,7 +1352,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     }
   });
 
-  /* ---------- reels: karuzela center-mode ---------- */
+  /* ---------- reels: karuzela center-mode (sekcja „Zobacz, jak robili to inni”) ----------
+     Aktywny kafelek jest szerszy i ma margines, więc pozycję toru liczymy z wymiarów docelowych (w jednostkach u),
+     a nie z offsetLeft — w trakcie przejścia szerokości kafelków się zmieniają. */
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var vp = document.getElementById('car-viewport');
   var track = document.getElementById('car-track');
@@ -1298,11 +1363,15 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   var carNext = document.getElementById('car-next');
   var carIdx = Math.floor(slides.length / 2);
   var baseOffset = 0;
+  var probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;visibility:hidden;height:0;width:calc(1000 * var(--u))';
+  vp.appendChild(probe);
+  var R = { side: 238.9, active: 290.9, gap: 45.7, margin: 64.9 };
 
-  function carGap() { return parseFloat(getComputedStyle(track).columnGap) || 0; }
   function carRender(anim) {
-    var w = slides[0].offsetWidth;
-    baseOffset = vp.clientWidth / 2 - (carIdx * (w + carGap()) + w / 2);
+    var u = probe.offsetWidth / 1000;
+    var center = carIdx * (R.side + R.gap) * u + R.margin * u + R.active * u / 2;
+    baseOffset = vp.clientWidth / 2 - center;
     track.style.transition = (anim && !reduced) ? 'transform 300ms ease' : 'none';
     track.style.transform = 'translateX(' + baseOffset + 'px)';
     slides.forEach(function (sl, j) { sl.classList.toggle('is-active', j === carIdx); });
@@ -1335,6 +1404,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   vp.addEventListener('pointerup', dragEnd);
   vp.addEventListener('pointercancel', dragEnd);
   window.addEventListener('resize', function () { carRender(false); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { carRender(false); });
   carRender(false);
 
   /* ---------- sticky CTA (mobile) ---------- */
