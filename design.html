@@ -398,7 +398,15 @@ main { container-type: inline-size; }
 }
 .d-nav__links a { display: flex; align-items: center; padding: 7px 16px; }
 .d-nav__actions { display: flex; align-items: center; gap: 8px; }
-.d-nav__cta { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 16px; background: var(--c-white); }
+/* przycisk jak w Hero (kształt „[[”, Anton, zielona plakietka ze strzałką), 43 px wysokości (Hero × 43.2/70.8);
+   nad jasnym tłem (krem, biel) kształt robi się niebieski — warstwa ::before z btn-aplikuj-lit.svg (skrypt: .is-light) */
+.d-nav__cta { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 13.7px;
+  width: 126.7px; height: 43.2px; padding: 0; background: url("design-assets/btn-aplikuj.svg") no-repeat 0 0 / 100% 100%;
+  font-family: var(--f-display); font-weight: 400; font-size: 19.5px; line-height: 1; letter-spacing: -0.39px; }
+.d-nav__cta::before { content: ""; position: absolute; z-index: -1; inset: 0; background: url("design-assets/btn-aplikuj-lit.svg") no-repeat 0 0 / 100% 100%;
+  opacity: 0; transition: opacity 200ms ease; }
+.d-nav.is-light .d-nav__cta::before { opacity: 1; }
+.d-nav__cta .d-btn__arrow { width: 16px; height: 13.7px; font-size: 13.7px; }
 .d-nav__toggle { display: none; }
 /* nad czarną sekcją (mentorzy) nawigacja w bieli; przycisk Aplikuj zostaje biały z czarnym tekstem */
 .d-nav.is-dark .d-nav__links a { color: var(--c-white); }
@@ -536,7 +544,7 @@ main { container-type: inline-size; }
    po dojechaniu przejmuje latarka z Problemu i zapala snop. Hero i Problem mają wspólne przycięcie,
    żeby latarka mogła wyjechać poza Hero bez poziomego scrolla. */
 html { scroll-behavior: auto; overscroll-behavior: none; }   /* smooth-scroll.js: nie łączyć z CSS smooth */
-/* tło sceny: --bgp (0–1) ustawia skrypt przy wejściu w „Jak to działa” — płynne przejście z niebieskiego w krem, bez twardej krawędzi */
+/* tło sceny: --bgp (0–1) ustawia skrypt przy wejściu sekcji po „Czego się nauczysz” (reelsy) — płynne przejście z niebieskiego w krem, bez twardej krawędzi */
 .d-scene { position: relative; overflow: clip;
   background: color-mix(in srgb, var(--c-cream) calc(var(--bgp, 0) * 100%), var(--c-blue-500)); }
 .d-problem { z-index: 1; }
@@ -622,7 +630,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-problem__text { position: relative; z-index: 1; margin-left: calc(40px - (100cqw - 1496 * var(--u)) / 2); width: calc(810 * var(--u));
   display: flex; flex-direction: column; gap: calc(92 * var(--u)); }
 .d-problem__text > * { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(62.33 * var(--u)); line-height: 1.1;
-  letter-spacing: calc(-1.52 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+  letter-spacing: calc(-1.52 * var(--u)); color: var(--c-black); }   /* bez wersalików: wielkie litery tylko tam, gdzie w tekście */
 /* ostatni akapit (Figma 7265:1747): do lewej krawędzi contentu, „Przyłożysz się?” 107.8 px, pod nim 60 px i przycisk;
    odstęp od akapitów wyżej 2× (92 → 184: gap 92 + margines 92) */
 .d-problem__text > .d-problem__cta { width: max-content; margin-top: calc(92 * var(--u)); display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
@@ -785,18 +793,17 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
    Nagłówek, pod nim po lewej dwa akapity, po prawej kolumna czterech liczb (liczba + plakietka obok, dół do dołu);
    na dole kolaż zdjęć w rastrze riso w zielonej plamie (555 px Figmy) z przyciskiem Aplikuj. Dół zdjęcia jest
    dołem sekcji — od razu pod nim zaczyna się czarna sekcja mentorów.
-   Desktop: scena przyklejona (100svh). Nagłówek i akapity wchodzą przy wjeździe sekcji i stoją, liczby jadą obok
-   w górę (przesunięcie od scrolla) i po kolei wjeżdżają z maski i naliczają się. Gdy dół liczb dojedzie do dołu
-   akapitów, wszystkie teksty chowają się w górę we własnych maskach, a na ich miejscu, przy dole sceny, formuje się
-   kolaż z kropek, plama wysuwa się spod niego, na końcu przycisk. Dół sceny = dół sekcji, dalej mentorzy.
-   Długość sekcji i osie ustawia skrypt (placeAbout). */
+   Desktop: nagłówek i akapity wchodzą przy wjeździe sekcji, potem lewa kolumna stoi (sticky), a liczby jadą obok
+   w górę zwykłym scrollem i po kolei wjeżdżają z maski i naliczają się. Gdy dół liczb dojedzie do dołu akapitów,
+   cała sekcja przewija się normalnie, a wjeżdżające zdjęcie formuje się z kropek, plama wysuwa się spod niego,
+   na końcu przycisk. Długość osi liczb liczy skrypt (placeAbout). */
 .d-about { position: relative; z-index: 2; background: var(--c-cream); overflow: clip; }
 .d-about__pin { padding-top: calc(115.3 * var(--u)); }
 .d-about__title { margin: 0; width: calc(837.4 * var(--u)); font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u));   /* 88 px */
   line-height: 1.1; letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-black); }
 /* lewa kolumna: nagłówek + akapity (od x = 40; szersze niż 585 px Figmy, żeby ostatnie słowa nie zostawały same
    w linii), prawa: liczby od x = 875, góra równo z akapitami (wysokość nagłówka 3 × 1.1 × 91.42 + odstęp 41.5). */
-.d-about__body { display: grid; grid-template-columns: calc(909 * var(--u) - 40px) auto; align-items: start; padding: 0 40px; }
+.d-about__body { display: grid; grid-template-columns: auto auto; justify-content: space-between; align-items: start; padding: 0 40px; }   /* liczby dosunięte do prawej krawędzi contentu (w 1440: x = 875 jak w Figmie) */
 .d-about__lead { display: flex; flex-direction: column; gap: calc(41.5 * var(--u)); }
 .d-about__text { width: calc(680 * var(--u)); display: flex; flex-direction: column; gap: calc(33.2 * var(--u)); }
 .d-about__text > p { margin: 0; text-wrap: pretty; }
@@ -817,7 +824,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-about__lmask { overflow: hidden; }
 .d-about__photo { position: relative; margin-top: calc(166.2 * var(--u)); width: 100%; aspect-ratio: 1439.59 / 554.625; }
 .d-about__blob { position: absolute; inset: 0; width: 100%; height: 100%; display: block; transform-origin: 50% 100%; }
-.d-about__masked { position: absolute; inset: 0; -webkit-mask: url("design-assets/about-mask.svg?v=2") no-repeat 0 0 / 100% 100%; mask: url("design-assets/about-mask.svg?v=2") no-repeat 0 0 / 100% 100%; }
+.d-about__masked { position: absolute; inset: 0; }   /* kształt plamy jest w alfie kolażu — chmura kropek może wyjść poza niego */
 .d-about__masked .riso { position: absolute; inset: 0; }
 .d-about__masked .riso > img { filter: grayscale(1) contrast(1.1); }
 /* przycisk na zdjęciu (Figma 7268:1948: 312.5 × 106.6, środek 0.4 px w prawo od osi, góra 389.8 / 554.6 wysokości) */
@@ -825,9 +832,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-about__btn { width: calc(324.6 * var(--u)); height: calc(110.7 * var(--u)); gap: calc(35 * var(--u)); font-size: calc(50.05 * var(--u)); letter-spacing: calc(-1 * var(--u)); }
 .d-about__btn .d-btn__arrow { width: calc(40.8 * var(--u)); height: calc(35 * var(--u)); font-size: calc(35 * var(--u)); }
 @media (min-width: 1024px) {
-  .d-about__pin { position: sticky; top: 0; height: 100svh; overflow: hidden; }
-  .d-about__photo { position: absolute; left: 0; right: 0; bottom: 0; margin-top: 0; pointer-events: none; }   /* do czasu wejścia leży na tekstach */
-  .d-about__btn { pointer-events: auto; }
+  .d-about__lead { position: sticky; top: calc(115.3 * var(--u)); }
 }
 
 /* ---------- 6 · Z KIM BĘDZIESZ PRACOWAĆ (bez Figmy: czarna, białe teksty, niebieskie akcenty) ----------
@@ -835,42 +840,46 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
    570 × 760 od x = 562. Kafle (zapętlone) ustawia skrypt z ciągłej pozycji: k = −2, −1 po lewej pod opisem, 0 duże,
    +1 po prawej pod strzałkami, dalsze poza kadrem. Opis aktywnej osoby w lewym górnym rogu sceny. */
 .d-mentors { position: relative; z-index: 2; background: var(--c-black); color: var(--c-white); overflow: clip;
-  padding: calc(140 * var(--u)) 0 calc(160 * var(--u)); }
+  padding: calc(280 * var(--u)) 0 calc(160 * var(--u)); }   /* góra 2× (było 140) */
 .d-mentors__head { display: flex; align-items: flex-start; justify-content: space-between; gap: calc(40 * var(--u)); padding: 0 40px; }
 .d-mentors__title { margin: 0; width: calc(868 * var(--u)); font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u));   /* 88 px */
   line-height: 1.1; letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-white); }
 .d-mentors__lead { flex: none; width: calc(537.1 * var(--u)); margin: 0; color: var(--c-white); }
-.d-mentors__stage { position: relative; height: calc(760 * var(--u)); margin: calc(82 * var(--u)) 40px 0; }
-.d-mentors__track { position: absolute; inset: 0; }
-.d-mentor-slide { position: absolute; left: 0; top: 0; padding: 0; border: 0; background: none; cursor: pointer; will-change: transform, width, height, opacity; }
-.d-mentor-slide.is-active { cursor: default; }
-.d-mentor-slide__photo { position: absolute; inset: 0; display: flex; background: #1E1E1E; border: 1px solid #3A3A3A; color: #3A3A3A; }
-.d-mentor-slide__photo .box-label { background: #1E1E1E; color: #8A8A8A; }
-.d-mentor-slide:focus-visible { outline: 2px solid var(--c-blue-500); outline-offset: 4px; }
-/* opis aktywnej osoby: zmiana z przenikaniem i lekkim podniesieniem */
-.d-mentors__info { position: absolute; left: 0; top: 0; width: calc(546 * var(--u)); height: calc(383 * var(--u)); }
-.d-mentor-info { position: absolute; inset: 0; opacity: 0; transform: translateY(calc(16 * var(--u))); pointer-events: none;
-  transition: opacity 260ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1); }
-.d-mentor-info.is-active { opacity: 1; transform: none; pointer-events: auto; transition-delay: 120ms; }
-.d-mentor-info__name { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(56 * var(--u)); line-height: 1;
-  letter-spacing: calc(-1.12 * var(--u)); text-transform: uppercase; color: var(--c-white); }
-.d-mentor-info__role { position: relative; isolation: isolate; display: inline-block; box-sizing: border-box; margin: calc(14 * var(--u)) 0 0;
-  height: calc(53 * var(--u)); padding: calc(10 * var(--u)) calc(18 * var(--u)) 0 calc(13.4 * var(--u));
-  font-family: var(--f-display); font-size: calc(24 * var(--u)); line-height: 1.2; letter-spacing: calc(-0.48 * var(--u)); text-transform: uppercase; color: var(--c-black); white-space: nowrap; }
-.d-mentor-info__role::before { content: ""; position: absolute; z-index: -1; inset: 0; background: url("design-assets/about-tag-2.svg") no-repeat 0 0 / 100% 100%; }
-.d-mentor-info__bio { margin: calc(20 * var(--u)) 0 0; font-family: var(--f-body); font-weight: 500; font-size: calc(20.78 * var(--u)); line-height: 1.3;
-  letter-spacing: calc(-0.42 * var(--u)); color: var(--c-white); }
-/* strzałki: kształt strzałek z reelsów w niebieskim (maska), licznik w Antonie */
-.d-mentors__nav { position: absolute; z-index: 5; left: calc(1148 * var(--u)); top: 0; display: flex; align-items: center; gap: calc(12 * var(--u)); }
-.d-mentors__arrow { position: relative; width: calc(58.2 * var(--u)); height: calc(58.2 * var(--u)); padding: 0; border: 0; cursor: pointer; background: none;
-  display: flex; align-items: center; justify-content: center; font-family: var(--f-body); font-weight: 600; font-size: calc(24.93 * var(--u)); line-height: 0.9; color: var(--c-black); }
-.d-mentors__arrow::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--c-blue-500);
-  -webkit-mask: url("design-assets/reels-arrow.svg") no-repeat 0 0 / 100% 100%; mask: url("design-assets/reels-arrow.svg") no-repeat 0 0 / 100% 100%; }
-.d-mentors__arrow { isolation: isolate; }
-.d-mentors__arrow--prev { transform: scaleX(-1); }
-.d-mentors__arrow:focus-visible { outline: 2px solid var(--c-blue-500); outline-offset: 4px; }
-.d-mentors__count { margin: 0 0 0 calc(10 * var(--u)); font-family: var(--f-display); font-size: calc(24 * var(--u)); letter-spacing: calc(-0.48 * var(--u)); color: var(--c-blue-500); }
-@media (prefers-reduced-motion: reduce) { .d-mentor-info { transition: none; } }
+/* karuzele kafelków (jak w wireframie): kafel 300u, zdjęcie 3:4 (Figma 7277:2808: postać wycięta z tła, biała ramka-wielokąt,
+   niebieskie tło — wszystko wpieczone w plik), pod nim imię (Anton) i rola; hover/fokus/tap: lekkie zbliżenie, na zdjęciu bio. Ruch, zatrzymanie i przeciąganie w skrypcie (mentorRows). */
+.d-mentors__rows { display: flex; flex-direction: column; gap: calc(48 * var(--u)); margin-top: calc(82 * var(--u)); }
+.d-marquee { overflow: hidden; cursor: grab; touch-action: pan-y; -webkit-user-select: none; user-select: none; }
+.d-marquee.is-dragging { cursor: grabbing; }
+.d-marquee__track { display: flex; gap: calc(24 * var(--u)); width: max-content; will-change: transform; }
+.d-mtile { flex: none; width: calc(300 * var(--u)); outline: none; }
+.d-mtile__photo { position: relative; overflow: hidden; aspect-ratio: 3 / 4; background: var(--c-black); }   /* tło jak sekcja: przy ułamkowych pikselach krawędź zdjęcia nie prześwituje jasną linią */
+/* warstwy w kaflu wychodzą 1–2 px poza kadr (przycina je overflow): kafle jadą o ułamki pikseli, a zdjęcie, raster
+   i bio na hover są osobnymi warstwami — każda inaczej zaokrągla krawędź i spod spodu prześwitywał pasek */
+.d-mtile__photo img { position: absolute; left: -1px; top: -1px; display: block; width: calc(100% + 2px); height: calc(100% + 2px); object-fit: cover; pointer-events: none; }
+/* lekki zoom na hover: zdjęcie i raster riso razem (ten sam środek), plakietka i bio stoją */
+.d-mtile__photo img, .d-mtile__photo > .d-mtile__riso { transform-origin: 50% 60%; transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1); }
+/* raster riso na hover: wspólny element, zaparkowany poza kadrem, w kaflu leży nad zdjęciem, pod plakietką i bio */
+.d-mtile__riso { position: absolute; left: 0; top: 0; width: calc(300 * var(--u)); aspect-ratio: 3 / 4; visibility: hidden; pointer-events: none; z-index: 1; }
+.d-mtile__photo > .d-mtile__riso { left: -1px; top: -1px; width: calc(100% + 2px); height: calc(100% + 2px); visibility: visible; }
+.d-mtile__tag { position: absolute; z-index: 3; left: calc(14 * var(--u)); top: calc(14 * var(--u)); isolation: isolate; box-sizing: border-box;
+  height: calc(40 * var(--u)); padding: calc(8 * var(--u)) calc(14 * var(--u)) 0 calc(11 * var(--u));
+  font-family: var(--f-display); font-size: calc(20 * var(--u)); line-height: 1.2; letter-spacing: calc(-0.4 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+.d-mtile__tag::before { content: ""; position: absolute; z-index: -1; inset: 0; background: #A6F893;   /* kształt plakietki, zielony (jak „Bezpłatnie” w Hero) */
+  -webkit-mask: url("design-assets/about-tag-2.svg") no-repeat 0 0 / 100% 100%; mask: url("design-assets/about-tag-2.svg") no-repeat 0 0 / 100% 100%; }
+.d-mtile__bio { position: absolute; inset: -2px; z-index: 2; margin: 0; display: flex; align-items: flex-end; box-sizing: border-box; padding: calc(20 * var(--u));
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0.2) 100%);
+  font-family: var(--f-body); font-weight: 500; font-size: max(15px, calc(18 * var(--u))); line-height: 1.3; letter-spacing: calc(-0.36 * var(--u)); color: var(--c-white);
+  opacity: 0; transition: opacity 250ms ease; }
+.d-mtile__name { margin: calc(16 * var(--u)) 0 0; font-family: var(--f-display); font-weight: 400; font-size: calc(32 * var(--u)); line-height: 1.05;
+  letter-spacing: calc(-0.64 * var(--u)); text-transform: uppercase; color: var(--c-white); }
+.d-mtile__role { margin: calc(6 * var(--u)) 0 0; font-family: var(--f-body); font-weight: 500; font-size: max(14px, calc(18 * var(--u))); line-height: 1.3; color: var(--c-blue-500); }
+@media (hover: hover) { .d-mtile:hover .d-mtile__bio { opacity: 1; }
+  .d-mtile:hover .d-mtile__photo img, .d-mtile:hover .d-mtile__photo > .d-mtile__riso { transform: scale(1.05); } }
+.d-mtile.is-open .d-mtile__photo img, .d-mtile.is-open .d-mtile__photo > .d-mtile__riso { transform: scale(1.05); }
+.d-mtile:focus-visible .d-mtile__bio, .d-mtile.is-open .d-mtile__bio { opacity: 1; }
+.d-mtile:focus-visible .d-mtile__photo { outline: 2px solid var(--c-blue-500); outline-offset: -2px; }
+.d-marquee.is-dragging .d-mtile__bio { transition: none; }
+@media (prefers-reduced-motion: reduce) { .d-mtile__bio, .d-mtile__photo img, .d-mtile__photo > .d-mtile__riso { transition: none; } }
 
 /* ---------- mobile (brak projektu w Figmie — układ tymczasowy) ---------- */
 @media (max-width: 1023px) {
@@ -936,21 +945,14 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-reels__aside { width: auto; gap: calc(16 * var(--m)); }
   .d-about { --u: calc(var(--m) * 0.75); }
   .d-about__pin { padding-top: calc(72 * var(--m)); }
-  .d-mentors { --u: calc(var(--m) * 0.75); padding: calc(72 * var(--m)) 0 calc(72 * var(--m)); }
+  .d-mentors { --u: calc(var(--m) * 0.75); padding: calc(144 * var(--m)) 0 calc(72 * var(--m)); }
   .d-mentors__head { flex-direction: column; gap: calc(20 * var(--m)); padding: 0 calc(20 * var(--m)); }
   .d-mentors__title { width: auto; font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
   .d-mentors__lead { width: auto; }
-  /* mobile: duże zdjęcie na szerokość (4:5), pod nim strzałki i opis; miniatury poza kadrem (skrypt) */
-  .d-mentors__stage { height: auto; margin: calc(32 * var(--m)) calc(20 * var(--m)) 0; display: flex; flex-direction: column; }
-  .d-mentors__track { position: relative; inset: auto; order: 1; aspect-ratio: 4 / 5; overflow: visible; }
-  .d-mentors__nav { position: static; order: 2; margin-top: calc(16 * var(--m)); }
-  .d-mentors__info { position: relative; order: 3; width: auto; height: auto; margin-top: calc(20 * var(--m)); display: grid; }
-  .d-mentor-info { position: static; grid-area: 1 / 1; }
-  .d-mentor-info__name { font-size: calc(36 * var(--m)); }
-  .d-mentor-info__role { font-size: calc(17 * var(--m)); height: auto; padding: calc(7 * var(--m)) calc(13 * var(--m)) calc(8 * var(--m)) calc(10 * var(--m)); white-space: normal; }
-  .d-mentor-info__bio { font-size: 16px; }
-  .d-mentors__arrow { width: 44px; height: 44px; font-size: 20px; }
-  .d-mentors__count { font-size: 18px; }
+  .d-mentors__rows { gap: calc(28 * var(--m)); margin-top: calc(32 * var(--m)); }
+  .d-marquee__track { gap: calc(12 * var(--m)); }
+  .d-mtile { width: calc(220 * var(--m)); }
+  .d-mtile__name { font-size: calc(24 * var(--m)); }
   .d-about__title { width: auto; font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
   .d-about__body { display: flex; flex-direction: column; gap: calc(40 * var(--m)); padding: 0 calc(20 * var(--m)); }
   .d-about__lead { gap: calc(24 * var(--m)); }
@@ -984,7 +986,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       </ul>
     </nav>
     <div class="d-nav__actions d-intro-in" style="--intro-delay: 440ms">
-      <a class="d-nav__cta" href="#aplikuj">Aplikuj</a>
+      <a class="d-nav__cta" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a>
       <button type="button" class="d-nav__toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-mobile"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -1057,10 +1059,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     <div class="d-problem__text">
       <h2 class="d-reveal" data-split="words">Startupy rzadko upadają przez brak kasy czy złą technologię.</h2>
       <p class="d-reveal" data-split="words">Najczęściej upadają, bo zbudowały coś, czego nikt nie chce.</p>
-      <p class="d-reveal" data-split="words">Daj nam miesiąc, pokażemy Ci, jak rozmawiać z potencjalnymi klientami i znaleźć problem do rozwiązania.</p>
       <div class="d-problem__cta">
-        <p class="d-problem__big d-reveal" data-split="words">Przyłożysz się?</p>
-        <p class="d-problem__sub d-reveal" data-split="words">Masz szansę skończyć program<br>z pierwszymi płacącymi klientami.</p>
+        <p class="d-problem__big d-reveal" data-split="words">Daj nam miesiąc</p>
+        <p class="d-problem__sub d-reveal" data-split="words">pokażemy Ci, jak rozmawiać<br>z potencjalnymi klientami i znaleźć<br>problem do rozwiązania.</p>
         <a class="d-btn d-btn--shape d-problem__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
@@ -1094,6 +1095,51 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         <p class="d-body d-skill__desc d-reveal" data-split="lines">MVP to najtańszy sposób, żeby sprawdzić, czy ktoś zapłaci. Czasem nawet bez linijki kodu.</p>
       </li>
     </ol>
+  </div>
+</section>
+
+<!-- 5. ZOBACZ, JAK ROBILI TO INNI (Figma 7243:48) -->
+<section class="d-reels" id="praktyka">
+  <div class="d-reels__head">
+    <h2 class="d-reels__title d-reveal" data-split="words">Zobacz, jak robili to inni</h2>
+    <div class="d-reels__aside">
+      <p class="d-reels__lead d-reveal" data-split="lines">Pięcioro Fellows opowiada, jak szukali problemu, dzwonili do obcych ludzi i stawiali pierwsze MVP.</p>
+      <a class="d-reels__ig" href="https://www.instagram.com/mdfellowship"><span>Więcej na Instagramie</span><span class="d-btn__arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+  <div class="d-reels__car" id="reels-car">
+    <button type="button" class="d-reels__arrow d-reels__arrow--prev" id="car-prev" aria-label="Poprzedni reel"><span aria-hidden="true">→</span></button>
+    <div class="d-reels__vp" id="car-viewport">
+      <span class="d-reels__shape" aria-hidden="true"><img src="design-assets/reels-active-shape.svg" width="396.676" height="664.648" alt=""></span>
+      <div class="d-reels__track" id="car-track">
+          <article class="d-reel">
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">Jak znalazłem problem</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+          <article class="d-reel">
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">Moje pierwsze discovery calle</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+          <article class="d-reel">
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">Zatrudniłem się u klienta</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+          <article class="d-reel">
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">MVP w Excelu</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+          <article class="d-reel">
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">[TEMAT REELSA]</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
+          </article>
+      </div>
+    </div>
+    <button type="button" class="d-reels__arrow d-reels__arrow--next" id="car-next" aria-label="Następny reel"><span aria-hidden="true">→</span></button>
   </div>
 </section>
 
@@ -1143,50 +1189,6 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 </section>
 
 
-<!-- 5. ZOBACZ, JAK ROBILI TO INNI (Figma 7243:48) -->
-<section class="d-reels" id="praktyka">
-  <div class="d-reels__head">
-    <h2 class="d-reels__title d-reveal" data-split="words">Zobacz, jak robili to inni</h2>
-    <div class="d-reels__aside">
-      <p class="d-reels__lead d-reveal" data-split="lines">Pięcioro Fellows opowiada, jak szukali problemu, dzwonili do obcych ludzi i stawiali pierwsze MVP.</p>
-      <a class="d-reels__ig" href="https://www.instagram.com/mdfellowship"><span>Więcej na Instagramie</span><span class="d-btn__arrow" aria-hidden="true">→</span></a>
-    </div>
-  </div>
-  <div class="d-reels__car" id="reels-car">
-    <button type="button" class="d-reels__arrow d-reels__arrow--prev" id="car-prev" aria-label="Poprzedni reel"><span aria-hidden="true">→</span></button>
-    <div class="d-reels__vp" id="car-viewport">
-      <span class="d-reels__shape" aria-hidden="true"><img src="design-assets/reels-active-shape.svg" width="396.676" height="664.648" alt=""></span>
-      <div class="d-reels__track" id="car-track">
-          <article class="d-reel">
-            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3 class="d-reel__title">Jak znalazłem problem</h3>
-            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
-          </article>
-          <article class="d-reel">
-            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3 class="d-reel__title">Moje pierwsze discovery calle</h3>
-            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
-          </article>
-          <article class="d-reel">
-            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3 class="d-reel__title">Zatrudniłem się u klienta</h3>
-            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
-          </article>
-          <article class="d-reel">
-            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3 class="d-reel__title">MVP w Excelu</h3>
-            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
-          </article>
-          <article class="d-reel">
-            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
-            <h3 class="d-reel__title">[TEMAT REELSA]</h3>
-            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
-          </article>
-      </div>
-    </div>
-    <button type="button" class="d-reels__arrow d-reels__arrow--next" id="car-next" aria-label="Następny reel"><span aria-hidden="true">→</span></button>
-  </div>
-</section>
 
 </div><!-- /d-scene -->
 
@@ -1223,7 +1225,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   <div class="d-about__photo">
     <img class="d-about__blob" src="design-assets/about-blob.svg?v=2" width="1439.59" height="554.625" alt="" aria-hidden="true">
     <div class="d-about__masked" aria-hidden="true">
-      <div class="riso" data-design-width="1440" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/about-collage.png?v=4" width="2159" height="832" alt=""></div>
+      <div class="riso" data-cloud="free" data-design-width="1440" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/about-collage.png?v=5" width="2159" height="832" alt=""></div>
     </div>
     <span class="d-mask d-about__cta"><a class="d-btn d-btn--shape d-about__btn d-mask__i" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a></span>
   </div>
@@ -1237,75 +1239,326 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     <h2 class="d-mentors__title d-reveal" data-split="words">Z kim będziesz pracować</h2>
     <p class="d-body d-mentors__lead d-reveal" data-split="lines">Ludzie, którzy budowali firmy, zatrudniali, sprzedawali, popełniali błędy i wyciągali z nich wnioski.</p>
   </div>
-  <div class="d-mentors__stage" id="mentors-stage">
-    <div class="d-mentors__info" aria-live="polite">
-        <div class="d-mentor-info is-active" data-i="0">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 01]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+  <!-- dwa rzędy kafelków: górny jedzie w prawo, dolny w lewo; hover/fokus zatrzymuje rząd i pokazuje bio;
+       każdy rząd można chwycić i przesunąć. Prelegenci wymieszani w obu rzędach (tag „Prelegent”).
+       Wszyscy z listy mentorów (bez względu na status zgody), rozdzieleni na przemian między rzędy.
+       UWAGA: zdjęcia przypisane do nazwisk tymczasowo — pewne tylko m01 (plakietka „Bartek”), m03 (bluza Clastify),
+       m06 (plakietka z nazwiskiem); reszta to powtórzone zdjęcia zastępcze. Prelegenci, brakujące role i bio — placeholdery. -->
+  <!-- jeden wspólny raster riso: na hover przenoszony do kafla, wejście = sama postać (mXX-cut.avif);
+       bez trybu free — kropki pojawiają się tylko w kształcie wyciętej postaci -->
+  <div class="riso d-mtile__riso" id="mentor-riso" data-design-width="300" aria-hidden="true" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/mentors/m01-cut.avif?v=4" width="480" height="640" alt=""></div>
+  <div class="d-mentors__rows" id="mentors-rows">
+    <div class="d-marquee" data-dir="1">
+     <div class="d-marquee__track">
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m03.avif?v=4" type="image/avif"><img src="design-assets/mentors/m03.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
-        <div class="d-mentor-info" data-i="1" aria-hidden="true">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 02]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+        <h3 class="d-mtile__name">Jan Kolaczyk</h3>
+        <p class="d-mtile__role">(exited) Founder Clastify</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
-        <div class="d-mentor-info" data-i="2" aria-hidden="true">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 03]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+        <h3 class="d-mtile__name">Kacper Gadomski</h3>
+        <p class="d-mtile__role">Co-founder Talona</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
-        <div class="d-mentor-info" data-i="3" aria-hidden="true">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 04]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 1]</h3>
+        <p class="d-mtile__role">[Firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
-        <div class="d-mentor-info" data-i="4" aria-hidden="true">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 05]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+        <h3 class="d-mtile__name">Mikołaj Nowak</h3>
+        <p class="d-mtile__role">Co-founder & CEO Vetina</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m06.avif?v=4" type="image/avif"><img src="design-assets/mentors/m06.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
-        <div class="d-mentor-info" data-i="5" aria-hidden="true">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 06]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+        <h3 class="d-mtile__name">Marek Rewoliński</h3>
+        <p class="d-mtile__role">Co-founder & CEO Rinvo</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m01.avif?v=4" type="image/avif"><img src="design-assets/mentors/m01.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
-        <div class="d-mentor-info" data-i="6" aria-hidden="true">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 07]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+        <h3 class="d-mtile__name">Bartek Nowak</h3>
+        <p class="d-mtile__role">Stealth Startup</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m10.avif?v=4" type="image/avif"><img src="design-assets/mentors/m10.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
-        <div class="d-mentor-info" data-i="7" aria-hidden="true">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 08]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+        <h3 class="d-mtile__name">Tomek Ostrowski</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
-        <div class="d-mentor-info" data-i="8" aria-hidden="true">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 09]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 2]</h3>
+        <p class="d-mtile__role">[Firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
-        <div class="d-mentor-info" data-i="9" aria-hidden="true">
-          <h3 class="d-mentor-info__name">[Imię Nazwisko 10]</h3>
-          <p class="d-mentor-info__role">[Rola, firma]</p>
-          <p class="d-mentor-info__bio">[Bio, zdanie 1: kim jest i czym zajmuje się dziś.] [Zdanie 2: jaką firmę lub projekt zbudował(a) i w jakiej skali.] [Zdanie 3: najważniejsze doświadczenie, np. sprzedaż, zatrudnianie albo pozyskiwanie finansowania.] [Zdanie 4: błąd lub lekcja, o której chętnie opowiada.] [Zdanie 5: w czym pomoże uczestnikom Discovery Sprintu.]</p>
+        <h3 class="d-mtile__name">Adam Majcher</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
         </div>
+        <h3 class="d-mtile__name">Mateusz Jacniacki</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Bartek Ludera</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Mateusz Piątkowski</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m10.avif?v=4" type="image/avif"><img src="design-assets/mentors/m10.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 3]</h3>
+        <p class="d-mtile__role">[Firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Mirella Kłosińska</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Oskar Wójcikiewicz</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Michał Wójcik</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Wiktor Gaweł</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 4]</h3>
+        <p class="d-mtile__role">[Firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Maciej Szymczyk</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+     </div>
     </div>
-    <div class="d-mentors__nav">
-      <button type="button" class="d-mentors__arrow d-mentors__arrow--prev" id="mentor-prev" aria-label="Poprzedni mentor"><span aria-hidden="true">→</span></button>
-      <button type="button" class="d-mentors__arrow" id="mentor-next" aria-label="Następny mentor"><span aria-hidden="true">→</span></button>
-      <p class="d-mentors__count" aria-hidden="true"><span id="mentor-count">01</span> / 10</p>
-    </div>
-    <div class="d-mentors__track">
-        <button type="button" class="d-mentor-slide" data-i="0" aria-label="Pokaż mentora 1"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 01</span></span></button>
-        <button type="button" class="d-mentor-slide" data-i="1" aria-label="Pokaż mentora 2"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 02</span></span></button>
-        <button type="button" class="d-mentor-slide" data-i="2" aria-label="Pokaż mentora 3"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 03</span></span></button>
-        <button type="button" class="d-mentor-slide" data-i="3" aria-label="Pokaż mentora 4"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 04</span></span></button>
-        <button type="button" class="d-mentor-slide" data-i="4" aria-label="Pokaż mentora 5"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 05</span></span></button>
-        <button type="button" class="d-mentor-slide" data-i="5" aria-label="Pokaż mentora 6"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 06</span></span></button>
-        <button type="button" class="d-mentor-slide" data-i="6" aria-label="Pokaż mentora 7"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 07</span></span></button>
-        <button type="button" class="d-mentor-slide" data-i="7" aria-label="Pokaż mentora 8"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 08</span></span></button>
-        <button type="button" class="d-mentor-slide" data-i="8" aria-label="Pokaż mentora 9"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 09</span></span></button>
-        <button type="button" class="d-mentor-slide" data-i="9" aria-label="Pokaż mentora 10"><span class="d-mentor-slide__photo box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE 10</span></span></button>
+    <div class="d-marquee" data-dir="-1">
+     <div class="d-marquee__track">
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Piotrek Czupryński</h3>
+        <p class="d-mtile__role">Founder Repto.pl</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Maciej Foks</h3>
+        <p class="d-mtile__role">Co-founder Quomerce</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 5]</h3>
+        <p class="d-mtile__role">[Firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Piotrek Gątkowski</h3>
+        <p class="d-mtile__role">Co-founder & CEO homi</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Filip Lasyk</h3>
+        <p class="d-mtile__role">Co-founder & CTO Vetina</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m11.avif?v=4" type="image/avif"><img src="design-assets/mentors/m11.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Weronika Gątkowska</h3>
+        <p class="d-mtile__role">CEO MD Fellowship</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Kacper Urbanowski</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 6]</h3>
+        <p class="d-mtile__role">[Firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Jan Kundziołka</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Antek Pater</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m10.avif?v=4" type="image/avif"><img src="design-assets/mentors/m10.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Michał Karp</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Mikołaj Rostkowski</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 7]</h3>
+        <p class="d-mtile__role">[Firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Natalia Żak</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Paweł Rainer</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Wojtek Basiński</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Mikołaj Wolny</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m10.avif?v=4" type="image/avif"><img src="design-assets/mentors/m10.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 8]</h3>
+        <p class="d-mtile__role">[Firma]</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+        </div>
+        <h3 class="d-mtile__name">Sonia Piorek</h3>
+        <p class="d-mtile__role">[Rola, firma]</p>
+      </article>
+     </div>
     </div>
   </div>
 </section>
@@ -1397,6 +1650,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     <div class="stack-l">
       <h2>Najtrudniejsze jest, żeby się przełamać. Z resztą Ci pomożemy.</h2>
       <p class="meta">12–13 listopada · Warszawa · bezpłatnie · 120 miejsc</p>
+      <h3>Przyłożysz się?</h3>
+      <p>Masz szansę skończyć program<br>z pierwszymi płacącymi klientami.</p>
       <div class="cta-row"><a class="btn" href="#aplikuj">Aplikuj</a></div>
     </div>
   </div>
@@ -1614,7 +1869,7 @@ fn vnoise(p: vec2f) -> f32 {
 // Przy a = f = 1 wynik jest identyczny z oryginalnym halftone (drżenie 0, pełne appear/form).
 // t (0–1): fala morfu A → B idąca od środka na brzeg (pas o szerokości MB); komórka, którą mija, przechodzi
 // zdjęcie A → plamka farby (poza siatką) → zdjęcie B, bez cofania: przy t = 0 wszystko jest A, przy t = 1 wszystko B.
-fn inkDot(px0: vec2f, angle: f32, dotSz: f32, rA: f32, rB: f32, dims: vec2f, a: f32, f: f32, cc0: f32, t: f32) -> f32 {
+fn inkDot(px0: vec2f, angle: f32, dotSz: f32, rA: f32, rB: f32, dims: vec2f, a: f32, f: f32, cc0: f32, t: f32, aPix: f32, free: f32) -> f32 {
   let c = cos(angle);
   let s = sin(angle);
   // siatka liczona od ŚRODKA okna: gdy komórki rosną/maleją (c), raster skaluje się wokół środka, a nie wokół
@@ -1651,7 +1906,10 @@ fn inkDot(px0: vec2f, angle: f32, dotSz: f32, rA: f32, rB: f32, dims: vec2f, a: 
       let dc = length((cuv - 0.5) * asp) / (0.5 * length(asp));
       // pole skupisk, dryfuje z postępem — chmura kropek żyje, póki się nie uformuje
       let nzA = clamp((vnoise(cuv * fieldScale + vec2f(a * 1.4 + cc0 * 0.9, -a * 0.9 - cc0 * 0.6)) - 0.2) / 0.6, 0.0, 1.0);
-      let thA = 0.2 * h + 0.4 * nzA + 0.4 * dc;
+      // free: bez skupisk z szumu — próg zależy tylko od odległości od środka (elipsa okna) i losu komórki,
+      // więc kropki rozchodzą się od środka z miękkim, rozmytym brzegiem
+      let de = length((cuv - 0.5) * 2.0);
+      let thA = mix(0.2 * h + 0.4 * nzA + 0.4 * dc, 0.5 * de + 0.5 * h, free);
       let nzF = clamp((vnoise(cuv * fieldScale * 0.8 + vec2f(2.5 - f * 0.6, 7.1 + f * 0.4)) - 0.2) / 0.6, 0.0, 1.0);
       let thF = 0.25 * h + 0.35 * nzF + 0.4 * dc;
       let form = smoothstep(thF, thF + 0.3, f * 1.3);
@@ -1667,7 +1925,12 @@ fn inkDot(px0: vec2f, angle: f32, dotSz: f32, rA: f32, rB: f32, dims: vec2f, a: 
       let wob = sin(ph * 3.14159);
       let rImg = select(rA, rB, ph >= 0.5);
       let r = mix(rInk, rImg, form * (1.0 - wob)) * (appear * (1.4 - 0.4 * appear));
-      cov = max(cov, select(0.0, 1.0, dist < r));
+      // free = 1: chmura nie zna kształtu zdjęcia — kropki rzedną od środka na zewnątrz (szansa komórki maleje
+      // z odległością, bez żadnego obrysu), a kształt (alfa zdjęcia) przejmują dopiero z formowaniem;
+      // przy form = 1 wynik jak w oryginale
+      let cloud = select(0.0, 1.0, h2 < 0.75 * (1.0 - de));   // przy brzegu okna (de = 1) już żadnej
+      let gate = mix(1.0, select(cloud, aPix, form > 0.5), free);
+      cov = max(cov, select(0.0, gate, dist < r));
     }
   }
   return cov;
@@ -1734,8 +1997,9 @@ fn inkDot(px0: vec2f, angle: f32, dotSz: f32, rA: f32, rB: f32, dims: vec2f, a: 
   let r2A = (1.0 - lumA2) * dotScaleL * 0.5;
   let r2B = (1.0 - lumB2) * dotScaleL * 0.5;
   // Dot coverage: 1 inside the dot, 0 outside (z fazą chmury kropek, formowania i fali morfu — inkDot)
-  let dot1 = inkDot(px, angle1, dotScaleL, r1A, r1B, dims, revA, revF, c, t);
-  let dot2 = inkDot(px, angle2, dotScaleL, r2A, r2B, dims, revA, revF, c, t);
+  let free = u.morph.z;
+  let dot1 = inkDot(px, angle1, dotScaleL, r1A, r1B, dims, revA, revF, c, t, inputA, free);
+  let dot2 = inkDot(px, angle2, dotScaleL, r2A, r2B, dims, revA, revF, c, t, inputA, free);
   // papier pod kropkami wypełnia okno plamami, gdy zdjęcie się formuje; wcześniej kropki leżą wprost na tle
   let aspP = vec2f(dims.x / max(dims.y, 1.0), 1.0);
   let nzP = vnoise(outputUv * aspP * 2.6 + vec2f(11.0, 3.0) - revF * 0.5);
@@ -1758,7 +2022,7 @@ fn inkDot(px0: vec2f, angle: f32, dotSz: f32, rA: f32, rB: f32, dims: vec2f, a: 
   // Shadow density boost
   let luminance = dot(result, vec3f(0.299, 0.587, 0.114));
   result = result * (0.85 + 0.15 * luminance);
-  let alpha = max(max(dot1, dot2), paperA) * inputColor.a;
+  let alpha = mix(max(max(dot1, dot2), paperA) * inputColor.a, max(max(dot1, dot2), paperA * inputColor.a), free);
   return vec4f(result * alpha, alpha);
 }
 `;
@@ -1903,7 +2167,7 @@ function render(device, frame) {
         numberParam("misregistration", 4), 0, 0, 0,
         numberParam("dotScale", 8), 0, 0, 0,
         numberParam("grain", 0.15), 0, 0, 0,
-        finiteNumber((params.morph || {}).t, 0), finiteNumber((params.morph || {}).pulse, 0), 0, 0,
+        finiteNumber((params.morph || {}).t, 0), finiteNumber((params.morph || {}).pulse, 0), finiteNumber((params.morph || {}).free, 0), 0,
         finiteNumber((params.reveal || {}).s, 1), finiteNumber((params.reveal || {}).c, 0),
         finiteNumber((params.reveal || {}).a, 1), finiteNumber((params.reveal || {}).f, 1),
     ]));
@@ -2075,12 +2339,14 @@ return { setup: setup, render: render, manifest: manifest };
     it.input = it.inputs[it.index];
     it.frame.input = it.input;
     it.frame.inputB = t > 0 ? it.inputs[Math.min(indexB || 0, it.inputs.length - 1)] : null;
-    it.frame.params.morph = { t: t || 0, pulse: 0 };
+    it.frame.params.morph = { t: t || 0, pulse: 0, free: it.el.dataset.cloud === 'free' ? 1 : 0 };
     it.frame.params.reveal = reveal;
     it.frame.output = it.ctx.getCurrentTexture();
     RisoEffect.render(device, it.frame);
     return true;
   };
+  // pełny render od nowa (nowe zdjęcie w <img> albo nowy rozmiar elementu) — kafle mentorów dzielą jeden element
+  window.risoRedraw = function (el) { var it = el.__riso; if (!it) return false; draw(it); return it.inputs.length > 0; };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawAll);
   var t;
   window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(drawAll, 120); });
@@ -2264,20 +2530,16 @@ function paintHeroExit(P) {
 // Jednostki postępu bloku: 0 = góra bloku na dole ekranu, 1 = dół bloku nad górą ekranu.
 const WORDS = { start: 0.02, spread: 0.26, rise: 0.07 };
 let wordTracks = [];
-// t.hide (0 → 1): chowanie bloku w górę we własnych maskach („Nie robimy konkursów”, gdy wchodzi zdjęcie)
 function paintWords(t, P) {
   const n = t.words.length;
   t.words.forEach((el, i) => {
-    const kh = t.hide > 0 ? easeInOut(seg(t.hide, (i / Math.max(1, n)) * 0.3, (i / Math.max(1, n)) * 0.3 + 0.7)) : 0;
-    if (kh > 0) { paintMask(el, kh, -1); return; }
     const rs = WORDS.start + (i / Math.max(1, n)) * WORDS.spread;
     paintMask(el, 1 - easeOut(seg(P, rs, rs + WORDS.rise)), +1);
   });
 }
 function buildWordTracks() {
   wordTracks = [...document.querySelectorAll('.d-reveal')].map((block) =>
-    Object.assign(makeTrack(() => trackProgress(block)), { words: [...block.querySelectorAll('.w__i, .ln__i')],
-      hideAt: block.closest('.d-about') ? ABOUT_HIDE_AT[block.matches('.d-about__title') ? 0 : [...block.parentNode.children].indexOf(block) + 1] : -1, hide: 0 }));
+    Object.assign(makeTrack(() => trackProgress(block)), { words: [...block.querySelectorAll('.w__i, .ln__i')] }));
 }
 
 function collect() {   // po podziale na linie (start i każda zmiana rozmiaru)
@@ -2493,10 +2755,10 @@ function paintBtnLit() {
 /* ---------- tło sceny: niebieski → krem przy wejściu w „Jak to działa” ----------
    0, gdy góra sekcji jest na dole ekranu; 1, gdy dochodzi do 30% wysokości ekranu */
 const scene = document.querySelector('.d-scene');
-const howSec = document.querySelector('.d-how');
+const bgSec = document.querySelector('.d-learn').nextElementSibling;   // tło sceny przechodzi w krem przy wejściu sekcji po „Czego się nauczysz”
 let bgp = -1;
 function paintSceneBg() {
-  const p = clamp01((innerHeight - howSec.getBoundingClientRect().top) / (innerHeight * 0.7));
+  const p = clamp01((innerHeight - bgSec.getBoundingClientRect().top) / (innerHeight * 0.7));
   const v = Math.round(p * 1000) / 1000;
   if (v !== bgp) { bgp = v; scene.style.setProperty('--bgp', v); }
 }
@@ -2630,67 +2892,66 @@ if (reels) {
 }
 
 /* ---------- „Nie robimy konkursów” ----------
-   Desktop: scena przyklejona, s = przewinięcie od przyklejenia (px). Trzy osie po kolei:
-   n — liczby: 0 → 1 na odcinku `travel` (aż dół liczb zrówna się z dołem akapitów); kolumna liczb przesuwa się o −n·travel.
-       Wiersz k: liczba wjeżdża z maski w [k·0.23, +0.12], plakietka 0.04 później, naliczanie [k·0.23, +0.2]
-       (easeOut, sufiks stały, „1:1” liczy obie strony) — każdy wiersz jest wtedy w ekranie, ostatni gotowy przed n = 1.
-   h — chowanie tekstów: 0.45 ekranu po n = 1; bloki w kolejności z ekranu (ABOUT_HIDE_AT: nagłówek, akapity; liczby
-       w ABOUT_STAT_HIDE_AT), każdy przez 45% osi.
-   q — zdjęcie: od 0.25 ekranu po n = 1, przez 1.1 ekranu; potem 0.1 ekranu postoju i koniec przyklejenia.
-   Mobile: bez przyklejania, każdy wiersz i kolaż z własnego postępu (trackProgress), nic się nie chowa. */
-const ABOUT_HIDE_AT = [0, 0.3, 0.55];             // nagłówek, akapit 1, akapit 2
-const ABOUT_STAT_HIDE_AT = [0, 0, 0.15, 0.4];      // wiersze liczb (3. i 4. stoją u góry i obok akapitów)
-const ABOUT_H = { hide: 0.45, photoAt: 0.25, photo: 1.1, rest: 0.1 };
+   Desktop: oś liczb n = postęp postoju lewej kolumny (sticky): 0 = nagłówek się przykleja (góra sekcji u góry
+   ekranu), 1 = dół liczb równo z dołem akapitów, dalej sekcja przewija się normalnie. Wiersz k: liczba wjeżdża
+   z maski w [k·0.23, +0.12], plakietka 0.04 później, naliczanie [k·0.23, +0.2] (easeOut, sufiks stały, „1:1” liczy
+   obie strony) — każdy wiersz jest wtedy w ekranie, ostatni gotowy przed n = 1.
+   Zdjęcie (desktop i mobile): własny postęp wjazdu (trackProgress). Mobile: liczby też z własnego postępu. */
 const aboutSec = document.querySelector('.d-about');
 const aboutPin = aboutSec && aboutSec.querySelector('.d-about__pin');
 const aboutStatsEl = aboutSec && aboutSec.querySelector('.d-about__stats');
 const aboutGeo = { travel: 1 };
-function placeAbout() {   // przy zmianie rozmiaru: długość osi liczb i wysokość sekcji
+function placeAbout() {   // przy zmianie rozmiaru: długość postoju lewej kolumny (= osi liczb)
   if (!aboutPin) return;
   const lead = aboutPin.querySelector('.d-about__lead');
-  if (!desktopMq.matches) { aboutSec.style.height = ''; aboutStatsEl.style.transform = ''; return; }
-  aboutGeo.travel = Math.max(1, aboutStatsEl.offsetTop + aboutStatsEl.offsetHeight - (lead.offsetTop + lead.offsetHeight));
-  const h = Math.round(innerHeight * (1 + ABOUT_H.photoAt + ABOUT_H.photo + ABOUT_H.rest) + aboutGeo.travel) + 'px';
-  if (aboutSec.style.height !== h) aboutSec.style.height = h;
+  const statsBottom = aboutStatsEl.getBoundingClientRect().bottom - aboutSec.getBoundingClientRect().top;
+  const leadBottom = (parseFloat(getComputedStyle(aboutPin).paddingTop) || 0) + lead.offsetHeight;
+  aboutGeo.travel = Math.max(1, statsBottom - leadBottom);
 }
 if (aboutPin) { new ResizeObserver(placeAbout).observe(aboutPin); addEventListener('resize', placeAbout); placeAbout(); }
-const aboutS = () => Math.max(0, -aboutSec.getBoundingClientRect().top);
-const aboutN = () => clamp01(aboutS() / aboutGeo.travel);
+const aboutN = () => clamp01(-aboutSec.getBoundingClientRect().top / aboutGeo.travel);
 const aboutStats = aboutSec ? [...aboutSec.querySelectorAll('.d-about__stat')].map((row, k) => {
   const num = row.querySelector('.d-about__ni'), raw = num.dataset.count;
   return Object.assign(makeTrack(() => desktopMq.matches ? aboutN() : trackProgress(row)), { k, num, label: row.querySelector('.d-about__label'),
-    pair: raw.includes(':'), to: parseInt(raw, 10), suf: num.dataset.suffix || '', hide: 0 });
+    pair: raw.includes(':'), to: parseInt(raw, 10), suf: num.dataset.suffix || '' });
 }) : [];
-const aboutHideTrack = aboutSec ? makeTrack(() => desktopMq.matches && !reduced
-  ? clamp01((aboutS() - aboutGeo.travel) / (innerHeight * ABOUT_H.hide)) : 0) : null;
 function paintStat(it, P) {
   const s0 = desktopMq.matches ? it.k * 0.23 : 0.08;
-  const H = it.hide > 0 ? easeInOut(seg(it.hide, ABOUT_STAT_HIDE_AT[it.k], ABOUT_STAT_HIDE_AT[it.k] + ABOUT_H.hide)) : 0;
-  paintMask(it.num, H > 0 ? H : reduced ? 0 : 1 - easeOut(seg(P, s0, s0 + 0.12)), H > 0 ? -1 : +1);
-  paintMask(it.label, H > 0 ? H : reduced ? 0 : 1 - easeOut(seg(P, s0 + 0.04, s0 + 0.16)), H > 0 ? -1 : +1);
+  paintMask(it.num, reduced ? 0 : 1 - easeOut(seg(P, s0, s0 + 0.12)), +1);
+  paintMask(it.label, reduced ? 0 : 1 - easeOut(seg(P, s0 + 0.04, s0 + 0.16)), +1);
   const n = Math.round(it.to * (reduced ? 1 : easeOut(seg(P, s0, s0 + 0.2))));
   const txt = (it.pair ? n + ':' + n : String(n)) + it.suf;
   if (it.num.textContent !== txt) it.num.textContent = txt;
 }
-function paintAboutTravel(n) {   // kolumna liczb jedzie w górę obok stojących tekstów
-  const v = desktopMq.matches && n > 0 ? 'translateY(' + (-n * aboutGeo.travel).toFixed(1) + 'px)' : '';
-  if (aboutStatsEl.style.transform !== v) aboutStatsEl.style.transform = v;
+// szerokość bloku liczb zamrożona na szerokości z wartościami końcowymi — blok jest dosunięty do prawej, więc
+// zmiana szerokości liczby w trakcie naliczania (np. „0:0” jest szersze niż „1:1”) przesuwałaby cały blok
+function fixAboutStatsWidth() {
+  if (!aboutStatsEl) return;
+  aboutStatsEl.style.width = '';
+  if (!desktopMq.matches) return;
+  const now = aboutStats.map((it) => it.num.textContent);
+  aboutStats.forEach((it) => { it.num.textContent = (it.pair ? it.to + ':' + it.to : String(it.to)) + it.suf; });
+  aboutStatsEl.style.width = Math.ceil(aboutStatsEl.getBoundingClientRect().width) + 'px';
+  aboutStats.forEach((it, i) => { it.num.textContent = now[i]; });
+}
+if (aboutStatsEl) {
+  fixAboutStatsWidth();
+  addEventListener('resize', fixAboutStatsWidth);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fixAboutStatsWidth);
 }
 const aboutPhoto = (() => {
   const el = aboutSec && aboutSec.querySelector('.d-about__photo');
   if (!el) return null;
   return { el, riso: el.querySelector('.riso'), blob: el.querySelector('.d-about__blob'), btn: el.querySelector('.d-about__btn'),
-    track: makeTrack(() => desktopMq.matches
-      ? clamp01((aboutS() - aboutGeo.travel - innerHeight * ABOUT_H.photoAt) / (innerHeight * ABOUT_H.photo))
-      : trackProgress(el)) };
+    track: makeTrack(() => trackProgress(el)) };
 })();
 function paintAboutPhoto(P) {
-  const it = aboutPhoto, D = desktopMq.matches;
-  const a = reduced ? 1 : D ? seg(P, 0.00, 0.26) : seg(P, 0.02, 0.24);
-  const f = reduced ? 1 : D ? seg(P, 0.10, 0.48) : seg(P, 0.14, 0.40);
-  const c = reduced ? 0 : 1 - easeOut(D ? seg(P, 0.04, 0.48) : seg(P, 0.08, 0.40));
-  const o = reduced ? 1 : easeOut(D ? seg(P, 0.44, 0.60) : seg(P, 0.36, 0.48));
-  const b = reduced ? 0 : 1 - easeOut(D ? seg(P, 0.56, 0.70) : seg(P, 0.44, 0.54));
+  const it = aboutPhoto;
+  const a = reduced ? 1 : seg(P, 0.02, 0.24);
+  const f = reduced ? 1 : seg(P, 0.14, 0.40);
+  const c = reduced ? 0 : 1 - easeOut(seg(P, 0.08, 0.40));
+  const o = reduced ? 1 : easeOut(seg(P, 0.36, 0.48));
+  const b = reduced ? 0 : 1 - easeOut(seg(P, 0.44, 0.54));
   it.blob.style.opacity = o >= 1 ? '' : o.toFixed(3);
   it.blob.style.transform = o >= 1 ? '' : 'scale(' + (0.96 + 0.04 * o).toFixed(4) + ')';
   paintMask(it.btn, b, +1);
@@ -2698,91 +2959,163 @@ function paintAboutPhoto(P) {
   else it.riso.style.opacity = f.toFixed(3);
 }
 
-/* ---------- mentorzy: karuzela zapętlona ----------
-   pos — ciągła pozycja (indeks aktywnego), jak w reelsach (wygładzanie do target). Każdy kafel ma względne k
-   zawinięte do [−n/2, n/2); geometrię kafla liczy slot(k) i interpolacja między pełnymi k. Opis po lewej
-   przełącza się, gdy zmienia się najbliższy indeks. Desktop: sloty w jednostkach u (scena 1413 × 760);
-   mobile: jedno duże zdjęcie na szerokość, sąsiednie poza kadrem. */
-const mentors = (() => {
-  const stage = document.getElementById('mentors-stage');
-  if (!stage) return null;
-  const slides = [...stage.querySelectorAll('.d-mentor-slide')], infos = [...stage.querySelectorAll('.d-mentor-info')];
-  const probe = document.createElement('div');
-  probe.style.cssText = 'position:absolute;visibility:hidden;height:0;width:calc(1000 * var(--u))';
-  stage.appendChild(probe);
-  return { stage, track: stage.querySelector('.d-mentors__track'), slides, infos, n: slides.length, probe, pos: 0, target: 0, shown: 0,
-    count: document.getElementById('mentor-count'), key: '' };
+/* ---------- mentorzy: dwa rzędy kafelków ----------
+   Każdy rząd: zestaw kafli + klony (aria-hidden, bez tabindex) tak, żeby zawsze wypełniały ekran; pozycja x zawijana
+   w [−szerokość zestawu, 0). Rząd jedzie stałą prędkością SPEED w swoją stronę (data-dir), a gdy kursor jest nad
+   nim, coś w nim ma fokus albo jest otwarte bio (tap) — zwalnia do zera. Chwycenie: rząd idzie za palcem/kursorem,
+   po puszczeniu leci z prędkością rzutu, która wygasa do prędkości jazdy. Tap/klik bez przesunięcia: bio w kaflu.
+   Własna pętla rAF (tylko gdy sekcja jest w ekranie); reduced motion: bez jazdy, przeciąganie zostaje. */
+/* raster riso na hover kafla: jeden element .riso (WebGPU) przenoszony do kafla. Wejście: sama postać (mXX-cut.avif),
+   kropki pojawiają się tylko w kształcie postaci (bez trybu free) i układają w zdjęcie jak kolaż w „Nie robimy
+   konkursów” (fazy a/f/c), papier rastra przykrywa kolorowe zdjęcie w obrysie postaci; ramka i niebieskie tło zostają. Czas: wejście 900 ms,
+   wyjście 350 ms (to interakcja, nie scroll). Bez WebGPU nic się nie dzieje (zostaje zwykłe zdjęcie i bio). */
+const mentorRiso = (() => {
+  const el = document.getElementById('mentor-riso'), park = el && el.parentNode;
+  const img = el && el.querySelector('img');
+  let tile = null, p = 0, target = 0, last = 0, raf = 0, token = 0;
+  const cutOf = (t) => (t.querySelector('.d-mtile__photo img').getAttribute('src') || '').replace(/(m\d\d)\.(?:webp|avif)(\?.*)?$/, '$1-cut.avif$2');
+  function paint() {
+    const a = seg(p, 0, 0.45), f = seg(p, 0.2, 0.85), c = 1 - easeOut(seg(p, 0.1, 0.85));
+    if (window.risoSet) window.risoSet(el, { s: 1, c, a, f });
+  }
+  function tick(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    p = target > p ? Math.min(target, p + dt / 0.9) : Math.max(target, p - dt / 0.35);
+    paint();
+    if (p === 0 && target === 0 && tile) { park.appendChild(el); tile = null; }
+    raf = p !== target ? requestAnimationFrame(tick) : 0;
+  }
+  function run() { if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }
+  function show(t) {
+    if (!el || !window.risoRedraw || reduced) return;
+    if (!t) { target = 0; run(); return; }
+    if (t === tile) { target = 1; run(); return; }
+    const my = ++token, src = cutOf(t);
+    tile = t; p = 0; target = 1;
+    t.querySelector('.d-mtile__photo').insertBefore(el, t.querySelector('.d-mtile__tag, .d-mtile__bio'));
+    const go = () => { if (my !== token || tile !== t) return; if (window.risoRedraw(el)) { paint(); run(); } };
+    if (img.getAttribute('src') === src && img.complete) go();
+    else { img.onload = go; img.src = src; }
+  }
+  return { show };
 })();
-const mobileMq = matchMedia('(max-width: 1023px)');
-function mentorSlot(k) {   // [x, y, w, h, opacity] w px
-  const M = mentors;
-  if (mobileMq.matches) {
-    const W = M.track.clientWidth, H = W * 1.25;
-    return [k * (W + 16), 0, W, H, 1];
+const mentorRows = (() => {
+  const root = document.getElementById('mentors-rows');
+  if (!root) return null;
+  const SPEED = 34;   // px/s
+  const rows = [...root.querySelectorAll('.d-marquee')].map((el) => {
+    const track = el.querySelector('.d-marquee__track');
+    return { el, track, dir: +el.dataset.dir || 1, orig: [...track.children], x: 0, v: 0, setW: 1, hover: false, drag: null, moved: false };
+  });
+  function build(R) {   // klony do wypełnienia ekranu + szerokość zestawu
+    R.track.querySelectorAll('.is-clone').forEach((n) => n.remove());
+    const gap = parseFloat(getComputedStyle(R.track).columnGap) || 0;
+    R.setW = R.orig.reduce((w, n) => w + n.getBoundingClientRect().width + gap, 0);
+    const copies = Math.ceil(innerWidth / Math.max(1, R.setW)) + 1;
+    for (let c = 0; c < copies; c++) R.orig.forEach((n) => {
+      const k = n.cloneNode(true);
+      k.classList.add('is-clone'); k.setAttribute('aria-hidden', 'true'); k.removeAttribute('tabindex');   // bez inert — hover na klonach ma działać
+      R.track.appendChild(k);
+    });
+    R.x = ((R.x % R.setW) - R.setW) % R.setW;
   }
-  const u = M.probe.offsetWidth / 1000, TW = 265, TH = 353, GAP = 16, SH = 760;
-  if (k === 0) return [562 * u, 0, 570 * u, SH * u, 1];
-  const x = k < 0 ? (TW + GAP) * (k + 2) : 1148 + (TW + GAP) * (k - 1);
-  return [x * u, (SH - TH) * u, TW * u, TH * u, 0.42];
-}
-function paintMentors() {
-  const M = mentors;
-  M.slides.forEach((el, i) => {
-    let k = ((i - M.pos) % M.n + M.n) % M.n;
-    if (k >= M.n / 2) k -= M.n;
-    const k0 = Math.floor(k), f = k - k0, A = mentorSlot(k0), B = mentorSlot(k0 + 1);
-    const g = A.map((v, j) => v + (B[j] - v) * f);
-    el.style.transform = 'translate(' + g[0].toFixed(2) + 'px,' + g[1].toFixed(2) + 'px)';
-    el.style.width = g[2].toFixed(2) + 'px';
-    el.style.height = g[3].toFixed(2) + 'px';
-    el.style.opacity = g[4].toFixed(3);
-    el.style.zIndex = String(20 - Math.round(Math.abs(k) * 2));
-    const act = Math.abs(k) < 0.5;
-    el.classList.toggle('is-active', act);
-    el.tabIndex = act ? -1 : 0;
-  });
-  const idx = ((Math.round(M.pos) % M.n) + M.n) % M.n;
-  if (idx !== M.shown) {
-    M.shown = idx;
-    M.infos.forEach((el, i) => { el.classList.toggle('is-active', i === idx); el.toggleAttribute('aria-hidden', i !== idx); });
-    M.count.textContent = String(idx + 1).padStart(2, '0');
+  function closeAll(except) {
+    root.querySelectorAll('.d-mtile.is-open').forEach((t) => { if (t !== except) t.classList.remove('is-open'); });
+    if (!except) mentorRiso.show(null);
   }
-}
-if (mentors) {
-  const M = mentors;
-  document.getElementById('mentor-prev').addEventListener('click', () => { M.target = Math.round(M.target) - 1; });
-  document.getElementById('mentor-next').addEventListener('click', () => { M.target = Math.round(M.target) + 1; });
-  M.slides.forEach((el) => el.addEventListener('click', () => {
-    let k = ((+el.dataset.i - Math.round(M.target)) % M.n + M.n) % M.n;
-    if (k >= M.n / 2) k -= M.n;
-    M.target = Math.round(M.target) + k;
-  }));
-  // przesunięcie palcem / myszą po zdjęciach
-  let sx = null;
-  M.track.addEventListener('pointerdown', (e) => { sx = e.clientX; });
-  M.track.addEventListener('pointerup', (e) => {
-    if (sx === null) return;
-    const d = e.clientX - sx; sx = null;
-    if (Math.abs(d) > 40) M.target = Math.round(M.target) + (d < 0 ? 1 : -1);
+  rows.forEach((R) => {
+    // zatrzymanie od razu (bez wyhamowania) — inaczej kafel jeszcze przesuwa się pod kursorem i hover przeskakuje
+    R.el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { R.hover = true; if (!R.drag) R.v = 0; } });
+    R.el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') R.hover = false; });
+    R.el.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      R.drag = { id: e.pointerId, x0: e.clientX, start: R.x, lastX: e.clientX, lastT: performance.now(), v: 0 };
+      R.moved = false;
+    });
+    R.el.addEventListener('pointermove', (e) => {
+      const D = R.drag;
+      if (!D || e.pointerId !== D.id) return;
+      const dx = e.clientX - D.x0;
+      if (!R.moved && Math.abs(dx) > 6) { R.moved = true; R.el.classList.add('is-dragging'); R.el.setPointerCapture(e.pointerId); }
+      if (!R.moved) return;
+      const now = performance.now(), dt = Math.max(1, now - D.lastT);
+      D.v = 0.8 * ((e.clientX - D.lastX) / dt * 1000) + 0.2 * D.v;
+      D.lastX = e.clientX; D.lastT = now;
+      R.x = D.start + dx;
+    });
+    const end = (e) => {
+      const D = R.drag;
+      if (!D || e.pointerId !== D.id) return;
+      R.drag = null;
+      R.el.classList.remove('is-dragging');
+      if (R.moved) R.v = Math.max(-2500, Math.min(2500, D.v));
+      else if (e.type === 'pointerup') {   // tap/klik: bio w kaflu (dotyk; myszą bio jest na hover)
+        const t = e.target.closest('.d-mtile');
+        if (t && e.pointerType !== 'mouse') { const open = !t.classList.contains('is-open'); closeAll(t); t.classList.toggle('is-open', open); mentorRiso.show(open ? t : null); }
+      }
+    };
+    R.el.addEventListener('pointerup', end);
+    R.el.addEventListener('pointercancel', end);
+    R.el.addEventListener('dragstart', (e) => e.preventDefault());
+    R.el.addEventListener('pointerover', (e) => { if (e.pointerType === 'mouse' && !R.drag) mentorRiso.show(e.target.closest('.d-mtile')); });
+    R.el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') mentorRiso.show(null); });
   });
-  M.stage.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') M.target = Math.round(M.target) + 1;
-    if (e.key === 'ArrowLeft') M.target = Math.round(M.target) - 1;
-  });
-}
-function stepMentors(dt) {
-  const M = mentors, d = M.target - M.pos;
-  if (Math.abs(d) < 1e-3) M.pos = M.target;
-  else M.pos += d * (reduced ? 1 : 1 - Math.exp(-dt * 8));
-}
+  document.addEventListener('pointerdown', (e) => { if (!e.target.closest('#mentors-rows')) closeAll(null); });
+  const buildAll = () => rows.forEach(build);
+  buildAll();
+  addEventListener('resize', buildAll);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildAll);
+  let on = false, last = 0;
+  function tick(now) {
+    const dt = Math.min(0.05, (now - last) / 1000 || 0); last = now;
+    for (const R of rows) {
+      if (!R.drag) {
+        const paused = reduced || R.hover || R.el.contains(document.activeElement) || !!R.el.querySelector('.d-mtile.is-open');
+        const target = paused ? 0 : R.dir * SPEED;
+        R.v += (target - R.v) * (1 - Math.exp(-dt * (Math.abs(R.v) > SPEED * 1.5 ? 2.2 : 5)));
+        R.x += R.v * dt;
+      }
+      R.x = ((R.x % R.setW) - R.setW) % R.setW;   // zawsze w [−setW, 0)
+      const v = 'translate3d(' + R.x.toFixed(2) + 'px,0,0)';
+      if (R.track.style.transform !== v) R.track.style.transform = v;
+    }
+    if (on) requestAnimationFrame(tick);
+  }
+  new IntersectionObserver(([en]) => {
+    const was = on; on = en.isIntersecting;
+    if (on && !was) { last = performance.now(); requestAnimationFrame(tick); }
+  }, { rootMargin: '200px 0px' }).observe(root);
+  return rows;
+})();
 
 /* ---------- pętla: jeden zegar dla wszystkiego, co zależy od scrolla ---------- */
 const travelTrack = makeTrack(() => (geo ? clamp01(scrollY / geo.span) : 0));   // podróż: do przyklejenia latarki
 
 const darkSecs = [...document.querySelectorAll('.d-mentors')];
+// tło pod przyciskiem nawigacji: pierwszy element pod nim (poza samą nawigacją) z nieprzezroczystym tłem;
+// jasne = wszystkie kanały ≥ 225 (krem, biel) — niebieski Hero i czarni mentorzy nie są jasne
+const navCta = nav.querySelector('.d-nav__cta');
+let navBgKey = null;
+function paintNavBg() {
+  const key = scrollY + ':' + innerWidth + ':' + innerHeight;
+  if (key === navBgKey) return;
+  navBgKey = key;
+  const r = navCta.getBoundingClientRect();
+  let light = false;
+  for (const el of document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2)) {
+    if (nav.contains(el)) continue;
+    const bg = getComputedStyle(el).backgroundColor, m = bg.match(/[\d.]+/g);   // rgb(…) albo color(srgb 0–1 …) z color-mix
+    if (!m || (m.length > 3 && +m[3] < 0.5)) continue;
+    const k = bg.startsWith('color(') ? 255 : 1;
+    light = Math.min(+m[0], +m[1], +m[2]) * k >= 225;
+    break;
+  }
+  nav.classList.toggle('is-light', light);
+}
 function frame(driving, dt) {
   nav.classList.toggle('is-scrolled', scrollY > 8);
   nav.classList.toggle('is-dark', darkSecs.some((el) => { const r = el.getBoundingClientRect(); return r.top <= 28 && r.bottom >= 28; }));
+  paintNavBg();
   if (travelOn()) {
     const pe = sync(exitTrack, driving, dt);
     if (pe !== exitTrack.key) { exitTrack.key = pe; paintHeroExit(pe); }
@@ -2806,20 +3139,13 @@ function frame(driving, dt) {
     const p = sync(aboutPhoto.track, driving, dt);
     if (p !== aboutPhoto.track.key) { aboutPhoto.track.key = p; paintAboutPhoto(p); }
   }
-  const aboutHide = aboutHideTrack ? sync(aboutHideTrack, driving, dt) : 0;
   for (const t of wordTracks) {
     const p = sync(t, driving, dt);
-    const hide = t.hideAt >= 0 && aboutHide > 0 ? seg(aboutHide, t.hideAt, t.hideAt + ABOUT_H.hide) : 0;
-    if (p !== t.key || hide !== t.hide) { t.key = p; t.hide = hide; paintWords(t, p); }
+    if (p !== t.key) { t.key = p; paintWords(t, p); }
   }
   for (const t of aboutStats) {
     const p = sync(t, driving, dt);
-    if (p !== t.key || aboutHide !== t.hide) { t.key = p; t.hide = aboutHide; paintStat(t, p); if (t.k === 0) paintAboutTravel(p); }
-  }
-  if (mentors) {
-    stepMentors(dt);
-    const key = mentors.pos.toFixed(4) + ':' + mentors.probe.offsetWidth + ':' + mentors.track.clientWidth + ':' + mobileMq.matches;
-    if (key !== mentors.key) { mentors.key = key; paintMentors(); }
+    if (p !== t.key) { t.key = p; paintStat(t, p); }
   }
   if (reels) {
     stepReels(dt);
