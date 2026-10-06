@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Startup Discovery Sprint – MD Fellowship</title>
+<title>Startup Discovery Sprint – MD Fellowship (wersja z 2026-10-05)</title>
+<!-- Archiwum: design.html ze stanu PR #5 (commit 22bbb35), zachowany do ewentualnego powrotu. Zmienione od tamtej pory SVG są w design-assets/v2026-10-05/. -->
+<meta name="robots" content="noindex">
 <script>
 /* intro: stan startowy ustawiany przed pierwszym renderem, żeby nie mignął gotowy Hero */
 (function () {
@@ -61,7 +63,7 @@ a { color: inherit; }
 .wrap { width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 var(--pad-x); }
 
 .section { padding: var(--rhythm) 0; border-bottom: 1px solid var(--line-soft); position: relative; }
-section[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
+section[id], footer[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 
 .lead { font-size: 29px; font-weight: 600; line-height: 1.3; }
 .body { font-size: 19px; }
@@ -236,6 +238,13 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 .final h2 { font-size: 52px; max-width: 900px; margin: 0 auto; }
 .final .cta-row { justify-content: center; }
 
+/* ---------- footer ---------- */
+.footer { padding: 56px 0 72px; }
+.footer-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.footer-logo { width: 160px; height: 40px; }
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; font-size: 16px; }
+.footer-partner { display: flex; align-items: center; gap: 16px; font-size: 15px; color: var(--muted); }
+.footer-partner .box { width: 220px; height: 56px; }
 
 /* ---------- sticky mobile CTA ---------- */
 .sticky-cta { display: none; }
@@ -311,6 +320,7 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
   .faq-q { font-size: 17px; padding: 18px 0; }
   .faq-a { font-size: 16px; padding-right: 24px; }
 
+  .footer-inner { flex-direction: column; }
 
   .sticky-cta {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -536,9 +546,9 @@ main { container-type: inline-size; }
    po dojechaniu przejmuje latarka z Problemu i zapala snop. Hero i Problem mają wspólne przycięcie,
    żeby latarka mogła wyjechać poza Hero bez poziomego scrolla. */
 html { scroll-behavior: auto; overscroll-behavior: none; }   /* smooth-scroll.js: nie łączyć z CSS smooth */
-/* tło sceny: kolor ustawia skrypt (paintSceneBg) przy wejściu sekcji po „Czego się nauczysz” (reelsy) — płynne przejście z niebieskiego w krem, bez twardej krawędzi */
+/* tło sceny: --bgp (0–1) ustawia skrypt przy wejściu sekcji po „Czego się nauczysz” (reelsy) — płynne przejście z niebieskiego w krem, bez twardej krawędzi */
 .d-scene { position: relative; overflow: clip;
-  background: var(--c-blue-500); }   /* przejście w krem ustawia skrypt (paintSceneBg) */
+  background: color-mix(in srgb, var(--c-cream) calc(var(--bgp, 0) * 100%), var(--c-blue-500)); }
 .d-problem { z-index: 1; }
 html.travel .d-hero { overflow: visible; }
 html.travel .d-hero.is-arrived .d-hero__flashlight { opacity: 0; }
@@ -554,15 +564,6 @@ html.travel .d-problem:not(.is-lit) .d-fl__hit { pointer-events: none; }
 /* maski: linie tekstu (dzielone skryptem), tagi, przycisk */
 .d-mask { overflow: hidden; }
 .d-mask--btn { display: block; }
-/* przycisk Aplikuj + termin zgłoszeń obok (Figma 7292:3451): odstęp 24, napis 24 px Figmy = 0.7 napisu w przycisku */
-.d-apply { display: flex; flex-wrap: wrap; align-items: center; gap: calc(22.4 * var(--u)); }
-.d-mask--btn.d-apply { display: flex; }
-/* w masce Hero termin ma wysokość przycisku (tekst wyśrodkowany), żeby przy chowaniu wyjechał nad maskę w całości —
-   przesunięcie to wysokość elementu + 0.35em, a sam napis był niższy od maski i zostawał w niej w połowie */
-.d-mask--btn .d-apply__date { display: flex; align-items: center; align-self: stretch; }
-.d-apply__date { display: block; font-family: var(--f-display); font-weight: 400; font-size: calc(22.37 * var(--u)); line-height: 1;
-  letter-spacing: calc(-0.43 * var(--u)); text-transform: uppercase; white-space: nowrap; color: var(--c-black); }
-.d-apply--big { gap: calc(44.8 * var(--u)); }
 .d-mask .d-btn:focus-visible { outline-offset: -5px; }
 .is-split { display: flex; flex-direction: column; align-items: flex-start; }
 .ln { display: block; overflow: hidden; white-space: nowrap; padding: 0.14em 0; margin: -0.14em 0; }
@@ -609,8 +610,8 @@ html.intro .d-hero__flashlight { opacity: 0; scale: 0.82; rotate: -14deg;
   transition: opacity 500ms ease 300ms, scale 1200ms cubic-bezier(0.16, 1, 0.3, 1) 300ms, rotate 1200ms cubic-bezier(0.16, 1, 0.3, 1) 300ms; }
 html.intro--spread .d-hero__flashlight { opacity: 1; scale: 1; rotate: 0deg; }
 
-html.intro .d-problem, html.intro .d-learn, html.intro .d-how, html.intro .d-about, html.intro .d-mentors, html.intro .d-who, html.intro .d-faq, html.intro .d-cta { opacity: 0; transition: opacity 600ms ease 500ms; }
-html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .d-how, html.intro--spread .d-about, html.intro--spread .d-mentors, html.intro--spread .d-who, html.intro--spread .d-faq, html.intro--spread .d-cta { opacity: 1; }
+html.intro .d-problem, html.intro .d-learn, html.intro .d-how, html.intro .d-about, html.intro .d-mentors, html.intro .wf-zone, html.intro .footer { opacity: 0; transition: opacity 600ms ease 500ms; }
+html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .d-how, html.intro--spread .d-about, html.intro--spread .d-mentors, html.intro--spread .wf-zone, html.intro--spread .footer { opacity: 1; }
 
 @media (min-width: 1024px) {
   /* Preload: grupa 1210 × 672 wyśrodkowana w ekranie (Startup/disco od 50% − 399, very/Sprint od 50% + 60).
@@ -638,29 +639,12 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-problem__cta > p { margin: 0; }
 .d-problem__big { font-size: calc(91.42 * var(--u)); letter-spacing: calc(-1.83 * var(--u)); }   /* 88 px */
 .d-problem__sub { margin-top: calc(49.9 * var(--u)) !important; }
-.d-problem__btn { position: relative; pointer-events: auto; }
-.d-problem__apply { margin-top: calc(33.2 * var(--u)); }
+.d-problem__btn { position: relative; margin-top: calc(33.2 * var(--u)); pointer-events: auto; }
 /* niebieska warstwa przycisku: przycięta (clip-path ze skryptu) do części, na którą pada biały snop latarki */
 .d-btn__lit { position: absolute; inset: 0; background: url("design-assets/btn-aplikuj-lit.svg") no-repeat 0 0 / 100% 100%;
   clip-path: polygon(0 0, 0 0, 0 0); pointer-events: none; }
 .d-problem__btn > :not(.d-btn__lit) { position: relative; }
 .d-fl__pt { position: absolute; width: 0; height: 0; }
-
-/* ---------- hover przycisków: kształt „gotuje się” poklatkowo (4 kl/s) ----------
-   Skrypt (wobble) wstawia do przycisku i do plakietki ze strzałką warstwę SVG z wielokątem kształtu; na hover/fokus
-   co 250 ms podmienia jej wierzchołki na jedną z 4 lekko przesuniętych wersji. Przycisk robi się zielony,
-   plakietka pod strzałką biała; strzałki karuzeli reelsów: zielone → białe. */
-.has-wob { position: relative; isolation: isolate; }
-.has-wob > :not(.d-wob):not(.d-btn__lit) { position: relative; }
-.has-wob > .d-btn__lit { z-index: -2; }
-.has-wob > svg.d-wob { position: absolute; z-index: -1; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; visibility: hidden; }
-.d-wob path { fill: #A6F893; }
-.d-btn__arrow > .d-wob path, .d-reels__arrow > .d-wob path { fill: var(--c-white); }
-.has-wob.is-wob > svg.d-wob { visibility: visible; }
-/* na hover widać tylko poklatkowy kształt — bazowe tło (i niebieska warstwa snopa/nawigacji) chowa się, żeby nie wystawało spod niego */
-.has-wob.is-wob { background-image: none; }
-.is-wob::before, .is-wob > .d-btn__lit { visibility: hidden; }
-.d-reels__ig > svg.d-wob { left: calc(0.92 * var(--u)); top: calc(0.6 * var(--u)); width: calc(264.95 * var(--u)); height: calc(49.87 * var(--u)); }
 
 /* Przyklejane warstwy latarki (desktop): kontener 100svh wyciągnięty 50svh w górę, więc przykleja się
    dokładnie wtedy, gdy nagłówek sekcji dochodzi do połowy ekranu — wtedy latarka z Hero kończy podróż.
@@ -714,14 +698,14 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
    Na dużym ekranie (≥ 1600 px) zdjęcie o 10% większe — przy 1440 nie ma na to miejsca obok tekstu.
    Odstęp od sekcji wyżej 2× (160 + 384). */
 .d-how { position: relative; z-index: 2; }
-.d-how__frame { padding: calc(222.6 * var(--u)) 40px calc(160 * var(--u)); }   /* było 384u; przerwa reelsy → nagłówek o 1/3 mniejsza (466 → 311 px przy 1440) */
+.d-how__frame { padding: calc(384 * var(--u)) 40px calc(160 * var(--u)); }
 .d-how__title { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u));   /* 88 px */
   line-height: 1.1; letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-black); }
 .d-how__rows { display: flex; align-items: flex-start; justify-content: space-between; gap: calc(60 * var(--u)); margin-top: calc(46 * var(--u)); }
 .d-how__steps { flex: none; width: calc(543 * var(--u)); }
 .d-how__step { box-sizing: border-box; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: calc(40 * var(--u)) 0; }
-.d-how__media { flex: none; position: sticky; top: calc(50vh - 302 * var(--u)); margin-right: calc(74.3 * var(--u)); }   /* plama na środku ekranu, 71.5 px Figmy od prawej krawędzi contentu */
-@media (min-width: 1600px) { .d-how__media { top: calc(50vh - 332 * var(--u)); } }
+.d-how__media { flex: none; position: sticky; top: calc(50vh - 281 * var(--u)); }
+@media (min-width: 1600px) { .d-how__media { top: calc(50vh - 309.1 * var(--u)); } }
 /* plakietka z terminem: czarny kształt z Figmy (7240:1061 / 1148 / 1154), biały tekst */
 .d-how__tag { display: block; box-sizing: border-box; padding-left: calc(13.38 * var(--u));
   font-family: var(--f-display); font-weight: 400; font-size: calc(24.93 * var(--u)); line-height: normal;
@@ -739,30 +723,26 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-how__desc, .d-how__fast { font-size: max(16px, calc(24.93 * var(--u))); }
 .d-how__desc { margin-top: calc(83.1 * var(--u)); }   /* Figma: 80 px między tytułem a opisem */
 .d-how__fast { margin-top: calc(16 * var(--u)); font-weight: 600; }
-.d-how__list { margin: calc(8 * var(--u)) 0 0; padding-left: 0; list-style: none; font-size: max(16px, calc(24.93 * var(--u))); }
-.d-how__list li { position: relative; padding-left: 1em; }
+.d-how__list { margin: calc(8 * var(--u)) 0 0; padding-left: 1.2em; font-size: max(16px, calc(24.93 * var(--u))); }
 .d-how__list li + li { margin-top: calc(4 * var(--u)); }
-/* kropka przy temacie: po podziale na linie siedzi w pierwszej linii (wjeżdża razem z nią z maski — maska poszerzona w lewo
-   o wcięcie), bez podziału (reduced motion) zwykły ::before na elemencie listy */
-.d-how__list li:not(.is-split)::before, .d-how__list li.is-split > .ln:first-child > .ln__i::before {
-  content: ""; position: absolute; top: 0.49em; width: 0.32em; height: 0.32em; border-radius: 50%; background: var(--c-blue-500); }
-.d-how__list li:not(.is-split)::before { left: 0.3em; }
-.d-how__list li.is-split > .ln:first-child { margin-left: -1em; padding-left: 1em; }
-.d-how__list li.is-split > .ln:first-child > .ln__i { position: relative; }
-.d-how__list li.is-split > .ln:first-child > .ln__i::before { left: -0.7em; }
 
-/* trybiki (Figma 7243:47 → 7293:3802): niebieska plama (wielokąt obrysowany wokół nowego układu kół z marginesem 24 px, scratchpad gears/blob.py — kształt z Figmy był dopasowany do starego zdjęcia) w ramce 583.5 × 581.2 px Figmy, w niej trzy trybiki z rastrem Riso (dotScale 4).
-   Zdjęcie z Figmy to jeden spłaszczony render w perspektywie (nie da się go rozciąć na obracające się koła), więc trybiki
-   są wygenerowane osobno (how-gear-1..3.webp, widok na wprost, 26 / 38 / 40 zębów), przeskalowane do wspólnego modułu
-   i ułożone tak, by się zazębiały (scratchpad gears/mk.py liczy pozycje, fazy zębów i proporcje obrotu).
-   Plama i trybiki stoją (sticky), tekst kroków przewija się obok; każda warstwa .d-how__gear kręci się osobno (--rot ze skryptu). */
-.d-how__gears { position: relative; flex: none; width: calc(606.2 * var(--u)); aspect-ratio: 583.536 / 581.169; }
-@media (min-width: 1600px) { .d-how__gears { width: calc(666.8 * var(--u)); } }
-.d-how__blob { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; fill: var(--c-blue-500);
+/* zdjęcie: ramka 757 × 562 (jak w Figmie); gruba czarna obwódka to polygon SVG z obrysem 24 px, z którego maska
+   (kształt okna) zostawia tylko zewnętrzną połowę — 12 px pierścień, jak obrys „outside” w Figmie. Pierścień leży
+   pod oknem i nigdy nie prześwituje przez raster (w trakcie morfu okno nie ma papieru). Skrypt skaluje go wokół
+   środka: schowany pod kadrem (0.95), gdy zdjęcie się formuje lub rozsypuje, wysuwa się spod niego, gdy jest gotowe. */
+.d-how__photo { position: relative; flex: none; width: calc(757 * var(--u)); aspect-ratio: 757 / 562; }
+@media (min-width: 1600px) { .d-how__photo { width: calc(832.7 * var(--u)); } }
+.d-how__shape { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+.d-how__outline { fill: var(--c-black); stroke: var(--c-black); stroke-width: 24; stroke-linejoin: miter; stroke-miterlimit: 4;
   transform-box: view-box; transform-origin: 50% 50%; }
-.d-how__gearset { position: absolute; inset: 0; }
-.d-how__gear { position: absolute; rotate: var(--rot, 0deg); }
-.d-how__gear > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.d-how__window { position: absolute; left: 1.7173%; top: 2.3132%; width: 96.631%; height: 97.954%; overflow: hidden;
+  clip-path: polygon(95.215% 94.428%, 100% 67.575%, 97.334% 11.353%, 90.084% 3.633%, 64.32% 0%, 7.903% 4.029%,
+    0% 13.806%, 1.094% 36.149%, 0% 86.285%, 10.253% 100%, 76.828% 97.457%); }
+.d-how__window .riso { position: absolute; inset: 0; }
+.d-how__window .riso > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.d-how__window .riso > img + img { visibility: hidden; }   /* bez WebGPU: widać pierwsze zdjęcie */
+/* zanim riso się narysuje (albo bez WebGPU): zdjęcie w odcieniach szarości, wejście przez opacity ze skryptu */
+.d-how__window .riso > img { filter: grayscale(1) contrast(1.1); }
 
 
 /* ---------- 5 · ZOBACZ, JAK ROBILI TO INNI (Figma 7243:48, ramka 1440 → u = px · 1496/1440) ----------
@@ -790,25 +770,12 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 /* kształt pod środkowym kaflem: stoi w miejscu (środek ekranu), kafle jadą nad nim */
 .d-reels__shape { position: absolute; z-index: 0; left: calc(50% - 145.45 * var(--u) - 63 * var(--u)); top: calc(56 * var(--u) - 46.9 * var(--u));
   width: calc(412.1 * var(--u)); height: calc(690.5 * var(--u)); transform-origin: 50% 40%; pointer-events: none; }
-.d-reels__shape svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.d-reels__shape path { stroke-width: calc(9 * 1.0389 * var(--u)); }   /* obrys w px ekranu (non-scaling-stroke) = 9 px Figmy */
+.d-reels__shape img { display: block; width: 100%; height: 100%; }
 .d-reels__track { position: absolute; inset: 0; }
 .d-reel { position: absolute; left: 50%; top: calc(56 * var(--u)); user-select: none; will-change: transform, opacity; }
-.d-reel__media { position: relative; aspect-ratio: 9 / 16; overflow: hidden; pointer-events: none; background: var(--c-black); }
-.d-reel__media video { position: absolute; left: 0; top: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-.d-reel__media::after { content: ""; position: absolute; inset: -1px; background: var(--c-black); opacity: calc(var(--dim, 0) * 0.55); pointer-events: none; }
-.d-reel__title, .d-reel__meta { opacity: calc(1 - var(--dim, 0) * 0.45); }
-.d-reel:not(.is-active) { cursor: pointer; }
-/* dźwięk: w prawym dolnym rogu aktywnego (środkowego) kafla — kafel 280 px Figmy, 9:16, góra 56u */
-.d-reels__sound { position: absolute; z-index: 20; left: calc(50% + 140 * 1.0389 * var(--u) - 60 * var(--u)); top: calc(56 * var(--u) + 280 * 1.0389 * 16 / 9 * var(--u) - 60 * var(--u));
-  display: flex; align-items: center; justify-content: center; width: calc(44 * var(--u)); height: calc(44 * var(--u)); min-width: 36px; min-height: 36px; padding: 0;
-  border: 0; border-radius: 50%; background: rgba(0, 0, 0, 0.55); color: var(--c-white); cursor: pointer; transition: opacity 200ms ease; }
-.d-reels__sound svg { width: 55%; height: 55%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.d-reels__sound .d-reels__spk { fill: currentColor; }
-.d-reels__sound .d-reels__on, .d-reels__sound[aria-pressed="true"] .d-reels__off { display: none; }
-.d-reels__sound[aria-pressed="true"] .d-reels__on { display: inline; }
-.d-reels__sound:focus-visible { outline: 2px solid var(--c-black); outline-offset: 3px; }
-.d-reels__vp.is-moving .d-reels__sound { opacity: 0; pointer-events: none; }
+.d-reel__media { position: relative; aspect-ratio: 9 / 16; pointer-events: none;
+  background: #E4E4E0; border: 1px solid #BDBDB8; color: #BDBDB8; }
+.d-reel__media .box-label { background: #E4E4E0; color: #555; }
 .d-reel__title { margin: calc(18.7 * var(--u)) 0 0; font-family: var(--f-display); font-weight: 400; font-size: calc(24.93 * var(--u));
   line-height: 1.2; letter-spacing: calc(-0.64 * var(--u)); text-transform: uppercase; color: var(--c-black); }
 .d-reel__meta { display: flex; flex-wrap: wrap; gap: calc(7.27 * var(--u)); margin: calc(4.16 * var(--u)) 0 0;
@@ -817,8 +784,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 /* strzałki na krawędziach contentu, w pionie na środku środkowego kafla */
 .d-reels__arrow { position: absolute; z-index: 3; top: calc(56 * var(--u) + 258.6 * var(--u) - 29.1 * var(--u)); width: calc(58.2 * var(--u)); height: calc(58.2 * var(--u));
   display: flex; align-items: center; justify-content: center; padding: 0; border: 0; cursor: pointer;
-  background: url("design-assets/reels-arrow.svg?v=2") no-repeat 0 0 / 100% 100%;   /* zielony kształt, czarna strzałka */
-  font-family: var(--f-body); font-weight: 600; font-size: calc(24.93 * var(--u)); line-height: 0.9; color: var(--c-black); }
+  background: url("design-assets/v2026-10-05/reels-arrow.svg") no-repeat 0 0 / 100% 100%;
+  font-family: var(--f-body); font-weight: 600; font-size: calc(24.93 * var(--u)); line-height: 0.9; color: var(--c-white); }
 .d-reels__arrow--prev { left: 40px; transform: scaleX(-1); }   /* odbita jak w Figmie: strzałka w lewo */
 .d-reels__arrow--next { right: 40px; }
 .d-reels__arrow:focus-visible, .d-reels__ig:focus-visible { outline: 2px solid var(--c-black); outline-offset: 4px; }
@@ -826,34 +793,30 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 
 /* ---------- 7 · NIE ROBIMY KONKURSÓW (Figma 7243:50, ramka 1440 → u = px · 1496/1440) ----------
    Nagłówek, pod nim po lewej dwa akapity, po prawej kolumna czterech liczb (liczba + plakietka obok, dół do dołu);
-   pod liczbami tło obu sekcji zmienia się scrollem z kremu w czerń mentorów (paintAboutBg; kolaż zdjęć przeniesiony do końcowego CTA).
+   na dole kolaż zdjęć w rastrze riso w zielonej plamie (555 px Figmy) z przyciskiem Aplikuj. Dół zdjęcia jest
+   dołem sekcji — od razu pod nim zaczyna się czarna sekcja mentorów.
    Desktop: nagłówek i akapity wchodzą przy wjeździe sekcji, potem lewa kolumna stoi (sticky), a liczby jadą obok
    w górę zwykłym scrollem i po kolei wjeżdżają z maski i naliczają się. Gdy dół liczb dojedzie do dołu akapitów,
-   cała sekcja przewija się normalnie. Długość osi liczb liczy skrypt (placeAbout). */
-/* „Nie robimy konkursów” → mentorzy: jednolite tło obu sekcji sterowane scrollem (krem → czerń, paintAboutBg);
-   po przekroczeniu połowy (.is-dark) teksty sekcji przechodzą w biel. Pas 420u pod liczbami to miejsce na przejście. */
-.d-about, .d-mentors { background: var(--c-cream); }
-.d-about { position: relative; z-index: 2; padding-bottom: calc(420 * var(--u)); overflow: clip; color: var(--c-black); }
-.d-about__title, .d-about__text .d-body, .d-about__num { transition: color 300ms ease; }
-.d-about.is-dark .d-about__title, .d-about.is-dark .d-about__text .d-body, .d-about.is-dark .d-about__num { color: var(--c-white); }
+   cała sekcja przewija się normalnie, a wjeżdżające zdjęcie formuje się z kropek, plama wysuwa się spod niego,
+   na końcu przycisk. Długość osi liczb liczy skrypt (placeAbout). */
+.d-about { position: relative; z-index: 2; background: var(--c-cream); overflow: clip; }
 .d-about__pin { padding-top: calc(115.3 * var(--u)); }
 .d-about__title { margin: 0; width: calc(837.4 * var(--u)); font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u));   /* 88 px */
   line-height: 1.1; letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-black); }
 /* lewa kolumna: nagłówek + akapity (od x = 40; szersze niż 585 px Figmy, żeby ostatnie słowa nie zostawały same
    w linii), prawa: liczby od x = 875, góra równo z akapitami (wysokość nagłówka 3 × 1.1 × 91.42 + odstęp 41.5). */
-.d-about__body { display: grid; grid-template-columns: auto auto; justify-content: space-between; align-items: start; padding: 0 40px; }
+.d-about__body { display: grid; grid-template-columns: auto auto; justify-content: space-between; align-items: start; padding: 0 40px; }   /* liczby dosunięte do prawej krawędzi contentu (w 1440: x = 875 jak w Figmie) */
 .d-about__lead { display: flex; flex-direction: column; gap: calc(41.5 * var(--u)); }
 .d-about__text { width: calc(680 * var(--u)); display: flex; flex-direction: column; gap: calc(33.2 * var(--u)); }
 .d-about__text > p { margin: 0; text-wrap: pretty; }
-/* liczby wg Figmy 7266:1873: liczba 152 px nad plakietką (32 px, wys. 62), odstęp 16; blok ~200 px od prawej krawędzi contentu */
-.d-about__stats { display: flex; flex-direction: column; align-items: flex-start; gap: calc(72 * var(--u)); margin: calc(343.2 * var(--u)) calc(200 * var(--u)) 0 0; }
-.d-about__stat { display: flex; flex-direction: column; align-items: flex-start; gap: calc(16.6 * var(--u)); }
-.d-about__num { margin: 0; overflow: hidden; font-family: var(--f-display); font-weight: 400; font-size: calc(157.9 * var(--u)); line-height: 1.1;   /* 152 px */
-  letter-spacing: calc(-2.24 * var(--u)); text-transform: uppercase; color: var(--c-black); white-space: nowrap; }
+.d-about__stats { display: flex; flex-direction: column; align-items: flex-start; gap: calc(103.9 * var(--u)); margin-top: calc(343.2 * var(--u)); }
+.d-about__stat { display: flex; align-items: flex-end; gap: calc(24.9 * var(--u)); }
+.d-about__num { margin: 0; overflow: hidden; font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u)); line-height: 1.5;   /* 88 px, wiersz 132 */
+  letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-black); white-space: nowrap; }
 .d-about__ni { display: block; }
-.d-about__label { position: relative; isolation: isolate; box-sizing: border-box; margin: 0; width: max-content; height: calc(64.4 * var(--u));   /* 62 px */
-  padding: calc(10.2 * var(--u)) calc(22 * var(--u)) 0 calc(15.5 * var(--u));
-  font-family: var(--f-display); font-weight: 400; font-size: calc(33.2 * var(--u)); line-height: 1.2; letter-spacing: calc(-0.48 * var(--u));   /* 32 px */
+.d-about__label { position: relative; isolation: isolate; box-sizing: border-box; margin: 0; width: max-content; height: calc(53 * var(--u));
+  padding: calc(10 * var(--u)) calc(18 * var(--u)) 0 calc(13.4 * var(--u));
+  font-family: var(--f-display); font-weight: 400; font-size: calc(24 * var(--u)); line-height: 1.2; letter-spacing: calc(-0.48 * var(--u));
   text-transform: uppercase; white-space: nowrap; color: var(--c-black); }
 .d-about__label::before { content: ""; position: absolute; z-index: -1; inset: 0; background: no-repeat 0 0 / 100% 100%; }
 .d-about__label--1::before { background-image: url("design-assets/about-tag-1.svg"); transform: scaleX(-1); }   /* odbite jak w Figmie */
@@ -861,6 +824,15 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-about__label--3::before { background-image: url("design-assets/about-tag-3.svg"); transform: scaleX(-1); }
 .d-about__label--4::before { background-image: url("design-assets/about-tag-4.svg"); }
 .d-about__lmask { overflow: hidden; }
+.d-about__photo { position: relative; margin-top: calc(166.2 * var(--u)); width: 100%; aspect-ratio: 1439.59 / 554.625; }
+.d-about__blob { position: absolute; inset: 0; width: 100%; height: 100%; display: block; transform-origin: 50% 100%; }
+.d-about__masked { position: absolute; inset: 0; }   /* kształt plamy jest w alfie kolażu — chmura kropek może wyjść poza niego */
+.d-about__masked .riso { position: absolute; inset: 0; }
+.d-about__masked .riso > img { filter: grayscale(1) contrast(1.1); }
+/* przycisk na zdjęciu (Figma 7268:1948: 312.5 × 106.6, środek 0.4 px w prawo od osi, góra 389.8 / 554.6 wysokości) */
+.d-about__cta { position: absolute; left: calc(50% + 0.4 * var(--u)); top: 70.29%; translate: -50% 0; }
+.d-about__btn { width: calc(324.6 * var(--u)); height: calc(110.7 * var(--u)); gap: calc(35 * var(--u)); font-size: calc(50.05 * var(--u)); letter-spacing: calc(-1 * var(--u)); }
+.d-about__btn .d-btn__arrow { width: calc(40.8 * var(--u)); height: calc(35 * var(--u)); font-size: calc(35 * var(--u)); }
 @media (min-width: 1024px) {
   .d-about__lead { position: sticky; top: calc(115.3 * var(--u)); }
 }
@@ -869,7 +841,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
    Scena 1413u × 760u (= content 1360 px przy 1440): miniatury 265 × 353 (3:4) przy dolnej krawędzi, aktywne zdjęcie
    570 × 760 od x = 562. Kafle (zapętlone) ustawia skrypt z ciągłej pozycji: k = −2, −1 po lewej pod opisem, 0 duże,
    +1 po prawej pod strzałkami, dalsze poza kadrem. Opis aktywnej osoby w lewym górnym rogu sceny. */
-.d-mentors { position: relative; z-index: 2; color: var(--c-white); overflow: clip;
+.d-mentors { position: relative; z-index: 2; background: var(--c-black); color: var(--c-white); overflow: clip;
   padding: calc(280 * var(--u)) 0 calc(160 * var(--u)); }   /* góra 2× (było 140) */
 .d-mentors__head { display: flex; align-items: flex-start; justify-content: space-between; gap: calc(40 * var(--u)); padding: 0 40px; }
 .d-mentors__title { margin: 0; width: calc(868 * var(--u)); font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u));   /* 88 px */
@@ -880,15 +852,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-mentors__rows { display: flex; flex-direction: column; gap: calc(48 * var(--u)); margin-top: calc(82 * var(--u)); }
 .d-marquee { overflow: hidden; cursor: grab; touch-action: pan-y; -webkit-user-select: none; user-select: none; }
 .d-marquee.is-dragging { cursor: grabbing; }
-/* kafle na całych pikselach: szerokość, odstęp i wysokość zdjęcia zaokrąglone (round), przesunięcie rzędu zaokrąglane
-   w skrypcie do pikseli urządzenia, a pionowy ułamek pozycji rzędu kasowany (snapRows). Przy ułamkowych krawędziach
-   warstwy kafla (zdjęcie w zoomie, raster, ciemny gradient bio) były przycinane różnie i przy brzegu zostawał
-   jasny pasek, do którego nie dochodziło zaciemnienie */
-.d-marquee { position: relative; }
-.d-marquee__track { display: flex; gap: round(calc(24 * var(--u)), 1px); width: max-content; will-change: transform; }
-.d-mtile { --tw: round(calc(300 * var(--u)), 1px); flex: none; width: var(--tw); outline: none; }
-.d-mtile__photo { position: relative; overflow: hidden; height: round(calc(var(--tw) * 4 / 3), 1px); background: var(--c-black); }
-@supports not (width: round(1.5px, 1px)) { .d-marquee__track { gap: calc(24 * var(--u)); } .d-mtile { --tw: calc(300 * var(--u)); } .d-mtile__photo { height: auto; aspect-ratio: 3 / 4; } }   /* tło jak sekcja: przy ułamkowych pikselach krawędź zdjęcia nie prześwituje jasną linią */
+.d-marquee__track { display: flex; gap: calc(24 * var(--u)); width: max-content; will-change: transform; }
+.d-mtile { flex: none; width: calc(300 * var(--u)); outline: none; }
+.d-mtile__photo { position: relative; overflow: hidden; aspect-ratio: 3 / 4; background: var(--c-black); }   /* tło jak sekcja: przy ułamkowych pikselach krawędź zdjęcia nie prześwituje jasną linią */
 /* warstwy w kaflu wychodzą 1–2 px poza kadr (przycina je overflow): kafle jadą o ułamki pikseli, a zdjęcie, raster
    i bio na hover są osobnymi warstwami — każda inaczej zaokrągla krawędź i spod spodu prześwitywał pasek */
 .d-mtile__photo img { position: absolute; left: -1px; top: -1px; display: block; width: calc(100% + 2px); height: calc(100% + 2px); object-fit: cover; pointer-events: none; }
@@ -916,131 +882,6 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-mtile:focus-visible .d-mtile__photo { outline: 2px solid var(--c-blue-500); outline-offset: -2px; }
 .d-marquee.is-dragging .d-mtile__bio { transition: none; }
 @media (prefers-reduced-motion: reduce) { .d-mtile__bio, .d-mtile__photo img, .d-mtile__photo > .d-mtile__riso { transition: none; } }
-
-/* ---------- 8 · DLA KOGO + CTA (Figma 7283:2950) ----------
-   Scena = ramka Figmy 1440 × 1727 (1496u × 1794.2u), wszystko w pozycjach z Figmy (× 1.0389): pytanie 88 px wielkimi
-   literami od x = 286, dwa akapity obok siebie (375 + 40 + 435), pasek zdjęć od y = 630.7 (3 zdjęcia w schodkach,
-   ramka-wielokąt #B9C5FF + zdjęcie przycięte tą samą ścieżką — inline SVG, kadry wycięte 1:1 z Figmy),
-   na końcu (Figma 7291:3275) „Przyłożysz się?” 88 px + „Masz szansę…” 60 px, od lewej krawędzi contentu jak pytanie.
-   Pasek (.d-who__track) jedzie w lewo przy scrollu: wjeżdża zza prawej krawędzi ekranu (pierwsze zdjęcie startuje
-   przy 85 % szerokości) i kończy, gdy trzecie zdjęcie stanie z prawym marginesem równym lewemu marginesowi pierwszego
-   (paintWho). Zdjęcie na środku ekranu jest powiększone, przy krawędziach mniejsze. Jednostka zdjęć --pu. */
-.d-who { position: relative; z-index: 2; color: var(--c-white); overflow: clip; }
-/* „Dla kogo” i FAQ: wspólne tło sterowane scrollem (czarny → niebieski, paintWhoBg); po przekroczeniu
-   połowy (.is-blue) teksty przechodzą w czarny, a duży Aplikuj w biały kształt (jak w Hero na niebieskim) */
-.d-who, .d-faq { background: var(--c-black); }
-.d-who__title, .d-who__body .d-body, .d-who__cta > p, .d-faq__title, .d-faq__q, .d-faq__a .d-body { transition: color 300ms ease; }
-.d-who.is-blue .d-who__title, .d-who.is-blue .d-who__body .d-body, .d-who.is-blue .d-who__cta > p { color: var(--c-black); }
-.d-who__stage { --pu: var(--u); height: calc(1972 * var(--u)); }   /* tekst końcowy pod paskiem (1547.5u) + 287.6u + dolny margines z Figmy 137u */
-/* blok tekstu przy lewej krawędzi contentu (40 px od krawędzi ekranu, także gdy ramka 1496u jest węższa od ekranu) */
-.d-who__title { position: absolute; z-index: 2; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); top: calc(218.9 * var(--u)); width: calc(902.8 * var(--u)); margin: 0;
-  font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u)); line-height: 1.1;   /* 88 px */
-  letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-white); }
-.d-who__body { position: absolute; z-index: 2; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); top: calc(482.8 * var(--u)); display: grid;
-  grid-template-columns: calc(389.6 * var(--u)) calc(451.9 * var(--u)); column-gap: calc(41.6 * var(--u)); }
-.d-who__body .d-body { margin: 0; color: var(--c-white); text-wrap: pretty; }
-.d-who__track { position: absolute; z-index: 1; left: 0; top: calc(655.2 * var(--u)); width: 100%; height: calc(782.3 * var(--pu)); will-change: transform; }
-.d-who__ph { position: absolute; margin: 0; will-change: scale; }
-.d-who__ph svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.d-who__frame { fill: var(--c-blue-500); stroke: var(--c-blue-500); stroke-width: 22.49; }
-.d-who__ph--1 { left: calc(88.3 * var(--pu)); top: 0; width: calc(822.6 * var(--pu)); height: calc(547.5 * var(--pu)); }
-.d-who__ph--2 { left: calc(974.5 * var(--pu)); top: calc(152.7 * var(--pu)); width: calc(571.6 * var(--pu)); height: calc(542.3 * var(--pu)); }
-.d-who__ph--3 { left: calc(1634.2 * var(--pu)); top: calc(274.3 * var(--pu)); width: calc(762 * var(--pu)); height: calc(508 * var(--pu)); }
-/* tekst końcowy pod paskiem zdjęć (pasek kończy się na 1437.5u — w Figmie tekst stoi zaraz pod drugim zdjęciem, ale pasek
-   jedzie, więc trzecie zdjęcie przejechałoby przez tekst); lewa krawędź jak pytanie */
-.d-who__cta { position: absolute; z-index: 2; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); top: calc(1547.5 * var(--u));
-  display: flex; flex-direction: column; align-items: flex-start; gap: calc(49.87 * var(--u)); }
-.d-who__cta > p { margin: 0; font-family: var(--f-display); font-weight: 400; line-height: 1.1; text-transform: uppercase; color: var(--c-white); }
-.d-who__q { font-size: calc(91.42 * var(--u)); letter-spacing: calc(-2.24 * var(--u)); }   /* 88 px */
-.d-who__chance { width: calc(828 * var(--u)); font-size: calc(62.33 * var(--u)); letter-spacing: calc(-1.52 * var(--u)); }   /* 60 px */
-
-/* ---------- 9 · FAQ ---------- */
-.d-faq { position: relative; z-index: 2; color: var(--c-white); }
-.d-faq__frame { display: grid; grid-template-columns: 1fr calc(868 * var(--u)); column-gap: calc(40 * var(--u)); align-items: start;
-  padding: calc(260 * var(--u)) 40px calc(200 * var(--u)); }
-.d-faq__title { position: sticky; top: calc(56px + 80 * var(--u)); margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u));   /* 88 px */
-  line-height: 1.1; letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-white); }
-.d-faq__list { border-bottom: 2px solid currentColor; }
-.d-faq__item { border-top: 2px solid currentColor; }
-.d-faq__h { margin: 0; }
-.d-faq__q { display: flex; align-items: center; justify-content: space-between; gap: calc(32 * var(--u)); width: 100%; padding: calc(28 * var(--u)) 0;
-  border: 0; background: none; cursor: pointer; text-align: left; color: var(--c-white);
-  font-family: var(--f-display); font-weight: 400; font-size: calc(41.56 * var(--u)); line-height: 1.05;   /* 40 px, jak tytuły umiejętności */
-  letter-spacing: calc(-0.64 * var(--u)); text-transform: uppercase; }
-.d-faq__q:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
-.d-faq__sign { display: inline-flex; flex: none; align-items: center; justify-content: center; width: calc(46 * var(--u)); height: calc(40 * var(--u));
-  background: url("design-assets/btn-arrow.svg") no-repeat 0 0 / 100% 100%; color: var(--c-black);
-  font-family: var(--f-body); font-weight: 600; font-size: calc(30 * var(--u)); line-height: 1; transition: transform 200ms ease; }
-@media (hover: hover) { .d-faq__q:hover .d-faq__sign { transform: scale(1.12) rotate(-6deg); } }
-/* rozsuwanie: wysokość przez grid-template-rows 0fr → 1fr (bez mierzenia w JS), tekst lekko wjeżdża i się pojawia;
-   po zamknięciu skrypt ustawia hidden (treść znika z drzewa dostępności) */
-.d-faq__a { display: grid; grid-template-rows: 0fr; padding: 0 calc(96 * var(--u)) 0 0;
-  transition: grid-template-rows 520ms cubic-bezier(0.22, 1, 0.36, 1); }
-.d-faq__a.is-open { grid-template-rows: 1fr; }
-.d-faq__a[hidden] { display: none; }
-.d-faq__in { min-height: 0; overflow: hidden; }   /* w środku, żeby odstęp pod tekstem też się zwijał */
-.d-faq__a .d-body { margin: 0; padding-bottom: calc(32 * var(--u)); color: var(--c-white); text-wrap: pretty;
-  opacity: 0; translate: 0 calc(-10 * var(--u)); transition: opacity 320ms ease, translate 520ms cubic-bezier(0.22, 1, 0.36, 1); }
-.d-faq__a.is-open .d-body { opacity: 1; translate: none; transition-delay: 80ms, 0ms; }
-.d-faq__sign { transition: transform 200ms ease, rotate 360ms cubic-bezier(0.22, 1, 0.36, 1); }
-.d-faq__q[aria-expanded="true"] .d-faq__sign { rotate: 180deg; }
-@media (prefers-reduced-motion: reduce) { .d-faq__a, .d-faq__a .d-body, .d-faq__sign { transition: none; } }
-.d-faq.is-blue, .d-faq.is-blue .d-faq__title, .d-faq.is-blue .d-faq__q, .d-faq.is-blue .d-faq__a .d-body { color: var(--c-black); }
-
-/* ---------- 10 · CTA (Figma 7291:3094) ----------
-   Ramka Figmy 1440 × 1216 = 1496u × 1263.3u, pozycje × 1.0389. Na górze nagłówek 88 px i duży Aplikuj (399.7 × 138 Figmy):
-   biały, a tam, gdzie pada snop — niebieski (.d-btn__lit przycinany skryptem do wielokąta snopa, paintLit).
-   Latarka w prawym górnym rogu (geometria jak w Problemie, obrót −51.73°, środek 1300 / 435 px) ze snopem pod tekstem;
-   celuje za kursorem (--aim ze skryptu) i mruga na klik. Od y = 661 px kolaż zdjęć na całą szerokość (1440 × 555,
-   jak wcześniej w „Nie robimy konkursów”): zielona plama (zawsze zielona, także pod snopem);
-   na zdjęciu wyśrodkowane tagi (od 331 px wysokości zdjęcia) i linki do social mediów. */
-.d-cta { position: relative; z-index: 2; background: var(--c-blue-500); overflow: clip; }
-.d-cta__stage { height: calc(1263.3 * var(--u)); }
-.d-cta__head { position: absolute; z-index: 1; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); top: calc(209.65 * var(--u));
-  display: flex; flex-direction: column; align-items: flex-start; gap: calc(33.24 * var(--u)); }
-.d-cta__title { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u)); line-height: 1.1;   /* 88 px */
-  letter-spacing: calc(-2.24 * var(--u)); text-transform: uppercase; color: var(--c-black); }
-/* duży Aplikuj: kształt przycisku z Hero, 2× */
-.d-btn--big { width: calc(415.2 * var(--u)); height: calc(143.4 * var(--u)); gap: calc(44.8 * var(--u)); font-size: calc(64 * var(--u)); letter-spacing: calc(-1.28 * var(--u)); }
-.d-btn--big .d-btn__arrow { width: calc(52.2 * var(--u)); height: calc(44.8 * var(--u)); font-size: calc(44.8 * var(--u)); }
-.d-cta__btn { position: relative; }   /* biały; w świetle snopa niebieski (jak w Problemie) */
-.d-cta__btn > :not(.d-btn__lit) { position: relative; }
-
-/* zdjęcie: kolaż w plamie (kształt plamy w alfie kolażu — chmura kropek może wyjść poza niego) */
-.d-cta__photo { position: absolute; left: 0; top: calc(686.7 * var(--u)); width: 100%; aspect-ratio: 1439.59 / 554.625; }
-.d-cta__blobs { position: absolute; inset: 0; transform-origin: 50% 100%; }
-.d-cta__blob { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.d-cta__masked { position: absolute; inset: 0; }
-.d-cta__masked .riso { position: absolute; inset: 0; }
-.d-cta__masked .riso > img { filter: grayscale(1) contrast(1.1); }
-.d-cta__tags { position: absolute; left: 0; right: 0; top: 59.68%; display: flex; flex-direction: column; align-items: center; gap: calc(8.3 * var(--t)); }
-.d-cta__row { display: flex; justify-content: center; gap: calc(8.3 * var(--t)); margin: 0; }
-/* tagi-linki: kształty z Figmy rozciągnięte na szerokość treści (ikona + napis) */
-.d-tag--social { display: inline-flex; align-items: center; gap: calc(9 * var(--t)); width: auto; padding: 0 calc(17 * var(--t)) 0 calc(13 * var(--t));
-  background-size: 100% 100%; text-decoration: none; }
-.d-tag--social svg { flex: none; width: 0.78em; height: 0.78em; }
-.d-tag--ig { background-image: url("design-assets/tag-instagram.svg"); }
-.d-tag--in { background-image: url("design-assets/tag-linkedin.svg"); }
-.d-tag--social:focus-visible { outline: 2px solid var(--c-black); outline-offset: 3px; }
-
-/* latarka i snop: wrapper wyśrodkowany w punkcie z Figmy, obrót za kursorem przez --aim (ustawia skrypt na sekcji) */
-.d-cta__fl, .d-cta__beam { position: absolute; display: flex; align-items: center; justify-content: center; pointer-events: none;
-  left: calc(1350.85 * var(--u)); top: calc(452.28 * var(--u)); width: calc(633.5 * var(--du)); height: calc(627.8 * var(--du));
-  translate: -50% -50%; rotate: var(--aim, 0deg); }
-.d-cta__beam { z-index: 0; }
-.d-cta__fl--a { z-index: 3; }
-.d-fl--cta { position: relative; flex: none; width: calc(431.81 * var(--du)); height: calc(466.254 * var(--du)); transform: rotate(-51.73deg);
-  scale: var(--press, 1); transition: scale 160ms cubic-bezier(0.2, 0.8, 0.2, 1); }
-.d-fl--cta .d-fl__shape { position: absolute; left: calc(-2.99 * var(--du)); top: calc(-2.12 * var(--du)); width: calc(441.89 * var(--du)); height: calc(473.505 * var(--du)); }
-.d-fl--cta .d-fl__photo { position: absolute; left: calc(-0.14 * var(--du)); top: calc(-30.24 * var(--du)); width: calc(425.514 * var(--du)); height: calc(546.063 * var(--du));
-  display: flex; align-items: center; justify-content: center; }
-.d-fl--cta .riso { width: calc(481.885 * var(--du)); height: calc(311.404 * var(--du)); transform: rotate(75deg); }
-.d-fl--cta .d-fl__beam { left: calc(-3160.19 * var(--du)); top: calc(-2985.97 * var(--du)); width: calc(3196.97 * var(--du)); height: calc(3050.33 * var(--du)); }
-.d-fl--cta .d-fl__hit { position: absolute; left: calc(-2.99 * var(--du)); top: calc(-2.12 * var(--du)); width: calc(441.89 * var(--du)); height: calc(473.505 * var(--du));
-  clip-path: polygon(0.00% 18.44%, 6.01% 7.02%, 11.75% 2.81%, 21.24% 0.00%, 30.73% 2.36%, 43.71% 13.53%, 56.76% 30.37%, 61.74% 41.35%, 78.20% 58.64%, 89.21% 69.37%, 100.00% 82.90%, 100.00% 94.13%, 91.46% 100.00%, 80.47% 98.60%, 73.76% 93.98%, 63.44% 83.54%, 52.93% 71.64%, 39.75% 60.49%, 32.24% 56.98%, 21.24% 50.47%, 12.98% 41.35%, 4.71% 35.73%, 0.00% 27.56%, 0.00% 18.44%);
-  pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.d-cta:not(.is-lit) .d-fl__hit { pointer-events: none; }
-.d-cta__beam .d-fl__beam { opacity: 0; }   /* zapala skrypt (switchOn) przy wjeździe sekcji */
 
 /* ---------- mobile (brak projektu w Figmie — układ tymczasowy) ---------- */
 @media (max-width: 1023px) {
@@ -1083,10 +924,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-problem__big { font-size: calc(56 * var(--m)); letter-spacing: calc(-1.12 * var(--m)); }
   .d-problem__sub { margin-top: calc(16 * var(--m)) !important; }
   .d-problem__sub br { display: none; }
-  .d-problem__apply { margin-top: calc(24 * var(--m)); }
-  .d-apply { gap: 12px 18px; }
-  .d-apply__date { font-size: 19px; letter-spacing: -0.37px; }
-  .d-apply--big { gap: calc(16 * var(--m)) calc(24 * var(--m)); }
+  .d-problem__btn { margin-top: calc(24 * var(--m)); }
   .d-problem__flashlight, .d-problem__beam { --du: calc(var(--m) * 0.42); left: calc(330 * var(--m)); top: calc(96 * var(--m)); }
 
   .d-learn__frame { min-height: 0; display: flex; flex-direction: column; padding: calc(72 * var(--m)) calc(20 * var(--m)) calc(80 * var(--m)); }
@@ -1095,13 +933,13 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-skill__title { font-size: calc(34 * var(--m)); letter-spacing: calc(-0.68 * var(--m)); }
   .d-skill__desc { margin-top: 16px; }
 
-  .d-how__frame { padding: calc(29.3 * var(--m)) calc(20 * var(--m)) calc(80 * var(--m)); }
+  .d-how__frame { padding: calc(72 * var(--m)) calc(20 * var(--m)) calc(80 * var(--m)); }
   .d-how__title { font-size: calc(64 * var(--m)); letter-spacing: calc(-1.28 * var(--m)); }
   .d-how__rows { flex-direction: column; align-items: stretch; gap: calc(24 * var(--m)); margin-top: calc(32 * var(--m)); }
   .d-how__steps { width: auto; }
   .d-how__step { min-height: 0; padding: calc(28 * var(--m)) 0; --u: calc(var(--m) * 0.8); }   /* plakietka i odstępy w skali mobile */
-  .d-how__media { position: static; margin-right: 0; }
-  .d-how__gears { width: min(100%, calc(320 * var(--m))); margin: 0 auto; }
+  .d-how__media { position: static; }
+  .d-how__photo { width: 100%; }
   .d-how__desc { margin-top: calc(32 * var(--m)); }
   .d-reels { --u: calc(var(--m) * 0.75); padding: calc(72 * var(--m)) 0 calc(56 * var(--m)); }
   .d-reels__head { flex-direction: column; align-items: flex-start; gap: calc(20 * var(--m)); padding: 0 calc(20 * var(--m)); }
@@ -1109,59 +947,27 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-reels__aside { width: auto; gap: calc(16 * var(--m)); }
   .d-about { --u: calc(var(--m) * 0.75); }
   .d-about__pin { padding-top: calc(72 * var(--m)); }
-  /* mobile: teksty w przepływie, pasek zdjęć (ta sama mechanika, skala --pu) między akapitami a przyciskiem */
-  .d-who { --u: calc(var(--m) * 0.75); padding: calc(72 * var(--m)) 0 calc(64 * var(--m)); }
-  .d-who__stage { --pu: calc(var(--m) * 0.4); height: auto; }
-  .d-who__title, .d-who__body, .d-who__track, .d-who__cta { position: relative; left: auto; top: auto; right: auto; }
-  .d-who__title { width: auto; padding: 0 calc(20 * var(--m)); font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
-  .d-who__body { grid-template-columns: 1fr; row-gap: calc(16 * var(--m)); margin-top: calc(20 * var(--m)); padding: 0 calc(20 * var(--m)); }
-  .d-who__track { margin-top: calc(40 * var(--m)); }
-  .d-who__ph--1 { left: calc(20 * var(--m)); }
-  .d-who__cta { margin-top: calc(56 * var(--m)); padding: 0 calc(20 * var(--m)); gap: calc(20 * var(--m)); }
-  .d-who__q { font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
-  .d-who__chance { width: auto; font-size: calc(30 * var(--m)); letter-spacing: calc(-0.6 * var(--m)); }
-  .d-who__chance br { display: none; }
-  .d-who__stage { height: auto; }
-  .d-faq { --u: calc(var(--m) * 0.75); }
-  .d-faq__frame { display: block; padding: calc(120 * var(--m)) calc(20 * var(--m)) calc(72 * var(--m)); }
-  .d-faq__title { position: static; margin-bottom: calc(28 * var(--m)); font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
-  .d-faq__q { gap: calc(16 * var(--m)); padding: calc(18 * var(--m)) 0; font-size: calc(24 * var(--m)); letter-spacing: calc(-0.4 * var(--m)); }
-  .d-faq__sign { width: calc(34 * var(--m)); height: calc(30 * var(--m)); font-size: calc(22 * var(--m)); }
-  .d-faq__a { padding: 0 calc(8 * var(--m)) 0 0; }
-  .d-faq__a .d-body { padding-bottom: calc(20 * var(--m)); }
-  /* CTA: bez latarki z rogu; zdjęcie w przepływie, tagi pod nim */
-  .d-cta { --u: calc(var(--m) * 0.75); }
-  .d-cta__stage { height: auto; display: flex; flex-direction: column; padding: calc(96 * var(--m)) 0 calc(48 * var(--m)); }
-  .d-cta__beam, .d-cta__fl--a { display: none; }
-  .d-cta__head { position: static; gap: calc(24 * var(--m)); padding: 0 calc(20 * var(--m)); }
-  .d-cta__title { font-size: calc(44 * var(--m)); letter-spacing: calc(-0.88 * var(--m)); }
-  .d-btn--big { width: calc(296 * var(--m)); height: calc(102 * var(--m)); gap: calc(32 * var(--m)); font-size: calc(45.7 * var(--m)); letter-spacing: calc(-0.9 * var(--m)); }
-  .d-btn--big .d-btn__arrow { width: calc(37 * var(--m)); height: calc(32 * var(--m)); font-size: calc(32 * var(--m)); }
-  /* zdjęcie: ramka o proporcji kolażu (::before), pod nią tagi w przepływie; warstwy plamy i kolażu kryją tylko ramkę */
-  .d-cta__photo { position: relative; top: auto; margin-top: calc(56 * var(--m)); aspect-ratio: auto; display: flex; flex-direction: column; }
-  .d-cta__photo::before { content: ""; display: block; width: 100%; aspect-ratio: 1439.59 / 554.625; }
-  .d-cta__blobs, .d-cta__masked { bottom: auto; aspect-ratio: 1439.59 / 554.625; }
-  .d-cta__tags { position: static; margin-top: calc(24 * var(--m)); padding: 0 calc(16 * var(--m)); }
-  .d-cta__row { flex-wrap: wrap; }
   .d-mentors { --u: calc(var(--m) * 0.75); padding: calc(144 * var(--m)) 0 calc(72 * var(--m)); }
   .d-mentors__head { flex-direction: column; gap: calc(20 * var(--m)); padding: 0 calc(20 * var(--m)); }
   .d-mentors__title { width: auto; font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
   .d-mentors__lead { width: auto; }
   .d-mentors__rows { gap: calc(28 * var(--m)); margin-top: calc(32 * var(--m)); }
-  .d-marquee__track { gap: round(calc(12 * var(--m)), 1px); }
-  .d-mtile { --tw: round(calc(220 * var(--m)), 1px); }
+  .d-marquee__track { gap: calc(12 * var(--m)); }
+  .d-mtile { width: calc(220 * var(--m)); }
   .d-mtile__name { font-size: calc(24 * var(--m)); }
   .d-about__title { width: auto; font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
   .d-about__body { display: flex; flex-direction: column; gap: calc(40 * var(--m)); padding: 0 calc(20 * var(--m)); }
   .d-about__lead { gap: calc(24 * var(--m)); }
   .d-about__text { width: auto; gap: calc(16 * var(--m)); }
   .d-about__text br { display: none; }
-  .d-about__stats { width: 100%; gap: calc(32 * var(--m)); margin: 0; }
-  .d-about__stat { gap: calc(8 * var(--m)); }
-  .d-about__num { font-size: calc(88 * var(--m)); line-height: 1.1; letter-spacing: calc(-1.3 * var(--m)); }
-  .d-about__label { width: auto; max-width: 100%; height: auto; white-space: normal; font-size: calc(20 * var(--m));
+  .d-about__stats { width: 100%; gap: calc(24 * var(--m)); margin-top: 0; }
+  .d-about__stat { gap: calc(12 * var(--m)); }
+  .d-about__num { font-size: calc(64 * var(--m)); line-height: 1.2; }
+  .d-about__label { width: auto; max-width: 100%; height: auto; white-space: normal; font-size: calc(17 * var(--m));
     padding: calc(7 * var(--m)) calc(13 * var(--m)) calc(8 * var(--m)) calc(10 * var(--m)); }
-  .d-about { padding-bottom: calc(120 * var(--m)); }
+  .d-about__photo { margin-top: calc(48 * var(--m)); }
+  .d-about__btn { width: 176px; height: 60px; gap: 18px; font-size: 27px; letter-spacing: -0.54px; }
+  .d-about__btn .d-btn__arrow { width: 22px; height: 19px; font-size: 18px; }
   .d-reels__arrow--prev { left: calc(12 * var(--m)); }
   .d-reels__arrow--next { right: calc(12 * var(--m)); }
 }
@@ -1211,7 +1017,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     <h1 class="d-hero__title"><span class="d-hero__w d-hero__w--1"><span class="d-hero__wi">Startup</span></span> <span class="d-hero__w d-hero__w--2"><span class="d-hero__wi">disco</span></span><span class="d-hero__w d-hero__w--3"><span class="d-hero__wi">very</span></span> <span class="d-hero__w d-hero__w--4"><span class="d-hero__wi">Sprint</span></span></h1>
     <div class="d-hero__intro d-intro-in" id="hero-cta" style="--intro-delay: 560ms">
       <p class="d-body d-hero__lead" data-split="lines">Zanim zaczniesz budować, porozmawiaj z klientami:<br>pokażemy Ci, jak znaleźć problem, za którego<br>rozwiązanie ktoś będzie gotowy zapłacić.</p>
-      <span class="d-mask d-mask--btn d-apply"><a class="d-btn d-btn--shape d-mask__i" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date d-mask__i">Zgłoszenia do 19.10.2026</span></span>
+      <span class="d-mask d-mask--btn"><a class="d-btn d-btn--shape d-mask__i" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a></span>
     </div>
     <div class="d-hero__flashlight" aria-hidden="true">
       <div class="d-fl d-fl--hero">
@@ -1257,8 +1063,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       <p class="d-reveal" data-split="words">Najczęściej upadają, bo zbudowały coś, czego nikt nie chce.</p>
       <div class="d-problem__cta">
         <p class="d-problem__big d-reveal" data-split="words">Daj nam miesiąc</p>
-        <p class="d-problem__sub d-reveal" data-split="words">pokażemy Ci, jak rozmawiać <br>z potencjalnymi klientami i znaleźć <br>problem do rozwiązania.</p>
-        <div class="d-apply d-problem__apply"><a class="d-btn d-btn--shape d-problem__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Zgłoszenia do 19.10.2026</span></div>
+        <p class="d-problem__sub d-reveal" data-split="words">pokażemy Ci, jak rozmawiać<br>z potencjalnymi klientami i znaleźć<br>problem do rozwiązania.</p>
+        <a class="d-btn d-btn--shape d-problem__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>
@@ -1306,68 +1112,40 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   <div class="d-reels__car" id="reels-car">
     <button type="button" class="d-reels__arrow d-reels__arrow--prev" id="car-prev" aria-label="Poprzedni reel"><span aria-hidden="true">→</span></button>
     <div class="d-reels__vp" id="car-viewport">
-      <span class="d-reels__shape" aria-hidden="true"><svg viewBox="0 0 396.676 664.648" preserveAspectRatio="none" overflow="visible"><path id="reels-shape-path" d="M64.897 4.628L360.072 16.128L384.082 37.36L392.171 345.526L378.794 637.831L228.774 660.091L46.533 652.621L5.573 600.827L10.842 209.679L4.676 54.304Z" fill="#B9C5FF" stroke="#000" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" vector-effect="non-scaling-stroke"/></svg></span>
+      <span class="d-reels__shape" aria-hidden="true"><img src="design-assets/v2026-10-05/reels-active-shape.svg" width="396.676" height="664.648" alt=""></span>
       <div class="d-reels__track" id="car-track">
           <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/piotrek-czuprynski-chodzcie-ze-mna-na-urbex.webp" aria-label="Piotrek Czupryński: Chodźcie ze mną na Urbex…"><source data-src="design-assets/reels/piotrek-czuprynski-chodzcie-ze-mna-na-urbex.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/piotrek-czuprynski-chodzcie-ze-mna-na-urbex.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Chodźcie ze mną na Urbex…</h3>
-            <p class="d-reel__meta"><span>Piotrek Czupryński</span></p>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">Jak znalazłem problem</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
           </article>
           <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/weronika-gatkowska-jesli-algorytm-podsunal-ci-ten-film.webp" aria-label="Weronika Gątkowska: Jeśli algorytm podsunął Ci ten film"><source data-src="design-assets/reels/weronika-gatkowska-jesli-algorytm-podsunal-ci-ten-film.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/weronika-gatkowska-jesli-algorytm-podsunal-ci-ten-film.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Jeśli algorytm podsunął Ci ten film</h3>
-            <p class="d-reel__meta"><span>Weronika Gątkowska</span></p>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">Moje pierwsze discovery calle</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
           </article>
           <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/kacper-urbanowski-chodzcie-ze-mna-na-urbex.webp" aria-label="Kacper Urbanowski: Chodźcie ze mną na Urbex…"><source data-src="design-assets/reels/kacper-urbanowski-chodzcie-ze-mna-na-urbex.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/kacper-urbanowski-chodzcie-ze-mna-na-urbex.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Chodźcie ze mną na Urbex…</h3>
-            <p class="d-reel__meta"><span>Kacper Urbanowski</span></p>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">Zatrudniłem się u klienta</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
           </article>
           <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/piotrek-gatkowski-pomysl-na-homi.webp" aria-label="Piotrek Gątkowski: Pomysł na Homi…"><source data-src="design-assets/reels/piotrek-gatkowski-pomysl-na-homi.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/piotrek-gatkowski-pomysl-na-homi.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Pomysł na Homi…</h3>
-            <p class="d-reel__meta"><span>Piotrek Gątkowski</span></p>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">MVP w Excelu</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
           </article>
           <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/weronika-gatkowska-chodzcie-z-nami-na-urbex.webp" aria-label="Weronika Gątkowska: Chodźcie z nami na Urbex…"><source data-src="design-assets/reels/weronika-gatkowska-chodzcie-z-nami-na-urbex.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/weronika-gatkowska-chodzcie-z-nami-na-urbex.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Chodźcie z nami na Urbex…</h3>
-            <p class="d-reel__meta"><span>Weronika Gątkowska</span></p>
-          </article>
-          <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/mikolaj-nowak-dwie-rady-na-start.webp" aria-label="Mikołaj Nowak: Dwie rady na start…"><source data-src="design-assets/reels/mikolaj-nowak-dwie-rady-na-start.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/mikolaj-nowak-dwie-rady-na-start.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Dwie rady na start…</h3>
-            <p class="d-reel__meta"><span>Mikołaj Nowak</span></p>
-          </article>
-          <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/piotrek-gatkowski-chodzcie-ze-mna-na-urbex.webp" aria-label="Piotrek Gątkowski: Chodźcie ze mną na Urbex…"><source data-src="design-assets/reels/piotrek-gatkowski-chodzcie-ze-mna-na-urbex.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/piotrek-gatkowski-chodzcie-ze-mna-na-urbex.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Chodźcie ze mną na Urbex…</h3>
-            <p class="d-reel__meta"><span>Piotrek Gątkowski</span></p>
-          </article>
-          <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/piotrek-czuprynski-wyskalowalem-firme-do.webp" aria-label="Piotrek Czupryński: Wyskalowałem firmę do…"><source data-src="design-assets/reels/piotrek-czuprynski-wyskalowalem-firme-do.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/piotrek-czuprynski-wyskalowalem-firme-do.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Wyskalowałem firmę do…</h3>
-            <p class="d-reel__meta"><span>Piotrek Czupryński</span></p>
-          </article>
-          <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/mikolaj-nowak-chodzcie-ze-mna-na-urbex.webp" aria-label="Mikołaj Nowak: Chodźcie ze mną na Urbex…"><source data-src="design-assets/reels/mikolaj-nowak-chodzcie-ze-mna-na-urbex.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/mikolaj-nowak-chodzcie-ze-mna-na-urbex.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Chodźcie ze mną na Urbex…</h3>
-            <p class="d-reel__meta"><span>Mikołaj Nowak</span></p>
-          </article>
-          <article class="d-reel">
-            <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/kacper-urbanowski-klient-ktory-cie-lubi.webp" aria-label="Kacper Urbanowski: Klient, który cię lubi…"><source data-src="design-assets/reels/kacper-urbanowski-klient-ktory-cie-lubi.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/kacper-urbanowski-klient-ktory-cie-lubi.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
-            <h3 class="d-reel__title">Klient, który cię lubi…</h3>
-            <p class="d-reel__meta"><span>Kacper Urbanowski</span></p>
+            <div class="d-reel__media box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">REEL 9:16</span></div>
+            <h3 class="d-reel__title">[TEMAT REELSA]</h3>
+            <p class="d-reel__meta"><span>[Imię]</span><span aria-hidden="true">·</span><span>[startup]</span></p>
           </article>
       </div>
-      <!-- dźwięk aktywnego reelsa: aktywny kafel gra bez dźwięku w pętli, przycisk (albo klik w aktywny kafel) włącza dźwięk -->
-      <button type="button" class="d-reels__sound" id="reels-sound" aria-pressed="false" aria-label="Włącz dźwięk"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="d-reels__spk" d="M4 9h4l5-4v14l-5-4H4z"/><path class="d-reels__on" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="d-reels__off" d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg></button>
     </div>
     <button type="button" class="d-reels__arrow d-reels__arrow--next" id="car-next" aria-label="Następny reel"><span aria-hidden="true">→</span></button>
   </div>
 </section>
 
-<!-- 4. JAK TO DZIAŁA (Figma 7243:47): kroki przewijają się po lewej, po prawej przyklejona niebieska plama z trybikami
-     (raster Riso); trybiki formują się z kropek przy wejściu i każdy kręci się osobno, poklatkowo ze scrollem (paintHowGears). -->
+<!-- 4. JAK TO DZIAŁA — sekcja scrollowana -->
 <section class="d-how" id="jak">
   <div class="d-how__frame">
     <h2 class="d-how__title d-reveal" data-split="words">Jak to działa</h2>
@@ -1379,12 +1157,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
           <p class="d-body d-how__desc d-reveal" data-split="lines">Dwa dni na Google for Startups Campus Warsaw. Super merytoryczne prelekcje, a pomiędzy sporo czasu na indywidualną pracę i konsultacje z mentorami.</p>
           <p class="d-body d-how__fast d-reveal" data-split="lines">Posłuchacie między innymi o:</p>
           <ul class="d-body d-how__list">
-            <li class="d-reveal" data-split="lines">Znajdź swoje „why?”</li>
-            <li class="d-reveal" data-split="lines">Jak szukać powtarzalnych problemów klientów?</li>
-            <li class="d-reveal" data-split="lines">Discovery calle: jak zadawać pytania?</li>
-            <li class="d-reveal" data-split="lines">Jak robić outbound i dobić się do klientów?</li>
-            <li class="d-reveal" data-split="lines">Skąd wziąć pieniądze na pierwszy startup?</li>
-            <li class="d-reveal" data-split="lines">Jak budować produkty w erze AI</li>
+            <li class="d-reveal" data-split="lines">[TEMATY PRELEKCJI – do uzupełnienia]</li>
           </ul>
         </article>
         <article class="d-how__step">
@@ -1400,12 +1173,16 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         </article>
       </div>
       <div class="d-how__media">
-        <div class="d-how__gears" aria-hidden="true">
-          <svg class="d-how__blob" viewBox="0 0 583.536 581.169"><path d="M496.6 265.9L436.3 314.7L376.0 329.0L395.6 378.2L394.5 453.9L345.2 529.8L305.3 551.9L206.4 567.3L135.5 544.7L97.7 487.4L76.8 422.8L103.9 300.1L71.8 257.3L58.0 204.9L65.0 148.9L114.7 107.4L159.9 91.6L210.1 103.1L291.7 43.3L360.2 13.6L446.1 30.0L495.8 59.5L523.7 129.5L525.2 216.4Z"/></svg>
-          <div class="d-how__gearset">
-            <div class="riso d-how__gear" style="left:40.921%;top:5.406%;width:47.038%;height:47.229%" data-k="-0.6579" data-rot0="-3.27" data-design-width="274.5" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-2.webp" width="720" height="720" alt=""></div>
-            <div class="riso d-how__gear" style="left:12.534%;top:19.447%;width:31.771%;height:31.901%" data-k="1.0" data-rot0="-6.36" data-design-width="185.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-1.webp" width="720" height="720" alt=""></div>
-            <div class="riso d-how__gear" style="left:15.949%;top:46.424%;width:49.429%;height:49.631%" data-k="-0.625" data-rot0="-0.94" data-design-width="288.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-3.webp" width="720" height="720" alt=""></div>
+        <div class="d-how__photo" aria-hidden="true">
+          <svg class="d-how__shape" viewBox="0 0 757 562" overflow="visible">
+            <defs><mask id="how-ring" maskUnits="userSpaceOnUse" x="-60" y="-60" width="877" height="682">
+              <rect x="-60" y="-60" width="877" height="682" fill="#fff"/>
+              <polygon points="709.5,532.8 744.5,385 725,75.5 672,33 483.5,13 70.8,35.2 13,89 21,212 13,488 88,563.5 575,549.5" fill="#000"/>
+            </mask></defs>
+            <g mask="url(#how-ring)"><polygon class="d-how__outline" points="709.5,532.8 744.5,385 725,75.5 672,33 483.5,13 70.8,35.2 13,89 21,212 13,488 88,563.5 575,549.5"/></g>
+          </svg>
+          <div class="d-how__window">
+            <div class="riso" data-fit="cover" data-design-width="731" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-photo-1.jpg" width="1620" height="1080" alt=""><img src="design-assets/how-photo-2.jpg" width="1620" height="1080" alt=""><img src="design-assets/how-photo-3.jpg" width="1620" height="1080" alt=""></div>
           </div>
         </div>
       </div>
@@ -1447,7 +1224,14 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       </div>
     </div>
   </div>
+  <div class="d-about__photo">
+    <img class="d-about__blob" src="design-assets/about-blob.svg?v=2" width="1439.59" height="554.625" alt="" aria-hidden="true">
+    <div class="d-about__masked" aria-hidden="true">
+      <div class="riso" data-cloud="free" data-design-width="1440" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/about-collage.png?v=5" width="2159" height="832" alt=""></div>
+    </div>
+    <span class="d-mask d-about__cta"><a class="d-btn d-btn--shape d-about__btn d-mask__i" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a></span>
   </div>
+ </div>
 </section>
 
 <!-- 6. Z KIM BĘDZIESZ PRACOWAĆ (bez Figmy: czarna sekcja, karuzela — duże zdjęcie aktywnej osoby, po lewej opis
@@ -1781,145 +1565,130 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   </div>
 </section>
 
-<!-- 8. DLA KOGO + CTA (Figma 7283:2950): pytanie 88 px + dwa akapity obok siebie, pod nimi pasek 3 zdjęć ułożonych
-     w schodki (kadry, ramki i maski 1:1 z Figmy — trzecie zdjęcie w Figmie stoi poza ramką), który przy scrollu jedzie
-     w lewo jak na referencji wideo (paintWho, przyspawane do scrolla); na końcu „Przyłożysz się?” (Figma 7291:3275). -->
-<section class="d-who" id="dlakogo">
-  <div class="d-frame d-who__stage">
-    <h2 class="d-who__title d-reveal" data-split="words">Masz 18–24 lata i chcesz zbudować własną firmę?</h2>
-    <div class="d-who__body">
-      <p class="d-body d-reveal" data-split="lines">Nie potrzebujesz pomysłu, zespołu ani umiejętności programowania.</p>
-      <p class="d-body d-reveal" data-split="lines">Potrzebujesz odwagi, żeby zadzwonić do obcej osoby i zapytać, co ją naprawdę boli.</p>
-    </div>
-    <div class="d-who__track">
-      <figure class="d-who__ph d-who__ph--1">
-        <svg viewBox="0 0 791.8 527" preserveAspectRatio="none" overflow="visible" role="img" aria-label="Pięciu uczestników w bluzach MD Fellowship">
-          <defs><clipPath id="who-clip-1"><path transform="translate(13.6 5.39)" d="M 728.4948 28.7682 L 765.103 167.387 L 744.7064 457.6175 L 689.2298 497.4713 L 492.1127 516.2261 L 60.4692 495.4292 L 0 444.9579 L 8.3675 329.6158 L 0 70.7997 L 78.4452 0 L 587.8164 13.1285 L 728.4948 28.7682 Z"/></clipPath></defs>
-          <path class="d-who__frame" transform="translate(13.6 5.39)" d="M 728.4948 28.7682 L 765.103 167.387 L 744.7064 457.6175 L 689.2298 497.4713 L 492.1127 516.2261 L 60.4692 495.4292 L 0 444.9579 L 8.3675 329.6158 L 0 70.7997 L 78.4452 0 L 587.8164 13.1285 L 728.4948 28.7682 Z"/>
-          <image href="design-assets/who/f1.webp" x="13.6" y="5.39" width="765.1" height="516.23" preserveAspectRatio="none" clip-path="url(#who-clip-1)"/>
-        </svg>
-      </figure>
-      <figure class="d-who__ph d-who__ph--2">
-        <svg viewBox="0 0 550.2 522" preserveAspectRatio="none" overflow="visible" role="img" aria-label="Uśmiechnięta widownia podczas prelekcji">
-          <defs><clipPath id="who-clip-2"><path transform="translate(17.18 15.93)" d="M 34.6311 461.8404 L 0 330.5065 L 19.2951 55.5286 L 71.7755 17.7692 L 258.2473 0 L 458.9657 19.7041 L 516.1693 67.5229 L 508.2537 176.8034 L 516.1693 422.0179 L 441.9605 489.0968 L 167.7121 476.6582 L 34.6311 461.8404 Z"/></clipPath></defs>
-          <path class="d-who__frame" transform="translate(17.18 15.93)" d="M 34.6311 461.8404 L 0 330.5065 L 19.2951 55.5286 L 71.7755 17.7692 L 258.2473 0 L 458.9657 19.7041 L 516.1693 67.5229 L 508.2537 176.8034 L 516.1693 422.0179 L 441.9605 489.0968 L 167.7121 476.6582 L 34.6311 461.8404 Z"/>
-          <image href="design-assets/who/f2.webp" x="17.18" y="15.93" width="516.17" height="489.1" preserveAspectRatio="none" clip-path="url(#who-clip-2)"/>
-        </svg>
-      </figure>
-      <figure class="d-who__ph d-who__ph--3">
-        <svg viewBox="0 0 733.5 489" preserveAspectRatio="none" overflow="visible" role="img" aria-label="Trzy uczestniczki programu pozują z założonymi rękami">
-          <defs><clipPath id="who-clip-3"><path transform="translate(12.6 5.0)" d="M 674.851 452.3009 L 708.7635 323.6797 L 689.8688 54.3816 L 638.4774 17.4021 L 455.8752 0 L 56.0165 19.2971 L 0 66.1281 L 7.7513 173.1514 L 0 413.3008 L 72.6688 478.9942 L 544.5316 466.8125 L 674.851 452.3009 Z"/></clipPath></defs>
-          <path class="d-who__frame" transform="translate(12.6 5.0)" d="M 674.851 452.3009 L 708.7635 323.6797 L 689.8688 54.3816 L 638.4774 17.4021 L 455.8752 0 L 56.0165 19.2971 L 0 66.1281 L 7.7513 173.1514 L 0 413.3008 L 72.6688 478.9942 L 544.5316 466.8125 L 674.851 452.3009 Z"/>
-          <image href="design-assets/who/f3.webp" x="12.6" y="5.0" width="708.76" height="478.99" preserveAspectRatio="none" clip-path="url(#who-clip-3)"/>
-        </svg>
-      </figure>
-    </div>
-    <div class="d-who__cta">
-      <p class="d-who__q d-reveal" data-split="words">Przyłożysz się?</p>
-      <p class="d-who__chance d-reveal" data-split="words">Masz szansę skończyć program <br>z pierwszymi płacącymi klientami.</p>
-    </div>
-  </div>
-</section>
+<div class="wf-zone">
 
-<!-- 9. FAQ (bez Figmy): nagłówek 88 px przyklejony po lewej (jak „Czego się nauczysz”), lista po prawej; pytania w Antonie
-     jak tytuły umiejętności (40 px), odpowiedzi body 24 px; znak +/– na zielonej plakietce ze strzałki przycisku.
-     Tło: przy scrollu „Dla kogo” + FAQ płynnie przechodzą z czarnego w niebieski (paintWhoBg). -->
-<section class="d-faq" id="faq">
-  <div class="d-frame d-faq__frame">
-    <h2 class="d-faq__title d-reveal" data-split="words">FAQ</h2>
-    <div class="d-faq__list" id="faq-list">
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="true" aria-controls="faq-p1" id="faq-b1"><span class="d-faq__qt">Ile to kosztuje?</span><span class="faq-sign d-faq__sign" aria-hidden="true">–</span></button></h3>
-        <div class="faq-a d-faq__a is-open" id="faq-p1" role="region" aria-labelledby="faq-b1"><div class="d-faq__in"><p class="d-body">Nic, sam udział jest bezpłatny. W koszty wlicz jednak ewentualny nocleg i dojazd do Warszawy – są po Twojej stronie.</p></div></div>
-      </div>
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p2" id="faq-b2"><span class="d-faq__qt">Do kiedy mogę aplikować?</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden><div class="d-faq__in"><p class="d-body">Nabór odbywa się w sposób ciągły, a liczba miejsc jest ograniczona. Im szybciej zaaplikujesz, tym większe masz szanse, aby dostać się do programu. Decyzję otrzymasz od nas na podany w zgłoszeniu adres e-mail.</p></div></div>
-      </div>
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p5" id="faq-b5"><span class="d-faq__qt">Nie mam pomysłu.</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p5" role="region" aria-labelledby="faq-b5" hidden><div class="d-faq__in"><p class="d-body">Tym lepiej, bo nie musisz się z niczym rozstawać. Nauczymy Cię szukać problemów wartych rozwiązania.</p></div></div>
-      </div>
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p6" id="faq-b6"><span class="d-faq__qt">Nie umiem kodować.</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p6" role="region" aria-labelledby="faq-b6" hidden><div class="d-faq__in"><p class="d-body">Spoko, tu nie kodujemy. Na starcie rozmowy z klientami są ważniejsze niż kod.</p></div></div>
-      </div>
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p7" id="faq-b7"><span class="d-faq__qt">Nie mam zespołu.</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p7" role="region" aria-labelledby="faq-b7" hidden><div class="d-faq__in"><p class="d-body">Nic nie szkodzi. Możesz aplikować solo albo w parze.</p></div></div>
-      </div>
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p8" id="faq-b8"><span class="d-faq__qt">Nie mam żadnego doświadczenia biznesowego. Czy to problem?</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p8" role="region" aria-labelledby="faq-b8" hidden><div class="d-faq__in"><p class="d-body">Nie. Program jest właśnie dla osób, które dopiero zaczynają. Wystarczy, że chcesz się uczyć i nie boisz się rozmawiać z ludźmi.</p></div></div>
-      </div>
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p9" id="faq-b9"><span class="d-faq__qt">Mam już startup. Czy to program dla mnie?</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p9" role="region" aria-labelledby="faq-b9" hidden><div class="d-faq__in"><p class="d-body">Tak, jeśli chcesz sprawdzić, czy rozwiązujesz prawdziwy problem. Wielu founderów robi discovery dopiero wtedy, gdy produkt nie chce się sprzedawać. Lepiej zrobić to wcześniej.</p></div></div>
-      </div>
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p10" id="faq-b10"><span class="d-faq__qt">Ile czasu muszę poświęcić?</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p10" role="region" aria-labelledby="faq-b10" hidden><div class="d-faq__in"><p class="d-body">Dwa pełne dni na miejscu (12–13 listopada), potem min. 10 godzin tygodniowo przez 4 tygodnie.</p></div></div>
-      </div>
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p11" id="faq-b11"><span class="d-faq__qt">Czy mogę uczestniczyć tylko online?</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p11" role="region" aria-labelledby="faq-b11" hidden><div class="d-faq__in"><p class="d-body">[DO UZUPEŁNIENIA]</p></div></div>
-      </div>
-      <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p12" id="faq-b12"><span class="d-faq__qt">Co mi to da?</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p12" role="region" aria-labelledby="faq-b12" hidden><div class="d-faq__in"><p class="d-body">Jeśli się przyłożysz, zakończysz program z konkretną wizją na swoją własną firmę i pierwszymi płacącymi klientami. Dodatkowo każdy, kto ukończy Discovery Sprint, trafia od razu do 2. etapu rekrutacji do MD Fellowship.</p></div></div>
+<!-- 8. DLA KOGO -->
+<section class="section audience" id="dlakogo">
+  <div class="box audience-bg" aria-hidden="true"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">ZDJĘCIE TŁA — UCZESTNICY / SALA</span></div>
+  <div class="wrap">
+    <div class="audience-card">
+      <h2>Dla kogo</h2>
+      <p class="lead">Masz 18–24 lata i chcesz zbudować własną firmę?</p>
+      <p class="body muted">Aplikuj solo albo w parze. Nie potrzebujesz pomysłu, zespołu ani umiejętności programowania. Potrzebujesz odwagi, żeby zadzwonić do obcej osoby i zapytać, co ją naprawdę boli.</p>
+      <div class="cta-row">
+        <a class="btn" href="#aplikuj">Aplikuj →</a>
+        <p class="cta-note">Nabór odbywa się w sposób ciągły, a liczba miejsc jest ograniczona. Im szybciej zaaplikujesz, tym większe masz szanse, aby dostać się do programu.</p>
       </div>
     </div>
   </div>
 </section>
+<!-- 9. FAQ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="split">
+      <h2>FAQ</h2>
+      <div class="faq-list" id="faq-list">
 
-<!-- 10. CTA (Figma 7291:3094, ramka 1440 × 1216): nagłówek + duży Aplikuj w świetle latarki z prawego górnego rogu; latarka
-     celuje za kursorem i mruga na klik; pod snopem przycisk robi się niebieski, plama zdjęcia zostaje zielona. Niżej kolaż zdjęć
-     (przeniesiony z „Nie robimy konkursów”, ta sama animacja formowania z kropek) z tagami i linkami do social mediów. -->
-<section class="d-cta" id="final">
-  <div class="d-frame d-cta__stage">
-    <div class="d-cta__beam" aria-hidden="true">
-      <div class="d-fl d-fl--cta">
-        <div class="d-fl__beam"><img src="design-assets/beam-flat.svg?v=2" width="3196.97" height="3050.29" alt=""><i class="d-fl__pt" style="left:0;top:0"></i><i class="d-fl__pt" style="left:100%;top:0"></i><i class="d-fl__pt" style="left:0;top:100%"></i></div>
-      </div>
-    </div>
-    <div class="d-cta__head">
-      <h2 class="d-cta__title d-reveal" data-split="words">Najtrudniej się przełamać.<br>Z resztą Ci pomożemy.</h2>
-      <div class="d-apply d-apply--big"><a class="d-btn d-btn--shape d-btn--big d-cta__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Zgłoszenia do 19.10.2026</span></div>
-    </div>
-    <div class="d-cta__photo">
-      <div class="d-cta__blobs" aria-hidden="true">
-        <img class="d-cta__blob" src="design-assets/about-blob.svg?v=2" width="1439.59" height="554.625" alt="">
-      </div>
-      <div class="d-cta__masked" aria-hidden="true">
-        <div class="riso" data-cloud="free" data-design-width="1440" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/about-collage.png?v=5" width="2159" height="832" alt=""></div>
-      </div>
-      <div class="d-cta__tags">
-        <p class="d-cta__row d-mask"><span class="d-tag d-tag--free d-mask__i">Bezpłatnie</span><span class="d-tag d-tag--age d-mask__i">18–24 lata</span><span class="d-tag d-tag--seats d-mask__i">120 miejsc</span></p>
-        <p class="d-cta__row d-mask"><span class="d-tag d-tag--date d-mask__i">12–13 listopada 2026 + 1 m-c online</span><span class="d-tag d-tag--place d-mask__i">Google for Startups Campus Warsaw</span></p>
-        <p class="d-cta__row d-cta__social d-mask">
-          <a class="d-tag d-tag--social d-tag--ig d-mask__i" href="https://www.instagram.com/mdfellowship"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.2" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="17.3" cy="6.7" r="1.5" fill="currentColor"/></svg>Instagram</a>
-          <a class="d-tag d-tag--social d-tag--in d-mask__i" href="https://www.linkedin.com/company/md-fellowship/"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5.2 3a2.3 2.3 0 1 1 0 4.6 2.3 2.3 0 0 1 0-4.6zM3.2 9.2h4V21h-4zM9.6 9.2h3.8v1.6h.06c.53-1 1.83-2 3.77-2 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.4c0-1.3-.02-2.95-1.8-2.95-1.8 0-2.07 1.4-2.07 2.86V21h-4z"/></svg>LinkedIn</a>
-        </p>
-      </div>
-    </div>
-    <div class="d-cta__fl d-cta__fl--a" aria-hidden="true">
-      <div class="d-fl d-fl--cta">
-        <img class="d-fl__shape" src="design-assets/problem-flashlight-shape.svg" width="441.89" height="473.505" alt="">
-        <div class="d-fl__hit"></div>
-        <div class="d-fl__photo">
-          <div class="riso" data-fit="cover" data-design-width="463.847" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="true" aria-controls="faq-p1" id="faq-b1">Ile to kosztuje?<span class="faq-sign" aria-hidden="true">–</span></button></h3>
+          <div class="faq-a" id="faq-p1" role="region" aria-labelledby="faq-b1">Nic, sam udział jest bezpłatny. W koszty wlicz jednak ewentualny nocleg i dojazd do Warszawy – są po Twojej stronie.</div>
         </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p2" id="faq-b2">Do kiedy mogę aplikować?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden>Nabór odbywa się w sposób ciągły, a liczba miejsc jest ograniczona. Im szybciej zaaplikujesz, tym większe masz szanse, aby dostać się do programu. Decyzję otrzymasz od nas na podany w zgłoszeniu adres e-mail.</div>
+        </div>
+
+
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p5" id="faq-b5">Nie mam pomysłu.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p5" role="region" aria-labelledby="faq-b5" hidden>Tym lepiej, bo nie musisz się z niczym rozstawać. Nauczymy Cię szukać problemów wartych rozwiązania.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p6" id="faq-b6">Nie umiem kodować.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p6" role="region" aria-labelledby="faq-b6" hidden>Spoko, tu nie kodujemy. Na starcie rozmowy z klientami są ważniejsze niż kod.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p7" id="faq-b7">Nie mam zespołu.<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p7" role="region" aria-labelledby="faq-b7" hidden>Nic nie szkodzi. Możesz aplikować solo albo w parze.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p8" id="faq-b8">Nie mam żadnego doświadczenia biznesowego. Czy to problem?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p8" role="region" aria-labelledby="faq-b8" hidden>Nie. Program jest właśnie dla osób, które dopiero zaczynają. Wystarczy, że chcesz się uczyć i nie boisz się rozmawiać z ludźmi.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p9" id="faq-b9">Mam już startup. Czy to program dla mnie?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p9" role="region" aria-labelledby="faq-b9" hidden>Tak, jeśli chcesz sprawdzić, czy rozwiązujesz prawdziwy problem. Wielu founderów robi discovery dopiero wtedy, gdy produkt nie chce się sprzedawać. Lepiej zrobić to wcześniej.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p10" id="faq-b10">Ile czasu muszę poświęcić?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p10" role="region" aria-labelledby="faq-b10" hidden>Dwa pełne dni na miejscu (12–13 listopada), potem min. 10 godzin tygodniowo przez 4 tygodnie.</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p11" id="faq-b11">Czy mogę uczestniczyć tylko online?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p11" role="region" aria-labelledby="faq-b11" hidden>[DO UZUPEŁNIENIA]</div>
+        </div>
+
+        <div class="faq-item">
+          <h3><button type="button" class="faq-q" aria-expanded="false" aria-controls="faq-p12" id="faq-b12">Co mi to da?<span class="faq-sign" aria-hidden="true">+</span></button></h3>
+          <div class="faq-a" id="faq-p12" role="region" aria-labelledby="faq-b12" hidden>Jeśli się przyłożysz, zakończysz program z konkretną wizją na swoją własną firmę i pierwszymi płacącymi klientami. Dodatkowo każdy, kto ukończy Discovery Sprint, trafia od razu do 2. etapu rekrutacji do MD Fellowship.</div>
+        </div>
+
       </div>
     </div>
   </div>
 </section>
 
+<!-- 10. FINALNE CTA -->
+<section class="section final" id="final">
+  <div class="wrap">
+    <div class="stack-l">
+      <h2>Najtrudniejsze jest, żeby się przełamać. Z resztą Ci pomożemy.</h2>
+      <p class="meta">12–13 listopada · Warszawa · bezpłatnie · 120 miejsc</p>
+      <h3>Przyłożysz się?</h3>
+      <p>Masz szansę skończyć program<br>z pierwszymi płacącymi klientami.</p>
+      <div class="cta-row"><a class="btn" href="#aplikuj">Aplikuj</a></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wf-zone -->
 
 </main>
 
+<!-- 11. FOOTER -->
+<footer class="footer" id="footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="stack">
+        <div class="box footer-logo"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">LOGO MD</span></div>
+        <nav class="footer-links" aria-label="Stopka">
+          <a href="https://mdfellows.com/">mdfellows.com</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.instagram.com/mdfellowship">Instagram</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.linkedin.com/company/md-fellowship/">LinkedIn</a>
+          <span aria-hidden="true">·</span>
+          [Polityka prywatności]
+        </nav>
+      </div>
+      <div class="footer-partner">
+        <span>Partner miejsca:</span>
+        <div class="box"><svg class="box-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg><span class="box-label">[LOGO Google for Startups Campus]</span></div>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
-  <p class="cta-note"><b>Bezpłatnie · 120 miejsc</b>Zgłoszenia do 19.10.2026</p>
+  <p class="cta-note"><b>Bezpłatnie · 120 miejsc</b>Nabór ciągły</p>
   <a class="btn btn-sm" href="#aplikuj" tabindex="-1">Aplikuj</a>
 </div>
 
@@ -1927,28 +1696,21 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 <script>
 (function () {
   /* ---------- FAQ accordion ---------- */
-  // płynne rozsuwanie: otwarcie = zdjęcie hidden, w następnej klatce .is-open (CSS animuje wysokość 0fr → 1fr);
-  // zamknięcie = zdjęcie .is-open, hidden dopiero po końcu animacji (zapas czasowy, gdyby transitionend nie przyszedł)
   var faq = document.getElementById('faq-list');
-  function setPanel(b, open) {
-    var panel = document.getElementById(b.getAttribute('aria-controls'));
-    b.setAttribute('aria-expanded', String(open));
-    b.querySelector('.faq-sign').textContent = open ? '–' : '+';
-    clearTimeout(panel._t);
-    if (open) {
-      panel.hidden = false;
-      requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('is-open'); }); });
-    } else if (!panel.hidden) {
-      panel.classList.remove('is-open');
-      panel._t = setTimeout(function () { if (!panel.classList.contains('is-open')) panel.hidden = true; }, 560);
-    }
-  }
   faq.addEventListener('click', function (e) {
     var btn = e.target.closest('.faq-q');
     if (!btn) return;
     var isOpen = btn.getAttribute('aria-expanded') === 'true';
-    faq.querySelectorAll('.faq-q').forEach(function (b) { if (b !== btn && b.getAttribute('aria-expanded') === 'true') setPanel(b, false); });
-    setPanel(btn, !isOpen);
+    faq.querySelectorAll('.faq-q').forEach(function (b) {
+      b.setAttribute('aria-expanded', 'false');
+      b.querySelector('.faq-sign').textContent = '+';
+      document.getElementById(b.getAttribute('aria-controls')).hidden = true;
+    });
+    if (!isOpen) {
+      btn.setAttribute('aria-expanded', 'true');
+      btn.querySelector('.faq-sign').textContent = '–';
+      document.getElementById(btn.getAttribute('aria-controls')).hidden = false;
+    }
   });
 
   /* ---------- mobile menu ---------- */
@@ -1987,7 +1749,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       render();
     }).observe(document.getElementById('hero-cta'));
 
-    var blockers = ['dlakogo', 'final'].map(function (id) { return document.getElementById(id); }).filter(Boolean);
+    var blockers = ['dlakogo', 'final', 'footer'].map(function (id) { return document.getElementById(id); });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         var was = en.target.dataset.blocking === '1';
@@ -2563,7 +2325,6 @@ return { setup: setup, render: render, manifest: manifest };
     it.frame.input = it.input;
     it.frame.output = it.ctx.getCurrentTexture();
     RisoEffect.render(device, it.frame);
-    it.key = '';   // pełny render bez reveal — następny risoSet rysuje na pewno
     it.el.classList.add('is-riso');
   }
 
@@ -2576,10 +2337,6 @@ return { setup: setup, render: render, manifest: manifest };
   window.risoSet = function (el, reveal, index, indexB, t) {
     var it = el.__riso;
     if (!it || !it.inputs.length) return false;
-    // te same parametry co w ostatnim renderze → płótno już to pokazuje, bez ponownego przebiegu shadera
-    var key = JSON.stringify(reveal) + '|' + (index || 0) + '|' + (indexB || 0) + '|' + (t || 0);
-    if (key === it.key) return true;
-    it.key = key;
     it.index = Math.min(index || 0, it.inputs.length - 1);
     it.input = it.inputs[it.index];
     it.frame.input = it.input;
@@ -2935,11 +2692,10 @@ const heroAim = makeAimer({ el: heroFl, host: hero, rest: -142, max: 22.5, mode:
   active: () => finePointer && !reduced && e < 0.02 && scrollY < hero.offsetHeight });
 const probAim = makeAimer({ el: probFl, host: problem, rest: 159.2, max: 25,
   active: () => finePointer && !reduced && lit && (() => { const r = problem.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; })() });
-const aims = [heroAim, probAim];
 if (finePointer && !reduced) {
-  addEventListener('pointermove', (ev) => aims.forEach((a) => a.move(ev.clientX, ev.clientY)), { passive: true });
-  d.addEventListener('mouseleave', () => aims.forEach((a) => a.reset()));
-  setInterval(() => aims.forEach((a) => a.tick()), 1000 / 8);
+  addEventListener('pointermove', (ev) => { heroAim.move(ev.clientX, ev.clientY); probAim.move(ev.clientX, ev.clientY); }, { passive: true });
+  d.addEventListener('mouseleave', () => { heroAim.reset(); probAim.reset(); });
+  setInterval(() => { heroAim.tick(); probAim.tick(); }, 1000 / 8);
 }
 
 /* ---------- klik ---------- */
@@ -2977,76 +2733,80 @@ function checkBeamOut() {
    Krycie warstwy = bieżące krycie snopa (gaśnie i zapala się razem z nim). */
 const BEAM_POLY = [[1957.17, 0], [3196.97, 2950.06], [3166.34, 2980.11], [3111.17, 3050.29], [0, 2301.54]];
 const BEAM_W = 3196.97, BEAM_H = 3050.29;
-// btn — przycisk z warstwą .d-btn__lit, beam — .d-fl__beam z trzema punktami, opEl — element, którego krycie = krycie snopa
-const makeLit = (btn, beam, opEl, sel = '.d-btn__lit') => btn && { btn, lit: btn.querySelector(sel), pts: [...beam.querySelectorAll('.d-fl__pt')], opEl, key: '' };
-const ctaBeam = document.querySelector('.d-cta__beam .d-fl__beam');
-const lits = [makeLit(document.querySelector('.d-problem__btn'), probBeam, probBeamImg),
-  ctaBeam && makeLit(document.querySelector('.d-cta__btn'), ctaBeam, ctaBeam)].filter(Boolean);
-function paintLit(it) {
-  const b = it.btn.getBoundingClientRect();
+const probBtn = document.querySelector('.d-problem__btn');
+const probLit = probBtn && probBtn.querySelector('.d-btn__lit');
+const beamPts = [...probBeam.querySelectorAll('.d-fl__pt')];
+let litKey = '';
+function paintBtnLit() {
+  if (!probLit) return;
+  const b = probBtn.getBoundingClientRect();
   if (b.bottom < 0 || b.top > innerHeight) return;
-  const [o, a, c] = it.pts.map((el) => { const r = el.getBoundingClientRect(); return [r.left, r.top]; });
-  const op = parseFloat(getComputedStyle(it.opEl).opacity) || 0;
+  const [o, a, c] = beamPts.map((el) => { const r = el.getBoundingClientRect(); return [r.left, r.top]; });
+  const op = parseFloat(getComputedStyle(probBeamImg).opacity) || 0;
   const pts = BEAM_POLY.map(([x, y]) => {
     const fx = x / BEAM_W, fy = y / BEAM_H;
     return [o[0] + fx * (a[0] - o[0]) + fy * (c[0] - o[0]) - b.left, o[1] + fx * (a[1] - o[1]) + fy * (c[1] - o[1]) - b.top];
   });
   const key = pts.map((q) => q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join() + '|' + op.toFixed(2);
-  if (key === it.key) return;
-  it.key = key;
-  it.lit.style.clipPath = 'polygon(' + pts.map((q) => q[0].toFixed(1) + 'px ' + q[1].toFixed(1) + 'px').join(', ') + ')';
-  it.lit.style.opacity = op.toFixed(3);
+  if (key === litKey) return;
+  litKey = key;
+  probLit.style.clipPath = 'polygon(' + pts.map((q) => q[0].toFixed(1) + 'px ' + q[1].toFixed(1) + 'px').join(', ') + ')';
+  probLit.style.opacity = op.toFixed(3);
 }
-function paintBtnLit() { lits.forEach(paintLit); }
 
 /* ---------- tło sceny: niebieski → krem przy wejściu w „Jak to działa” ----------
    0, gdy góra sekcji jest na dole ekranu; 1, gdy dochodzi do 30% wysokości ekranu */
 const scene = document.querySelector('.d-scene');
 const bgSec = document.querySelector('.d-learn').nextElementSibling;   // tło sceny przechodzi w krem przy wejściu sekcji po „Czego się nauczysz”
-// tła sterowane scrollem: kolor wpisany wprost w background-color sekcji (mieszanie w sRGB jak color-mix);
-// nie przez zmienną CSS, bo zmienna dziedziczy się i przeliczała style całego poddrzewa sekcji w każdej klatce
-const BG = { cream: [253, 251, 242], blue: [185, 197, 255], black: [0, 0, 0] };
-const mixBg = (from, to, v) => 'rgb(' + from.map((c, i) => Math.round(c + (to[i] - c) * v)).join(', ') + ')';
 let bgp = -1;
 function paintSceneBg() {
   const p = clamp01((innerHeight - bgSec.getBoundingClientRect().top) / (innerHeight * 0.7));
   const v = Math.round(p * 1000) / 1000;
-  if (v !== bgp) { bgp = v; scene.style.backgroundColor = mixBg(BG.blue, BG.cream, v); }
+  if (v !== bgp) { bgp = v; scene.style.setProperty('--bgp', v); }
 }
 
-/* ---------- „Jak to działa”: trybiki stoją, tekst jedzie; każdy trybik kręci się osobno, poklatkowo ----------
-   Wejście (postęp pierwszego kroku, trackProgress): a 2–30% — kropki wyłaniają się na tle; f 22–50% — plamki łapią
-   jasność zdjęcia; c 14–50% — raster gęstnieje do normy; plama pod spodem rośnie 0.95 → 1 (46–58%).
-   Obrót: postęp całej kolumny kroków (0 = góra kroków na dole ekranu, 1 = dół kroków nad górą ekranu) × GEAR_SPIN
-   dla pierwszego trybika, zaokrąglony do GEAR_STEP (jak celowanie latarki: kąt skokami, bez przejścia); pozostałe
-   z przełożenia data-k (ujemne = w drugą stronę) od fazy startowej data-rot0 (zęby w lukach sąsiada) — ruch stoi razem
-   ze scrollem i cofa się przy przewijaniu w górę. Bez rastra (WebGPU) zostaje zwykłe zdjęcie z przenikaniem.
-   Przy prefers-reduced-motion trybiki stoją uformowane i nie kręcą się. */
+/* ---------- „Jak to działa”: jedno przyklejone zdjęcie, kadry morfują przy scrollu ----------
+   Postęp bierzemy z kroków tekstu (trackProgress każdego .d-how__step: 0 = góra kroku na dole ekranu,
+   1 = dół kroku nad górą; krok wysokości ekranu jest wyśrodkowany przy 0.5). Wszystko w shaderze
+   (uniform reveal = s, c, a, f) i w jednym elemencie .riso z trzema zdjęciami (risoSet z indeksem kadru):
+     wejście (krok 1):  a 2–30% — kropki wyłaniają się z niczego wprost na tle (skupiska wg pola szumu, drżenie poza
+                        siatką, rozmiar plamek farby); f 22–50% — plama po plamie łapią jasność zdjęcia, pod nimi
+                        wypełnia się papier; c 14–50% — raster z grubego i rozjechanego gęstnieje do normy;
+                        pierścień obrysu wysuwa się spod kadru 46–58%, gdy zdjęcie jest już uformowane;
+     morf k → k+1 (krok k+1, 14–46%): jedna fala ze środka na brzeg (uniform morph.t, shader ma oba kadry):
+                        komórka rastra, którą mija, przechodzi kadr k → plamka farby poza siatką → kadr k+1, papier
+                        znika w pasie fali i wraca za nią; nic się nie cofa. c pulsuje łagodnie (grubszy raster).
+                        Pierścień obrysu zostaje.
+   Bez rastra (WebGPU) zostaje pierwsze zdjęcie z przenikaniem. Przy prefers-reduced-motion kadr stoi od razu
+   uformowany i zmienia się skokowo w połowie morfu. */
 const howSteps = [...document.querySelectorAll('.d-how__step')];
-const howStepsEl = document.querySelector('.d-how__steps');
-const GEAR_STEP = 4, GEAR_SPIN = 60;   // skok klatki i obrót pierwszego trybika (°) na całą kolumnę kroków
-const howGears = (() => {
-  const el = document.querySelector('.d-how__gears');
+const howPhoto = (() => {
+  const el = document.querySelector('.d-how__photo');
   if (!el) return null;
-  return { el, blob: el.querySelector('.d-how__blob'),
-    gears: [...el.querySelectorAll('.d-how__gear')].map((g) => ({ el: g, k: parseFloat(g.dataset.k) || 0, rot0: parseFloat(g.dataset.rot0) || 0, shown: null })),
-    enter: makeTrack(() => trackProgress(howSteps[0])), spin: makeTrack(() => trackProgress(howStepsEl)), key: '' };
+  return { el, riso: el.querySelector('.riso'), outline: el.querySelector('.d-how__outline'),
+    tracks: howSteps.map((st) => makeTrack(() => trackProgress(st))), key: '' };
 })();
-function paintHowGears(Pe, Ps) {
-  const it = howGears;
-  const a = reduced ? 1 : seg(Pe, 0.02, 0.30);
-  const f = reduced ? 1 : seg(Pe, 0.22, 0.50);
-  const c = reduced ? 0 : 1 - easeOut(seg(Pe, 0.14, 0.50));
-  const o = reduced ? 1 : easeOut(seg(Pe, 0.46, 0.58));
-  it.blob.style.transform = 'scale(' + (0.95 + 0.05 * o).toFixed(4) + ')';
-  // kąt wiodący skokami co GEAR_STEP; pozostałe trybiki dokładnie z przełożenia (k = ±N1/Ni), więc zazębienie się nie rozjeżdża
-  const master = reduced ? 0 : Math.round(GEAR_SPIN * Ps / GEAR_STEP) * GEAR_STEP;
-  for (const g of it.gears) {
-    const ang = Math.round((g.rot0 + g.k * master) * 100) / 100;
-    if (ang !== g.shown) { g.shown = ang; g.el.style.setProperty('--rot', ang + 'deg'); }
-    if (window.risoSet && window.risoSet(g.el, { s: 1, c, a, f })) { if (g.el.style.opacity) g.el.style.opacity = ''; }
-    else g.el.style.opacity = f.toFixed(3);
+const MORPH = { start: 0.14, end: 0.46 };
+function paintHowPhoto(Ps) {
+  const it = howPhoto;
+  // wejście pierwszego kadru
+  let a = reduced ? 1 : seg(Ps[0], 0.02, 0.30);
+  let f = reduced ? 1 : seg(Ps[0], 0.22, 0.50);
+  let c = reduced ? 0 : 1 - easeOut(seg(Ps[0], 0.14, 0.50));
+  let o = reduced ? 1 : easeOut(seg(Ps[0], 0.46, 0.58));
+  let index = 0, indexB = 0, t = 0;
+  // morfy: ostatni rozpoczęty decyduje o kadrze
+  for (let k = 1; k < Ps.length; k++) {
+    const m = seg(Ps[k], MORPH.start, MORPH.end);
+    if (m <= 0) break;
+    if (reduced) { index = m >= 0.5 ? k : k - 1; t = 0; continue; }
+    a = 1; f = 1; o = 1;
+    if (m >= 1) { index = k; indexB = k; t = 0; c = 0; }
+    else { index = k - 1; indexB = k; t = easeInOut(m); c = 0.6 * Math.sin(m * Math.PI); }
   }
+  it.outline.style.transform = 'scale(' + (0.95 + 0.05 * o).toFixed(4) + ')';
+  if (window.risoSet && window.risoSet(it.riso, { s: 1, c, a, f }, index, indexB, t)) { if (it.riso.style.opacity) it.riso.style.opacity = ''; }
+  else it.riso.style.opacity = (index === 0 ? f : 1).toFixed(3);
 }
 
 /* ---------- „Zobacz, jak robili to inni”: karuzela zapętlona + wejście przy scrollu ----------
@@ -3066,7 +2826,7 @@ const reels = (() => {
   probe.style.cssText = 'position:absolute;visibility:hidden;height:0;width:calc(1000 * var(--u))';
   vp.appendChild(probe);
   return { car, vp, shape, slides, n: slides.length, m: orig.length, probe, pos: Math.floor(orig.length / 2), target: Math.floor(orig.length / 2),
-    drag: null, track: makeTrack(() => trackProgress(car)), key: '', visible: false, sound: false, started: false, vkey: '' };
+    drag: null, track: makeTrack(() => trackProgress(car)), key: '' };
 })();
 // sloty w px Figmy: [x środka, szerokość, opacity]; |k| ≥ 3 jak 3
 const SLOT = [[0, 280, 1], [361.5, 230, 0.55], [624, 207, 0.55], [875, 207, 0.55]];
@@ -3076,21 +2836,8 @@ function slotAt(a) {
   const x = a > 3 ? SLOT[3][0] + (a - 3) * 251 : A[0] + (B[0] - A[0]) * f;
   return [x, A[1] + (B[1] - A[1]) * f, A[2] + (B[2] - A[2]) * f];
 }
-// kształt pod aktywnym kaflem: przy każdej zmianie aktywnego reelsa przeskakuje (bez przejścia, jak klatka) na lekko
-// inną wersję wielokąta — wierzchołki przesunięte o maks. ~9 px Figmy, deterministycznie dla indeksu reelsa
-const SHAPE_P = [64.897, 4.628, 360.072, 16.128, 384.082, 37.36, 392.171, 345.526, 378.794, 637.831, 228.774, 660.091, 46.533, 652.621, 5.573, 600.827, 10.842, 209.679, 4.676, 54.304];
-const shapePath = document.getElementById('reels-shape-path');
-function reelShapeD(k) {
-  const h = (i) => { const x = Math.sin((k + 1) * 91.7 + i * 12.9898) * 43758.5453; return (x - Math.floor(x)) * 2 - 1; };
-  const pts = SHAPE_P.map((v, i) => (k === 0 ? v : v + 9 * h(i)).toFixed(2));
-  let d = '';
-  for (let i = 0; i < pts.length; i += 2) d += (i ? 'L' : 'M') + pts[i] + ' ' + pts[i + 1];
-  return d + 'Z';
-}
 function paintReels(P) {
   const R = reels, u = R.probe.offsetWidth / 1000;
-  const act = ((Math.round(R.pos) % R.m) + R.m) % R.m;   // indeks reelsa (oryginał i klon mają ten sam kształt)
-  if (shapePath && act !== R.shapeK) { R.shapeK = act; shapePath.setAttribute('d', reelShapeD((act - Math.floor(R.m / 2) + R.m) % R.m)); }
   const e0 = reduced ? 1 : easeOut(seg(P, 0.02, 0.14));
   const sc0 = 0.7 + 0.3 * e0;
   R.shape.style.transform = e0 >= 1 ? '' : 'scale(' + sc0.toFixed(4) + ')';
@@ -3108,10 +2855,7 @@ function paintReels(P) {
     el.style.width = w.toFixed(2) + 'px';
     el.style.transform = 'translate(' + (x - w / 2).toFixed(2) + 'px,' + y.toFixed(2) + 'px)' + (s < 1 ? ' scale(' + s.toFixed(4) + ')' : '');
     el.style.transformOrigin = '50% 40%';
-    // nieaktywne: czarna apla na kadrze (--dim 0 → 1 przy op 1 → 0.55) zamiast przezroczystości — kafle nie prześwitują przez siebie;
-    // przezroczystość zostaje tylko na wejście sekcji
-    el.style.opacity = (ring === 0 ? e0 : ein).toFixed(3);
-    el.style.setProperty('--dim', ((1 - op) / 0.45).toFixed(3));
+    el.style.opacity = (op * (ring === 0 ? e0 : ein)).toFixed(3);
     el.style.zIndex = String(10 - Math.round(a * 2));
     el.classList.toggle('is-active', a < 0.5);
   });
@@ -3143,68 +2887,10 @@ if (reels) {
     const moved = e.clientX - R.drag.x;
     R.drag = null;
     R.vp.classList.remove('is-dragging');
-    if (Math.abs(moved) < 8 && e.type === 'pointerup') {   // klik: aktywny kafel — dźwięk, boczny — przejazd do niego
-      const tile = document.elementsFromPoint(e.clientX, e.clientY).find((el) => el.classList && el.classList.contains('d-reel'));
-      const i = tile ? R.slides.indexOf(tile) : -1;
-      if (i >= 0) {
-        let k = ((i - Math.round(R.pos)) % R.n + R.n) % R.n;
-        if (k >= R.n / 2) k -= R.n;
-        if (k === 0) { reelSound(!R.sound); return; }
-        R.target = Math.round(R.pos) + k; return;
-      }
-    }
     R.target = Math.abs(moved) < 8 ? Math.round(R.pos) : (moved < 0 ? Math.ceil(R.pos - 0.15) : Math.floor(R.pos + 0.15));
   };
   R.vp.addEventListener('pointerup', end);
   R.vp.addEventListener('pointercancel', end);
-  const btn = document.getElementById('reels-sound');
-  btn.addEventListener('pointerdown', (e) => e.stopPropagation());   // nie zaczyna przeciągania karuzeli
-  btn.addEventListener('click', () => reelSound(!R.sound));
-  new IntersectionObserver(([en]) => { R.visible = en.isIntersecting; R.vkey = ''; }, { threshold: 0.25 }).observe(R.vp);
-  // reelsy nie ładują się razem ze stroną: postery dociągamy, gdy sekcja wjeżdża w ekran (z wyprzedzeniem pół ekranu),
-  // a plik wideo dopiero wtedy, gdy dany reels ma zagrać (syncReelVideo → reelSrc)
-  const lazy = new IntersectionObserver(([en]) => {
-    if (!en.isIntersecting) return;
-    lazy.disconnect();
-    R.slides.forEach((el) => el.querySelectorAll('video[data-poster]').forEach((v) => { v.poster = v.dataset.poster; }));
-  }, { rootMargin: '50% 0px' });
-  lazy.observe(R.car);
-}
-/* wideo: gra tylko aktywny (środkowy) kafel — bez dźwięku, w pętli — i tylko gdy karuzela jest w ekranie i stoi;
-   reszta stoi na posterze. Dźwięk włącza przycisk albo klik w aktywny kafel i zostaje włączony dla kolejnych.
-   Przy prefers-reduced-motion nic nie startuje samo — dopiero po kliknięciu. */
-function reelSound(on) {
-  const R = reels;
-  R.sound = on; R.started = true; R.vkey = '';
-  const btn = document.getElementById('reels-sound');
-  btn.setAttribute('aria-pressed', String(on));
-  btn.setAttribute('aria-label', on ? 'Wycisz' : 'Włącz dźwięk');
-  syncReelVideo();
-}
-function reelSrc(v) {
-  const srcs = v.querySelectorAll('source[data-src]');
-  if (!srcs.length) return;
-  srcs.forEach((src) => { src.src = src.dataset.src; src.removeAttribute('data-src'); });
-  v.load();
-}
-function syncReelVideo() {
-  const R = reels;
-  const moving = !!R.drag || Math.abs(R.target - R.pos) > 0.02;
-  const act = ((Math.round(R.pos) % R.n) + R.n) % R.n;
-  const play = R.visible && !moving && (!reduced || R.started);
-  const key = act + ':' + play + ':' + R.sound;
-  R.vp.classList.toggle('is-moving', moving);
-  if (key === R.vkey) return;
-  R.vkey = key;
-  R.slides.forEach((el, i) => {
-    const v = el.querySelector('video');
-    if (!v) return;
-    if (i === act && play) {
-      v.muted = !R.sound;
-      reelSrc(v);
-      if (v.paused) { const p = v.play(); if (p) p.catch(() => { if (R.sound) { v.muted = true; reelSound(false); } }); }
-    } else if (!v.paused) v.pause();
-  });
 }
 
 /* ---------- „Nie robimy konkursów” ----------
@@ -3255,6 +2941,26 @@ if (aboutStatsEl) {
   addEventListener('resize', fixAboutStatsWidth);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fixAboutStatsWidth);
 }
+const aboutPhoto = (() => {
+  const el = aboutSec && aboutSec.querySelector('.d-about__photo');
+  if (!el) return null;
+  return { el, riso: el.querySelector('.riso'), blob: el.querySelector('.d-about__blob'), btn: el.querySelector('.d-about__btn'),
+    track: makeTrack(() => trackProgress(el)) };
+})();
+function paintAboutPhoto(P) {
+  const it = aboutPhoto;
+  const a = reduced ? 1 : seg(P, 0.02, 0.24);
+  const f = reduced ? 1 : seg(P, 0.14, 0.40);
+  const c = reduced ? 0 : 1 - easeOut(seg(P, 0.08, 0.40));
+  const o = reduced ? 1 : easeOut(seg(P, 0.36, 0.48));
+  const b = reduced ? 0 : 1 - easeOut(seg(P, 0.44, 0.54));
+  it.blob.style.opacity = o >= 1 ? '' : o.toFixed(3);
+  it.blob.style.transform = o >= 1 ? '' : 'scale(' + (0.96 + 0.04 * o).toFixed(4) + ')';
+  paintMask(it.btn, b, +1);
+  if (window.risoSet && window.risoSet(it.riso, { s: 1, c, a, f })) { if (it.riso.style.opacity) it.riso.style.opacity = ''; }
+  else it.riso.style.opacity = f.toFixed(3);
+}
+
 /* ---------- mentorzy: dwa rzędy kafelków ----------
    Każdy rząd: zestaw kafli + klony (aria-hidden, bez tabindex) tak, żeby zawsze wypełniały ekran; pozycja x zawijana
    w [−szerokość zestawu, 0). Rząd jedzie stałą prędkością SPEED w swoją stronę (data-dir), a gdy kursor jest nad
@@ -3276,7 +2982,7 @@ const mentorRiso = (() => {
   }
   function tick(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
-    p = target > p ? Math.min(target, p + dt / 0.45) : Math.max(target, p - dt / 0.22);   // wejście 450 ms, wyjście 220 ms
+    p = target > p ? Math.min(target, p + dt / 0.9) : Math.max(target, p - dt / 0.35);
     paint();
     if (p === 0 && target === 0 && tile) { park.appendChild(el); tile = null; }
     raf = p !== target ? requestAnimationFrame(tick) : 0;
@@ -3357,22 +3063,10 @@ const mentorRows = (() => {
     R.el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') mentorRiso.show(null); });
   });
   document.addEventListener('pointerdown', (e) => { if (!e.target.closest('#mentors-rows')) closeAll(null); });
-  // pionowo: rząd przesunięty o ułamek tak, żeby jego góra w dokumencie wypadała na całym pikselu urządzenia
-  let dpr = devicePixelRatio || 1;
-  function snapRows() {
-    dpr = devicePixelRatio || 1;
-    rows.forEach((R) => {
-      const cur = parseFloat(R.el.style.top) || 0;
-      const y = (R.el.getBoundingClientRect().top + scrollY - cur) * dpr;
-      const v = (Math.round(y) - y) / dpr;
-      if (Math.abs(v - cur) > 0.001) R.el.style.top = v ? v.toFixed(4) + 'px' : '';
-    });
-  }
-  const buildAll = () => { rows.forEach(build); snapRows(); };
+  const buildAll = () => rows.forEach(build);
   buildAll();
   addEventListener('resize', buildAll);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildAll);
-  new ResizeObserver(snapRows).observe(document.body);   // zmiana wysokości czegokolwiek nad sekcją
   let on = false, last = 0;
   function tick(now) {
     const dt = Math.min(0.05, (now - last) / 1000 || 0); last = now;
@@ -3384,7 +3078,7 @@ const mentorRows = (() => {
         R.x += R.v * dt;
       }
       R.x = ((R.x % R.setW) - R.setW) % R.setW;   // zawsze w [−setW, 0)
-      const v = 'translate3d(' + (Math.round(R.x * dpr) / dpr) + 'px,0,0)';   // całe piksele urządzenia
+      const v = 'translate3d(' + R.x.toFixed(2) + 'px,0,0)';
       if (R.track.style.transform !== v) R.track.style.transform = v;
     }
     if (on) requestAnimationFrame(tick);
@@ -3396,178 +3090,10 @@ const mentorRows = (() => {
   return rows;
 })();
 
-/* ---------- 8 · Dla kogo: pasek zdjęć jedzie w lewo przy scrollu (jak na referencji wideo) ----------
-   P = 0, gdy góra paska jest na dole ekranu; 1, gdy na dół ekranu dochodzi góra CTA (span = odległość paska od CTA w
-   układzie) — do tej chwili wszystkie zdjęcia przelatują przez środek. Pasek przesuwa się liniowo od x0 (pierwsze zdjęcie
-   przy 85 % szerokości — wjeżdża zza prawej krawędzi) przez x1 = −dist przy P = 1 (prawa krawędź ostatniego zdjęcia
-   w odległości lewego marginesu pierwszego od prawej krawędzi) i jedzie dalej w tym samym tempie, aż pasek zniknie
-   górą ekranu (P maks. = (ekran + wysokość paska) / span) — zdjęcia wyjeżdżają za lewą krawędź.
-   Skala każdego zdjęcia z odległości jego środka od środka ekranu: na środku WHO_BIG, od pół szerokości ekranu WHO_SMALL
-   (cos², płynnie). Reduced motion: pasek stoi w połowie drogi, bez skalowania. */
-const WHO_BIG = 1.06, WHO_SMALL = 0.84;
-const who = (() => {
-  const sec = document.querySelector('.d-who');
-  if (!sec) return null;
-  const track = sec.querySelector('.d-who__track');
-  const it = { track, cta: sec.querySelector('.d-who__cta'), phs: [...track.querySelectorAll('.d-who__ph')], x0: 0, x1: 0, span: 1 };
-  it.tr = makeTrack(() => Math.min((innerHeight + track.offsetHeight) / it.span, Math.max(0, (innerHeight - track.getBoundingClientRect().top) / it.span)));
-  return it;
-})();
-function placeWho() {
-  const f = who.phs[0], l = who.phs[who.phs.length - 1], w = who.track.clientWidth;
-  who.x0 = w * 0.85 - f.offsetLeft;
-  who.x1 = -Math.max(0, l.offsetLeft + l.offsetWidth - (w - f.offsetLeft));
-  who.span = Math.max(1, who.cta.offsetTop - who.track.offsetTop);
-  who.tr.key = -1;
-}
-function paintWho(P) {
-  const x = reduced ? who.x1 / 2 : who.x0 + (who.x1 - who.x0) * P;
-  who.track.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
-  const left = who.track.parentElement.getBoundingClientRect().left + who.track.offsetLeft + x, mid = innerWidth / 2;
-  who.phs.forEach((el) => {
-    if (reduced) { el.style.scale = ''; return; }
-    const d = Math.min(1, Math.abs(left + el.offsetLeft + el.offsetWidth / 2 - mid) / mid);
-    const c = Math.cos(d * Math.PI / 2);
-    el.style.scale = (WHO_SMALL + (WHO_BIG - WHO_SMALL) * c * c).toFixed(4);
-  });
-}
-if (who) { new ResizeObserver(placeWho).observe(who.track); addEventListener('resize', placeWho); placeWho(); }
-
-/* ---------- 10 · CTA: latarka w rogu świeci na nagłówek i przycisk, zdjęcie formuje się z kropek ----------
-   Snop zapala się z mrugnięciem (switchOn), gdy góra sekcji wjedzie poniżej 60 % ekranu, i gaśnie, gdy sekcja zjeżdża
-   z ekranu (histereza). Latarka celuje za kursorem (makeAimer 'aim', jak w Problemie) i mruga na klik (wirePress).
-   Pod snopem przycisk robi się niebieski (paintLit: wielokąt snopa → clip-path warstwy); plama zdjęcia zostaje zielona.
-   Zdjęcie: wejście jak wcześniej w „Nie robimy konkursów” (postęp = ile zdjęcia wjechało w ekran: kropki a .02–.24,
-   jasność f .14–.40, raster c .08–.40, plama .36–.48), tagi wyjeżdżają z masek po kolei od .44.
-   Reduced motion: snop świeci, zdjęcie od razu uformowane. */
-const cta = (() => {
-  const sec = document.querySelector('.d-cta');
-  if (!sec) return null;
-  const photo = sec.querySelector('.d-cta__photo');
-  return { sec, A: sec.querySelector('.d-cta__fl--a'), beam: ctaBeam, photo, riso: photo.querySelector('.riso'), blobs: photo.querySelector('.d-cta__blobs'),
-    // postęp zdjęcia: 0 = góra zdjęcia na dole ekranu, 1 = dół zdjęcia na dole ekranu (= koniec strony; zwykły trackProgress
-    // nie doszedłby tu nawet do połowy, bo za zdjęciem nie ma już nic do przewinięcia)
-    tags: [...photo.querySelectorAll('.d-mask__i')], track: makeTrack(() => { const r = photo.getBoundingClientRect(); return clamp01((innerHeight - r.top) / Math.max(1, r.height)); }), lit: null };
-})();
-function ctaLight(on, instant) {
-  cta.lit = on;
-  cta.sec.classList.toggle('is-lit', on);
-  cta.beam.getAnimations().forEach((a) => a.cancel());
-  cta.beam.style.opacity = on ? '1' : '0';
-  if (!instant) { const fx = on ? FX.switchOn : FX.switchOff; cta.beam.animate(fx.frames, { duration: fx.duration }); }
-}
-// snop zapala się przy wjeździe sekcji (zależy od położenia sekcji, nie od postępu zdjęcia — sprawdzane co klatkę, tanio)
-function checkCtaLight() {
-  const r = cta.sec.getBoundingClientRect();
-  const want = reduced ? r.bottom > 0 : (cta.lit ? r.top < innerHeight * 0.7 && r.bottom > 0 : r.top < innerHeight * 0.6 && r.bottom > 0);
-  if (want !== cta.lit) ctaLight(want, cta.lit === null);
-}
-// zdjęcie i tagi: tylko gdy zmienia się postęp (wcześniej co klatkę scrolla na całej stronie, z renderem rastra 1440 px)
-function paintCta(P) {
-  const a = reduced ? 1 : seg(P, 0.02, 0.24);
-  const f = reduced ? 1 : seg(P, 0.14, 0.40);
-  const c = reduced ? 0 : 1 - easeOut(seg(P, 0.08, 0.40));
-  const o = reduced ? 1 : easeOut(seg(P, 0.36, 0.48));
-  cta.blobs.style.opacity = o >= 1 ? '' : o.toFixed(3);
-  cta.blobs.style.transform = o >= 1 ? '' : 'scale(' + (0.96 + 0.04 * o).toFixed(4) + ')';
-  cta.tags.forEach((el, i) => paintMask(el, reduced ? 0 : 1 - easeOut(seg(P, 0.44 + i * 0.02, 0.56 + i * 0.02)), +1));
-  if (window.risoSet && window.risoSet(cta.riso, { s: 1, c, a, f })) { if (cta.riso.style.opacity) cta.riso.style.opacity = ''; }
-  else cta.riso.style.opacity = f.toFixed(3);
-}
-if (cta) {
-  // celowanie: grupa latarki obrócona o −51.73° (Problem: −68.25°, rest 159.2) → rest 175.7
-  aims.push(makeAimer({ el: cta.A, host: cta.sec, rest: 175.7, max: 25,
-    active: () => finePointer && !reduced && cta.lit && (() => { const r = cta.sec.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; })() }));
-  wirePress(cta.A, cta.A, () => !!cta.lit, () => {
-    if (running(cta.beam)) return;
-    cta.beam.animate(FX.litFlicker.frames, { duration: FX.litFlicker.duration });
-  });
-}
-
-/* ---------- hover przycisków: poklatkowe „gotowanie się” kształtu (opis przy .d-wob w CSS) ---------- */
-(() => {
-  const SH = {
-    btn: [222.795, 76, [4.549, 10.764, 0, 64.929, 60.529, 76, 169.803, 73.735, 219.027, 66.187, 222.795, 21.261, 191, 3.395, 78.475, 0]],
-    badge: [28, 24, [0, 21.223, 1.012, 2.218, 16.193, 0, 28, 4.667, 25.301, 21.223, 11.133, 24]],
-    arrow: [56, 56, [0, 49.52, 2.024, 5.175, 32.386, 0, 56, 10.889, 50.602, 49.52, 22.265, 56]],
-    ig: [255.028, 48, [2.873, 6.799, 0, 41.008, 38.229, 48, 221.56, 46.57, 252.648, 41.802, 255.028, 13.428, 234.947, 2.144, 49.563, 0]],
-    // tagi Instagram / LinkedIn w CTA (tag-instagram.svg, tag-linkedin.svg)
-    tagIg: [168.875, 60.111, [3.598, 51.597, 0, 8.757, 47.874, 0, 126.961, 1.791, 165.894, 7.762, 168.875, 43.295, 143.727, 57.425, 76.212, 60.111]],
-    tagIn: [137.875, 60.111, [3.598, 51.597, 0, 8.757, 47.874, 0, 95.962, 1.791, 134.894, 7.762, 137.875, 43.295, 112.727, 57.425, 76.212, 60.111]],
-  };
-  const NS = 'http://www.w3.org/2000/svg';
-  let seed = 1;
-  const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 * 2 - 1; };
-  function layer(host, key) {
-    const [W, H, P] = SH[key];
-    const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('class', 'd-wob'); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-    svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
-    const path = document.createElementNS(NS, 'path'); svg.appendChild(path);
-    host.insertBefore(svg, host.firstChild);
-    host.classList.add('has-wob');
-    // 4 klatki: każdy wierzchołek przesunięty o maks. ~7% krótszego boku (w poziomie więcej przy szerokich kształtach)
-    const a = 0.07 * Math.min(W, H), ax = W / H > 2 ? a * 1.6 : a;
-    const frames = [0, 1, 2, 3].map(() => 'M' + P.map((v, i) => (v + (i % 2 ? a : ax) * rnd()).toFixed(2)).join(' ').replace(/(\S+ \S+) /g, '$1L') + 'Z');
-    return { host, path, frames };
-  }
-  const items = [];
-  const add = (el, key) => { const L = [layer(el, key)]; const b = el.querySelector(':scope > .d-btn__arrow'); if (b) L.push(layer(b, 'badge')); items.push({ el, L }); };
-  document.querySelectorAll('.d-btn--shape, .d-nav__cta').forEach((el) => add(el, 'btn'));
-  document.querySelectorAll('.d-reels__ig').forEach((el) => add(el, 'ig'));
-  document.querySelectorAll('.d-reels__arrow').forEach((el) => add(el, 'arrow'));
-  document.querySelectorAll('.d-tag--ig').forEach((el) => add(el, 'tagIg'));
-  document.querySelectorAll('.d-tag--in').forEach((el) => add(el, 'tagIn'));
-  items.forEach((it) => {
-    let timer = 0, f = 0;
-    const paint = () => { it.L.forEach((l, j) => l.path.setAttribute('d', l.frames[(f + j) % 4])); f = (f + 1) % 4; };
-    const on = () => {
-      if (timer || it.el.classList.contains('is-wob')) return;
-      it.L.forEach((l) => l.host.classList.add('is-wob'));
-      paint();
-      if (!reduced) timer = setInterval(paint, 250);   // 4 kl/s
-    };
-    const off = () => { clearInterval(timer); timer = 0; it.L.forEach((l) => l.host.classList.remove('is-wob')); };
-    it.el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') on(); });
-    it.el.addEventListener('pointerleave', off);
-    it.el.addEventListener('focus', () => { if (it.el.matches(':focus-visible')) on(); });
-    it.el.addEventListener('blur', off);
-  });
-})();
-
 /* ---------- pętla: jeden zegar dla wszystkiego, co zależy od scrolla ---------- */
 const travelTrack = makeTrack(() => (geo ? clamp01(scrollY / geo.span) : 0));   // podróż: do przyklejenia latarki
 
-const darkSecs = [...document.querySelectorAll('.d-about, .d-mentors, .d-who')];
-// ciemne tło: „Nie robimy konkursów” od połowy przejścia w czerń (.is-dark), mentorzy i „Dla kogo” dopóki nie są niebiescy
-const isDarkSec = (el) => (el === aboutBgEl ? el.classList.contains('is-dark') : !el.classList.contains('is-blue'));
-/* „Dla kogo” → FAQ: tło obu sekcji z czarnego w niebieski, gdy góra FAQ jedzie od 70 % do 20 % wysokości ekranu
-   (scroll-linked, bez zegara); od połowy przejścia teksty i nawigacja przełączają się na wersję na jasnym tle */
-const whoSecEl = document.querySelector('.d-who'), faqSecEl = document.querySelector('.d-faq');
-let wbKey = -1;
-function paintWhoBg() {
-  if (!whoSecEl || !faqSecEl) return;
-  const p = clamp01((innerHeight * 0.7 - faqSecEl.getBoundingClientRect().top) / (innerHeight * 0.5));
-  const v = Math.round(p * 1000) / 1000;
-  if (v === wbKey) return;
-  wbKey = v;
-  const bg = mixBg(BG.black, BG.blue, v);
-  [whoSecEl, faqSecEl].forEach((el) => { el.style.backgroundColor = bg; el.classList.toggle('is-blue', v >= 0.5); });
-}
-/* „Nie robimy konkursów” → mentorzy: tło obu sekcji z kremu w czerń, gdy góra mentorów jedzie od dołu ekranu do 40 %
-   jego wysokości (scroll-linked, bez zegara); od połowy teksty „Nie robimy konkursów” przechodzą w biel */
-const aboutBgEl = document.querySelector('.d-about'), mentorsBgEl = document.querySelector('.d-mentors');
-let abKey = -1;
-function paintAboutBg() {
-  if (!aboutBgEl || !mentorsBgEl) return;
-  const p = clamp01((innerHeight - mentorsBgEl.getBoundingClientRect().top) / (innerHeight * 0.6));
-  const v = Math.round(p * 1000) / 1000;
-  if (v === abKey) return;
-  abKey = v;
-  const bg = mixBg(BG.cream, BG.black, v);
-  [aboutBgEl, mentorsBgEl].forEach((el) => { el.style.backgroundColor = bg; });
-  aboutBgEl.classList.toggle('is-dark', v >= 0.5);
-}
+const darkSecs = [...document.querySelectorAll('.d-mentors')];
 // tło pod przyciskiem nawigacji: pierwszy element pod nim (poza samą nawigacją) z nieprzezroczystym tłem;
 // jasne = wszystkie kanały ≥ 225 (krem, biel) — niebieski Hero i czarni mentorzy nie są jasne
 const navCta = nav.querySelector('.d-nav__cta');
@@ -3590,9 +3116,7 @@ function paintNavBg() {
 }
 function frame(driving, dt) {
   nav.classList.toggle('is-scrolled', scrollY > 8);
-  paintWhoBg();
-  paintAboutBg();
-  nav.classList.toggle('is-dark', darkSecs.some((el) => { if (!isDarkSec(el)) return false; const r = el.getBoundingClientRect(); return r.top <= 28 && r.bottom >= 28; }));
+  nav.classList.toggle('is-dark', darkSecs.some((el) => { const r = el.getBoundingClientRect(); return r.top <= 28 && r.bottom >= 28; }));
   paintNavBg();
   if (travelOn()) {
     const pe = sync(exitTrack, driving, dt);
@@ -3606,11 +3130,16 @@ function frame(driving, dt) {
     fresh = false;
   }
   checkBeamOut();
+  paintBtnLit();
   paintSceneBg();
-  if (howGears) {
-    const pe = sync(howGears.enter, driving, dt), ps = sync(howGears.spin, driving, dt);
-    const key = pe.toFixed(4) + ':' + ps.toFixed(4);
-    if (key !== howGears.key) { howGears.key = key; paintHowGears(pe, ps); }
+  if (howPhoto) {
+    const Ps = howPhoto.tracks.map((t) => sync(t, driving, dt));
+    const key = Ps.map((p) => p.toFixed(4)).join();
+    if (key !== howPhoto.key) { howPhoto.key = key; paintHowPhoto(Ps); }
+  }
+  if (aboutPhoto) {
+    const p = sync(aboutPhoto.track, driving, dt);
+    if (p !== aboutPhoto.track.key) { aboutPhoto.track.key = p; paintAboutPhoto(p); }
   }
   for (const t of wordTracks) {
     const p = sync(t, driving, dt);
@@ -3620,22 +3149,11 @@ function frame(driving, dt) {
     const p = sync(t, driving, dt);
     if (p !== t.key) { t.key = p; paintStat(t, p); }
   }
-  if (who) {
-    const p = sync(who.tr, driving, dt);
-    if (p !== who.tr.key) { who.tr.key = p; paintWho(p); }
-  }
-  if (cta) {
-    checkCtaLight();
-    const p = sync(cta.track, driving, dt);
-    if (p !== cta.track.key) { cta.track.key = p; paintCta(p); }
-  }
-  paintBtnLit();   // po latarkach (snop w Problemie i w CTA)
   if (reels) {
     stepReels(dt);
     const p = sync(reels.track, driving, dt);
     const key = p.toFixed(4) + ':' + reels.pos.toFixed(4) + ':' + reels.probe.offsetWidth;
     if (key !== reels.key) { reels.key = key; paintReels(p); }
-    syncReelVideo();
   }
 }
 
@@ -3658,7 +3176,7 @@ addEventListener('resize', () => {
   clearTimeout(rt);
   rt = setTimeout(() => { splitAll(); geo = null; fresh = true; placeHeroBeam(); }, 150);
 });
-desktopMq.addEventListener('change', () => { applyMode(); placeHeroBeam(); if (who) placeWho(); });
+desktopMq.addEventListener('change', () => { applyMode(); placeHeroBeam(); });
 </script>
 </body>
 </html>
