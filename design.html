@@ -376,8 +376,10 @@ main { container-type: inline-size; }
 .d-frame { position: relative; width: calc(1496 * var(--u)); margin: 0 auto; }
 
 /* ---------- nawigacja ---------- */
-.d-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; transition: backdrop-filter 200ms ease, -webkit-backdrop-filter 200ms ease; }
-.d-nav.is-scrolled { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.d-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+/* pełny pasek w kolorze tła sekcji tuż pod nim (paintNavBg: kolor wpisany wprost w background-color, także w trakcie
+   przejść tła sterowanych scrollem); start = niebieski Hero */
+.d-nav__bar { background: var(--c-blue-500); }
 .d-nav__bar { display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 40px; }
 .d-nav__logo { display: block; width: 82.449px; height: 20px; flex: none; }
 .d-nav__logo img { display: block; width: 82.449px; height: 20px; }
@@ -400,7 +402,7 @@ main { container-type: inline-size; }
 .d-nav.is-light .d-nav__cta::before { opacity: 1; }
 .d-nav__cta .d-btn__arrow { width: 16px; height: 13.7px; font-size: 13.7px; }
 .d-nav__toggle { display: none; }
-/* nad czarną sekcją (mentorzy) nawigacja w bieli; przycisk Aplikuj zostaje biały z czarnym tekstem */
+/* na ciemnym pasku (czarne sekcje) logo i linki w bieli; przycisk Aplikuj i hamburger zostają bez zmian */
 .d-nav.is-dark .d-nav__links a { color: var(--c-white); }
 .d-nav.is-dark .d-nav__logo img { filter: invert(1); }
 .d-nav.is-dark .d-nav__toggle span { background: var(--c-black); }
@@ -762,7 +764,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
    Zdjęcie z Figmy to jeden spłaszczony render w perspektywie (nie da się go rozciąć na obracające się koła), więc trybiki
    są wygenerowane osobno (how-gear-1..3.webp, widok na wprost, 26 / 38 / 40 zębów), przeskalowane do wspólnego modułu
    i ułożone tak, by się zazębiały (scratchpad gears/mk.py liczy pozycje, fazy zębów i proporcje obrotu).
-   Plama i trybiki stoją (sticky), tekst kroków przewija się obok; każda warstwa .d-how__gear kręci się osobno (--rot ze skryptu). */
+   Plama i trybiki stoją (sticky), tekst kroków przewija się obok; każda warstwa .d-how__gear kręci się osobno (--rot ze skryptu).
+   Wejście: trybiki wjeżdżają z przenikaniem, każdy ze swojej strony (data-from; translate i opacity ze skryptu),
+   potem spod nich wyrasta plama; raster riso stoi od początku uformowany. */
 .d-how__gears { position: relative; flex: none; width: calc(606.2 * var(--u)); aspect-ratio: 583.536 / 581.169; }
 @media (min-width: 1600px) { .d-how__gears { width: calc(666.8 * var(--u)); } }
 .d-how__blob { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; fill: var(--c-blue-500);
@@ -791,23 +795,25 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   text-transform: uppercase; color: var(--c-black); text-decoration: none; }
 .d-reels__ig .d-btn__arrow { width: calc(29.1 * var(--u)); height: calc(24.9 * var(--u)); font-size: calc(24.9 * var(--u)); }
 
-.d-reels__car { position: relative; margin-top: calc(26 * var(--u)); }
-.d-reels__vp { position: relative; z-index: 0; isolation: isolate; overflow: hidden; height: calc(716 * var(--u)); cursor: grab; touch-action: pan-y; }
+/* --rk = 1 px Figmy (rama 1440); środkowy kafel --rw px Figmy szerokości (9:16), góra --rt; boczne wyśrodkowane w pionie na nim (skrypt) */
+.d-reels__car { position: relative; margin-top: calc(26 * var(--u)); --rk: calc(1.0389 * var(--u)); --rw: 336; --rt: 20;
+  --rh: calc(var(--rw) * 16 / 9 * var(--rk)); }
+.d-reels__vp { position: relative; z-index: 0; isolation: isolate; overflow: hidden; height: calc(var(--rt) * var(--rk) + var(--rh) + 84 * var(--rk)); cursor: grab; touch-action: pan-y; }
 .d-reels__vp.is-dragging { cursor: grabbing; }
-/* kształt pod środkowym kaflem: stoi w miejscu (środek ekranu), kafle jadą nad nim */
-.d-reels__shape { position: absolute; z-index: 0; left: calc(50% - 145.45 * var(--u) - 63 * var(--u)); top: calc(56 * var(--u) - 46.9 * var(--u));
-  width: calc(412.1 * var(--u)); height: calc(690.5 * var(--u)); transform-origin: 50% 40%; pointer-events: none; }
-.d-reels__shape svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.d-reels__shape path { stroke-width: calc(9 * 1.0389 * var(--u)); }   /* obrys w px ekranu (non-scaling-stroke) = 9 px Figmy */
 .d-reels__track { position: absolute; inset: 0; }
-.d-reel { position: absolute; left: 50%; top: calc(56 * var(--u)); user-select: none; will-change: transform, opacity; }
-.d-reel__media { position: relative; aspect-ratio: 9 / 16; overflow: hidden; pointer-events: none; background: var(--c-black); }
-.d-reel__media video { position: absolute; left: 0; top: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-.d-reel__media::after { content: ""; position: absolute; inset: -1px; background: var(--c-black); opacity: calc(var(--dim, 0) * 0.55); pointer-events: none; }
-.d-reel__title, .d-reel__meta { opacity: calc(1 - var(--dim, 0) * 0.45); }
+.d-reel { position: absolute; left: 50%; top: calc(var(--rt) * var(--rk)); user-select: none; will-change: transform, opacity; }
+/* kadr przycięty nieregularnym wielokątem (clip-path ustawia skrypt, inny dla każdego reelsa); nieaktywne = raster kropek
+   (poster przepuszczony przez dither, design-assets/reels/*.dots.webp) na kremie: --dim 0 → 1 chowa wideo, --dots = gęstość szarości */
+.d-reel__media { position: relative; aspect-ratio: 9 / 16; overflow: hidden; pointer-events: none; background: var(--c-cream); }
+.d-reel__media video { position: absolute; left: 0; top: 0; display: block; width: 100%; height: 100%; object-fit: cover; opacity: calc(1 - var(--dim, 0)); }
+.d-reel__dots { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; opacity: var(--dots, 0); }
+/* niebieski obrys tylko na aktywnym: ten sam wielokąt co clip-path, kreska po krawędzi (połowa na kadrze, połowa na zewnątrz) */
+.d-reel__line { position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 9 / 16; overflow: visible; pointer-events: none; opacity: calc(1 - var(--dim, 0) * 2); }
+.d-reel__line path { fill: none; stroke: var(--c-blue-500); stroke-width: calc(9 * var(--rk)); stroke-linejoin: miter; stroke-miterlimit: 10; }
+.d-reel__title, .d-reel__meta { opacity: calc(1 - var(--dim, 0) * 1.5); }
 .d-reel:not(.is-active) { cursor: pointer; }
-/* dźwięk: w prawym dolnym rogu aktywnego (środkowego) kafla — kafel 280 px Figmy, 9:16, góra 56u */
-.d-reels__sound { position: absolute; z-index: 20; left: calc(50% + 140 * 1.0389 * var(--u) - 60 * var(--u)); top: calc(56 * var(--u) + 280 * 1.0389 * 16 / 9 * var(--u) - 60 * var(--u));
+/* dźwięk: w prawym dolnym rogu aktywnego (środkowego) kafla */
+.d-reels__sound { position: absolute; z-index: 20; left: calc(50% + var(--rw) / 2 * var(--rk) - 64 * var(--u)); top: calc(var(--rt) * var(--rk) + var(--rh) - 72 * var(--u));
   display: flex; align-items: center; justify-content: center; width: calc(44 * var(--u)); height: calc(44 * var(--u)); min-width: 36px; min-height: 36px; padding: 0;
   border: 0; border-radius: 50%; background: rgba(0, 0, 0, 0.55); color: var(--c-white); cursor: pointer; transition: opacity 200ms ease; }
 .d-reels__sound svg { width: 55%; height: 55%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -816,13 +822,13 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-reels__sound[aria-pressed="true"] .d-reels__on { display: inline; }
 .d-reels__sound:focus-visible { outline: 2px solid var(--c-black); outline-offset: 3px; }
 .d-reels__vp.is-moving .d-reels__sound { opacity: 0; pointer-events: none; }
-.d-reel__title { margin: calc(18.7 * var(--u)) 0 0; font-family: var(--f-display); font-weight: 400; font-size: calc(24.93 * var(--u));
+.d-reel__title { margin: calc(18.7 * var(--u)) 0 0; text-align: center; font-family: var(--f-display); font-weight: 400; font-size: calc(24.93 * var(--u));
   line-height: 1.2; letter-spacing: calc(-0.64 * var(--u)); text-transform: uppercase; color: var(--c-black); }
-.d-reel__meta { display: flex; flex-wrap: wrap; gap: calc(7.27 * var(--u)); margin: calc(4.16 * var(--u)) 0 0;
+.d-reel__meta { display: flex; flex-wrap: wrap; justify-content: center; gap: calc(7.27 * var(--u)); margin: calc(4.16 * var(--u)) 0 0;
   font-family: var(--f-body); font-weight: 500; font-size: calc(16.62 * var(--u)); line-height: 1.1; letter-spacing: calc(-0.44 * var(--u)); color: var(--c-black); }
 
 /* strzałki na krawędziach contentu, w pionie na środku środkowego kafla */
-.d-reels__arrow { position: absolute; z-index: 3; top: calc(56 * var(--u) + 258.6 * var(--u) - 29.1 * var(--u)); width: calc(58.2 * var(--u)); height: calc(58.2 * var(--u));
+.d-reels__arrow { position: absolute; z-index: 3; top: calc(var(--rt) * var(--rk) + var(--rh) / 2 - 29.1 * var(--u)); width: calc(58.2 * var(--u)); height: calc(58.2 * var(--u));
   display: flex; align-items: center; justify-content: center; padding: 0; border: 0; cursor: pointer;
   background: url("design-assets/reels-arrow.svg?v=2") no-repeat 0 0 / 100% 100%;   /* zielony kształt, czarna strzałka */
   font-family: var(--f-body); font-weight: 600; font-size: calc(24.93 * var(--u)); line-height: 0.9; color: var(--c-black); }
@@ -900,10 +906,12 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
    i bio na hover są osobnymi warstwami — każda inaczej zaokrągla krawędź i spod spodu prześwitywał pasek */
 .d-mtile__photo img { position: absolute; left: -1px; top: -1px; display: block; width: calc(100% + 2px); height: calc(100% + 2px); object-fit: cover; pointer-events: none; }
 /* lekki zoom na hover: zdjęcie i raster riso razem (ten sam środek), plakietka i bio stoją */
-.d-mtile__photo img, .d-mtile__photo > .d-mtile__riso { transform-origin: 50% 60%; transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1); }
-/* raster riso na hover: wspólny element, zaparkowany poza kadrem, w kaflu leży nad zdjęciem, pod plakietką i bio */
-.d-mtile__riso { position: absolute; left: 0; top: 0; width: calc(300 * var(--u)); aspect-ratio: 3 / 4; visibility: hidden; pointer-events: none; z-index: 1; }
-.d-mtile__photo > .d-mtile__riso { left: -1px; top: -1px; width: calc(100% + 2px); height: calc(100% + 2px); visibility: visible; }
+.d-mtile__photo img, .d-mtile__halo { transform-origin: 50% 60%; transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1); }
+/* obrys postaci na hover: zielona warstwa przycięta maską białego wielokąta wpieczonego w zdjęcie (mXX-halo.webp,
+   scratchpad mentors/halo.py; --halo wpisuje skrypt) — biały obrys przechodzi w zielony, zbliża się razem ze zdjęciem */
+.d-mtile__halo { position: absolute; z-index: 1; left: -1px; top: -1px; width: calc(100% + 2px); height: calc(100% + 2px); pointer-events: none;
+  background: #A6F893; -webkit-mask: var(--halo) no-repeat 0 0 / 100% 100%; mask: var(--halo) no-repeat 0 0 / 100% 100%;
+  opacity: 0; transition: opacity 250ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1); }
 .d-mtile__tag { position: absolute; z-index: 3; left: calc(14 * var(--u)); top: calc(14 * var(--u)); isolation: isolate; box-sizing: border-box;
   height: calc(40 * var(--u)); padding: calc(8 * var(--u)) calc(14 * var(--u)) 0 calc(11 * var(--u));
   font-family: var(--f-display); font-size: calc(20 * var(--u)); line-height: 1.2; letter-spacing: calc(-0.4 * var(--u)); text-transform: uppercase; color: var(--c-black); }
@@ -916,18 +924,18 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-mtile__name { margin: calc(16 * var(--u)) 0 0; font-family: var(--f-display); font-weight: 400; font-size: calc(32 * var(--u)); line-height: 1.05;
   letter-spacing: calc(-0.64 * var(--u)); text-transform: uppercase; color: var(--c-white); }
 .d-mtile__role { margin: calc(6 * var(--u)) 0 0; font-family: var(--f-body); font-weight: 500; font-size: max(14px, calc(18 * var(--u))); line-height: 1.3; color: var(--c-blue-500); }
-@media (hover: hover) { .d-mtile:hover .d-mtile__bio { opacity: 1; }
-  .d-mtile:hover .d-mtile__photo img, .d-mtile:hover .d-mtile__photo > .d-mtile__riso { transform: scale(1.05); } }
-.d-mtile.is-open .d-mtile__photo img, .d-mtile.is-open .d-mtile__photo > .d-mtile__riso { transform: scale(1.05); }
-.d-mtile:focus-visible .d-mtile__bio, .d-mtile.is-open .d-mtile__bio { opacity: 1; }
+@media (hover: hover) { .d-mtile:hover .d-mtile__bio, .d-mtile:hover .d-mtile__halo { opacity: 1; }
+  .d-mtile:hover .d-mtile__photo img, .d-mtile:hover .d-mtile__halo { transform: scale(1.05); } }
+.d-mtile.is-open .d-mtile__photo img, .d-mtile.is-open .d-mtile__halo { transform: scale(1.05); }
+.d-mtile:focus-visible .d-mtile__bio, .d-mtile.is-open .d-mtile__bio, .d-mtile:focus-visible .d-mtile__halo, .d-mtile.is-open .d-mtile__halo { opacity: 1; }
 .d-mtile:focus-visible .d-mtile__photo { outline: 2px solid var(--c-blue-500); outline-offset: -2px; }
-.d-marquee.is-dragging .d-mtile__bio { transition: none; }
-@media (prefers-reduced-motion: reduce) { .d-mtile__bio, .d-mtile__photo img, .d-mtile__photo > .d-mtile__riso { transition: none; } }
+.d-marquee.is-dragging .d-mtile__bio, .d-marquee.is-dragging .d-mtile__halo { transition: none; }
+@media (prefers-reduced-motion: reduce) { .d-mtile__bio, .d-mtile__photo img, .d-mtile__halo { transition: none; } }
 
 /* ---------- 8 · DLA KOGO + CTA (Figma 7283:2950) ----------
    Scena = ramka Figmy 1440 × 1727 (1496u × 1794.2u), wszystko w pozycjach z Figmy (× 1.0389): pytanie 88 px wielkimi
    literami od x = 286, dwa akapity obok siebie (375 + 40 + 435), pasek zdjęć od y = 630.7 (3 zdjęcia w schodkach,
-   ramka-wielokąt #B9C5FF + zdjęcie przycięte tą samą ścieżką — inline SVG, kadry wycięte 1:1 z Figmy),
+   zdjęcie przycięte wielokątem z Figmy — inline SVG, kadry wycięte 1:1 z Figmy; bez niebieskiej ramki),
    na końcu (Figma 7291:3275) „Przyłożysz się?” 88 px + „Masz szansę…” 60 px, od lewej krawędzi contentu jak pytanie.
    Desktop: pasek (.d-who__track, 4 zdjęcia) siedzi w .d-who__pin przyklejonym do ekranu na czas przejazdu (.d-who__run,
    wysokość liczy skrypt). Pierwsze zdjęcie wjeżdża zza prawej krawędzi i przy przyklejeniu stoi obok tekstów; dalej tekst
@@ -938,8 +946,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 /* „Dla kogo” i FAQ: wspólne tło sterowane scrollem (czarny → niebieski, paintWhoBg); po przekroczeniu
    połowy (.is-blue) teksty przechodzą w czarny, a duży Aplikuj w biały kształt (jak w Hero na niebieskim) */
 .d-who, .d-faq { background: var(--c-black); }
-.d-who__title, .d-who__body .d-body, .d-who__cta > p, .d-faq__title, .d-faq__q, .d-faq__a .d-body { transition: color 300ms ease; }
-.d-who.is-blue .d-who__title, .d-who.is-blue .d-who__body .d-body, .d-who.is-blue .d-who__cta > p { color: var(--c-black); }
+.d-who__title, .d-who__body .d-body, .d-who__lines > p, .d-faq__title, .d-faq__q, .d-faq__a .d-body { transition: color 300ms ease; }
+.d-who.is-blue .d-who__title, .d-who.is-blue .d-who__body .d-body, .d-who.is-blue .d-who__lines > p { color: var(--c-black); }
 .d-who__stage { --pu: var(--u); padding-bottom: calc(137 * var(--u)); }   /* dolny margines z Figmy */
 /* blok tekstu przy lewej krawędzi contentu (40 px od krawędzi ekranu, także gdy ramka 1496u jest węższa od ekranu) */
 .d-who__title { position: absolute; z-index: 2; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); top: calc(218.9 * var(--u)); width: calc(902.8 * var(--u)); margin: 0;
@@ -956,17 +964,27 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-who__track { position: absolute; left: 0; top: 0; width: 100%; height: calc(938.3 * var(--pu)); will-change: transform; }
 .d-who__ph { position: absolute; margin: 0; will-change: scale; }
 .d-who__ph svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.d-who__frame { fill: var(--c-blue-500); stroke: var(--c-blue-500); stroke-width: 22.49; }
 .d-who__ph--1 { left: calc(88.3 * var(--pu)); top: 0; width: calc(822.6 * var(--pu)); height: calc(547.5 * var(--pu)); }
 .d-who__ph--2 { left: calc(974.5 * var(--pu)); top: calc(152.7 * var(--pu)); width: calc(571.6 * var(--pu)); height: calc(542.3 * var(--pu)); }
 .d-who__ph--3 { left: calc(1634.2 * var(--pu)); top: calc(274.3 * var(--pu)); width: calc(762 * var(--pu)); height: calc(508 * var(--pu)); }
 .d-who__ph--4 { left: calc(2472.2 * var(--pu)); top: calc(396 * var(--pu)); width: calc(571.6 * var(--pu)); height: calc(542.3 * var(--pu)); }   /* schodek niżej, jak w Figmie */
-/* tekst końcowy pod przejazdem paska (w przepływie, po odklejeniu paska); lewa krawędź jak pytanie */
-.d-who__cta { position: relative; z-index: 2; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); margin-top: calc(40 * var(--u));
-  display: flex; flex-direction: column; align-items: flex-start; gap: calc(49.87 * var(--u)); }
-.d-who__cta > p { margin: 0; font-family: var(--f-display); font-weight: 400; line-height: 1.1; text-transform: uppercase; color: var(--c-white); }
-.d-who__q { font-size: calc(91.42 * var(--u)); letter-spacing: calc(-2.24 * var(--u)); }   /* 88 px */
-.d-who__chance { width: calc(828 * var(--u)); font-size: calc(62.33 * var(--u)); letter-spacing: calc(-1.52 * var(--u)); }   /* 60 px */
+/* tekst końcowy pod przejazdem paska (w przepływie, po odklejeniu paska), Figma 7314:5997: wszystko wyśrodkowane —
+   pytanie 88 px, pod nim (32) „Masz szansę…” 60 px w dwóch liniach, dalej (48) niebieski Aplikuj 222.8 × 76 i (24) termin 24 px */
+.d-who__cta { position: relative; z-index: 2; margin-top: calc(40 * var(--u));
+  display: flex; flex-direction: column; align-items: center; gap: calc(49.87 * var(--u)); text-align: center; }
+.d-who__lines { display: flex; flex-direction: column; align-items: center; gap: calc(33.24 * var(--u)); }
+.d-who__lines > p { margin: 0; font-family: var(--f-display); font-weight: 400; line-height: 1.1; text-transform: uppercase; color: var(--c-white); }
+.d-who__lines > .is-split { align-items: center; }
+.d-who__q { font-size: calc(91.42 * var(--u)); letter-spacing: calc(-2.29 * var(--u)); }   /* 88 px */
+.d-who__chance { font-size: calc(62.33 * var(--u)); letter-spacing: calc(-1.56 * var(--u)); text-transform: none !important; white-space: nowrap; }   /* 60 px, jak w Figmie bez wersalików */
+.d-who__cta .d-apply { flex-direction: column; gap: calc(24.93 * var(--u)); }
+.d-who__btn { width: calc(231.5 * var(--u)); height: calc(79 * var(--u)); gap: calc(24.2 * var(--u)); font-size: calc(35.74 * var(--u)); letter-spacing: calc(-0.73 * var(--u));
+  background-image: url("design-assets/btn-aplikuj-lit.svg"); }   /* niebieski kształt */
+.d-who__btn .d-btn__arrow { width: calc(28 * var(--u)); height: calc(24 * var(--u)); font-size: calc(24 * var(--u)); }
+.d-who__cta .d-apply__date { font-size: calc(24.93 * var(--u)); letter-spacing: calc(-0.52 * var(--u)); color: var(--c-white); transition: color 300ms ease; }
+/* na niebieskim tle (przejście w FAQ) przycisk biały, termin czarny — jak teksty */
+.d-who.is-blue .d-who__btn { background-image: url("design-assets/btn-aplikuj.svg"); }
+.d-who.is-blue .d-who__cta .d-apply__date { color: var(--c-black); }
 
 /* ---------- 9 · FAQ ---------- */
 /* FAQ bez własnego kontekstu warstw (z-index auto): snop latarki z CTA wychodzi w górę na tło FAQ, a treść FAQ (z 3)
@@ -1029,12 +1047,15 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-cta__btn { position: relative; }   /* biały; w świetle snopa niebieski (jak w Problemie) */
 .d-cta__btn > :not(.d-btn__lit) { position: relative; }
 
-/* zdjęcie: kolaż w plamie (kształt plamy w alfie kolażu — chmura kropek może wyjść poza niego) */
+/* zdjęcie: kolaż (wycięte postaci, raster riso) na zielonej plamie. Wejście (paintCta): kontur plamy rysuje się linią,
+   linia grubieje do środka, aż wypełni kształt, potem kolaż wyjeżdża od dołu (przycięty dolną krawędzią zdjęcia) i tagi */
 .d-cta__photo { position: absolute; left: 0; top: calc(667 * var(--u)); width: 100%; aspect-ratio: 1439.59 / 554.625; }
-.d-cta__blobs { position: absolute; inset: 0; transform-origin: 50% 100%; }
-.d-cta__blob { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.d-cta__masked { position: absolute; inset: 0; }
-.d-cta__masked .riso { position: absolute; inset: 0; }
+.d-cta__blobs { position: absolute; inset: 0; }
+.d-cta__blob { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+.d-cta__fill { fill: #A6F893; }
+.d-cta__line { fill: none; stroke: #A6F893; stroke-width: 16; stroke-linejoin: round; visibility: hidden; }
+.d-cta__masked { position: absolute; inset: 0; overflow: clip; }
+.d-cta__masked .riso { position: absolute; inset: 0; will-change: transform; }
 .d-cta__masked .riso > img { filter: grayscale(1) contrast(1.1); }
 .d-cta__tags { position: absolute; left: 0; right: 0; top: 59.68%; display: flex; flex-direction: column; align-items: center; gap: calc(8.3 * var(--t)); }
 .d-cta__row { display: flex; justify-content: center; gap: calc(8.3 * var(--t)); margin: 0; }
@@ -1149,7 +1170,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-who__ph--1 { left: calc(20 * var(--m)); }
   .d-who__cta { margin-top: calc(56 * var(--m)); padding: 0 calc(20 * var(--m)); gap: calc(20 * var(--m)); }
   .d-who__q { font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
-  .d-who__chance { width: auto; font-size: calc(30 * var(--m)); letter-spacing: calc(-0.6 * var(--m)); }
+  .d-who__chance { width: auto; white-space: normal; font-size: calc(30 * var(--m)); letter-spacing: calc(-0.6 * var(--m)); }
+  .d-who__btn { width: 176px; height: 60px; gap: 18px; font-size: 27px; letter-spacing: -0.54px; }
   .d-who__chance br { display: none; }
   .d-who__stage { height: auto; }
   .d-faq { --u: calc(var(--m) * 0.75); }
@@ -1338,7 +1360,6 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   <div class="d-reels__car" id="reels-car">
     <button type="button" class="d-reels__arrow d-reels__arrow--prev" id="car-prev" aria-label="Poprzedni reel"><span aria-hidden="true">→</span></button>
     <div class="d-reels__vp" id="car-viewport">
-      <span class="d-reels__shape" aria-hidden="true"><svg viewBox="0 0 396.676 664.648" preserveAspectRatio="none" overflow="visible"><path id="reels-shape-path" d="M64.897 4.628L360.072 16.128L384.082 37.36L392.171 345.526L378.794 637.831L228.774 660.091L46.533 652.621L5.573 600.827L10.842 209.679L4.676 54.304Z" fill="#B9C5FF" stroke="#000" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" vector-effect="non-scaling-stroke"/></svg></span>
       <div class="d-reels__track" id="car-track">
           <article class="d-reel">
             <div class="d-reel__media"><video muted loop playsinline preload="none" data-poster="design-assets/reels/piotrek-czuprynski-chodzcie-ze-mna-na-urbex.webp" aria-label="Piotrek Czupryński: Chodźcie ze mną na Urbex…"><source data-src="design-assets/reels/piotrek-czuprynski-chodzcie-ze-mna-na-urbex.av1.mp4" type='video/mp4; codecs="av01.0.05M.08, mp4a.40.2"'><source data-src="design-assets/reels/piotrek-czuprynski-chodzcie-ze-mna-na-urbex.hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"'></video></div>
@@ -1399,7 +1420,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 </section>
 
 <!-- 4. JAK TO DZIAŁA (Figma 7243:47): kroki przewijają się po lewej, po prawej przyklejona niebieska plama z trybikami
-     (raster Riso); trybiki formują się z kropek przy wejściu i każdy kręci się osobno, poklatkowo ze scrollem (paintHowGears). -->
+     (raster Riso); przy wejściu trybiki wjeżdżają z przenikaniem, każdy ze swojej strony (data-from), potem pojawia się plama,
+     a dalej każdy kręci się osobno, poklatkowo ze scrollem (paintHowGears). -->
 <section class="d-how" id="jak">
   <div class="d-how__frame">
     <h2 class="d-how__title d-reveal" data-split="words">Jak to działa</h2>
@@ -1435,9 +1457,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         <div class="d-how__gears" aria-hidden="true">
           <svg class="d-how__blob" viewBox="0 0 583.536 581.169"><path d="M496.6 265.9L436.3 314.7L376.0 329.0L395.6 378.2L394.5 453.9L345.2 529.8L305.3 551.9L206.4 567.3L135.5 544.7L97.7 487.4L76.8 422.8L103.9 300.1L71.8 257.3L58.0 204.9L65.0 148.9L114.7 107.4L159.9 91.6L210.1 103.1L291.7 43.3L360.2 13.6L446.1 30.0L495.8 59.5L523.7 129.5L525.2 216.4Z"/></svg>
           <div class="d-how__gearset">
-            <div class="riso d-how__gear" style="left:40.921%;top:5.406%;width:47.038%;height:47.229%" data-k="-0.6579" data-rot0="-3.27" data-design-width="274.5" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-2.webp" width="720" height="720" alt=""></div>
-            <div class="riso d-how__gear" style="left:12.534%;top:19.447%;width:31.771%;height:31.901%" data-k="1.0" data-rot0="-6.36" data-design-width="185.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-1.webp" width="720" height="720" alt=""></div>
-            <div class="riso d-how__gear" style="left:15.949%;top:46.424%;width:49.429%;height:49.631%" data-k="-0.625" data-rot0="-0.94" data-design-width="288.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-3.webp" width="720" height="720" alt=""></div>
+            <div class="riso d-how__gear" style="left:40.921%;top:5.406%;width:47.038%;height:47.229%" data-from="right" data-k="-0.6579" data-rot0="-3.27" data-design-width="274.5" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-2.webp" width="720" height="720" alt=""></div>
+            <div class="riso d-how__gear" style="left:12.534%;top:19.447%;width:31.771%;height:31.901%" data-from="left" data-k="1.0" data-rot0="-6.36" data-design-width="185.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-1.webp" width="720" height="720" alt=""></div>
+            <div class="riso d-how__gear" style="left:15.949%;top:46.424%;width:49.429%;height:49.631%" data-from="bottom" data-k="-0.625" data-rot0="-0.94" data-design-width="288.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-3.webp" width="720" height="720" alt=""></div>
           </div>
         </div>
       </div>
@@ -1494,9 +1516,6 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
        Wszyscy z listy mentorów (bez względu na status zgody), rozdzieleni na przemian między rzędy.
        UWAGA: zdjęcia przypisane do nazwisk tymczasowo — pewne tylko m01 (plakietka „Bartek”), m03 (bluza Clastify),
        m06 (plakietka z nazwiskiem); reszta to powtórzone zdjęcia zastępcze. Prelegenci, brakujące role i bio — placeholdery. -->
-  <!-- jeden wspólny raster riso: na hover przenoszony do kafla, wejście = sama postać (mXX-cut.avif);
-       bez trybu free — kropki pojawiają się tylko w kształcie wyciętej postaci -->
-  <div class="riso d-mtile__riso" id="mentor-riso" data-design-width="300" aria-hidden="true" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/mentors/m01-cut.avif?v=4" width="480" height="640" alt=""></div>
   <div class="d-mentors__rows" id="mentors-rows">
     <div class="d-marquee" data-dir="1">
      <div class="d-marquee__track">
@@ -1829,36 +1848,35 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       <figure class="d-who__ph d-who__ph--1">
         <svg viewBox="0 0 791.8 527" preserveAspectRatio="none" overflow="visible" role="img" aria-label="Pięciu uczestników w bluzach MD Fellowship">
           <defs><clipPath id="who-clip-1"><path transform="translate(13.6 5.39)" d="M 728.4948 28.7682 L 765.103 167.387 L 744.7064 457.6175 L 689.2298 497.4713 L 492.1127 516.2261 L 60.4692 495.4292 L 0 444.9579 L 8.3675 329.6158 L 0 70.7997 L 78.4452 0 L 587.8164 13.1285 L 728.4948 28.7682 Z"/></clipPath></defs>
-          <path class="d-who__frame" transform="translate(13.6 5.39)" d="M 728.4948 28.7682 L 765.103 167.387 L 744.7064 457.6175 L 689.2298 497.4713 L 492.1127 516.2261 L 60.4692 495.4292 L 0 444.9579 L 8.3675 329.6158 L 0 70.7997 L 78.4452 0 L 587.8164 13.1285 L 728.4948 28.7682 Z"/>
           <image href="design-assets/who/f1.webp" x="13.6" y="5.39" width="765.1" height="516.23" preserveAspectRatio="none" clip-path="url(#who-clip-1)"/>
         </svg>
       </figure>
       <figure class="d-who__ph d-who__ph--2">
         <svg viewBox="0 0 550.2 522" preserveAspectRatio="none" overflow="visible" role="img" aria-label="Uśmiechnięta widownia podczas prelekcji">
           <defs><clipPath id="who-clip-2"><path transform="translate(17.18 15.93)" d="M 34.6311 461.8404 L 0 330.5065 L 19.2951 55.5286 L 71.7755 17.7692 L 258.2473 0 L 458.9657 19.7041 L 516.1693 67.5229 L 508.2537 176.8034 L 516.1693 422.0179 L 441.9605 489.0968 L 167.7121 476.6582 L 34.6311 461.8404 Z"/></clipPath></defs>
-          <path class="d-who__frame" transform="translate(17.18 15.93)" d="M 34.6311 461.8404 L 0 330.5065 L 19.2951 55.5286 L 71.7755 17.7692 L 258.2473 0 L 458.9657 19.7041 L 516.1693 67.5229 L 508.2537 176.8034 L 516.1693 422.0179 L 441.9605 489.0968 L 167.7121 476.6582 L 34.6311 461.8404 Z"/>
           <image href="design-assets/who/f2.webp" x="17.18" y="15.93" width="516.17" height="489.1" preserveAspectRatio="none" clip-path="url(#who-clip-2)"/>
         </svg>
       </figure>
       <figure class="d-who__ph d-who__ph--3">
         <svg viewBox="0 0 733.5 489" preserveAspectRatio="none" overflow="visible" role="img" aria-label="Trzy uczestniczki programu pozują z założonymi rękami">
           <defs><clipPath id="who-clip-3"><path transform="translate(12.6 5.0)" d="M 674.851 452.3009 L 708.7635 323.6797 L 689.8688 54.3816 L 638.4774 17.4021 L 455.8752 0 L 56.0165 19.2971 L 0 66.1281 L 7.7513 173.1514 L 0 413.3008 L 72.6688 478.9942 L 544.5316 466.8125 L 674.851 452.3009 Z"/></clipPath></defs>
-          <path class="d-who__frame" transform="translate(12.6 5.0)" d="M 674.851 452.3009 L 708.7635 323.6797 L 689.8688 54.3816 L 638.4774 17.4021 L 455.8752 0 L 56.0165 19.2971 L 0 66.1281 L 7.7513 173.1514 L 0 413.3008 L 72.6688 478.9942 L 544.5316 466.8125 L 674.851 452.3009 Z"/>
           <image href="design-assets/who/f3.webp" x="12.6" y="5.0" width="708.76" height="478.99" preserveAspectRatio="none" clip-path="url(#who-clip-3)"/>
         </svg>
       </figure>
       <figure class="d-who__ph d-who__ph--4">
         <svg viewBox="0 0 550.2 522" preserveAspectRatio="none" overflow="visible" role="img" aria-label="Uczestnicy słuchają prelekcji z telefonami w rękach">
           <defs><clipPath id="who-clip-4"><path transform="translate(17.18 15.93)" d="M 34.6311 461.8404 L 0 330.5065 L 19.2951 55.5286 L 71.7755 17.7692 L 258.2473 0 L 458.9657 19.7041 L 516.1693 67.5229 L 508.2537 176.8034 L 516.1693 422.0179 L 441.9605 489.0968 L 167.7121 476.6582 L 34.6311 461.8404 Z"/></clipPath></defs>
-          <path class="d-who__frame" transform="translate(17.18 15.93)" d="M 34.6311 461.8404 L 0 330.5065 L 19.2951 55.5286 L 71.7755 17.7692 L 258.2473 0 L 458.9657 19.7041 L 516.1693 67.5229 L 508.2537 176.8034 L 516.1693 422.0179 L 441.9605 489.0968 L 167.7121 476.6582 L 34.6311 461.8404 Z"/>
           <image href="design-assets/who/f4.webp" x="17.18" y="15.93" width="516.17" height="489.1" preserveAspectRatio="none" clip-path="url(#who-clip-4)"/>
         </svg>
       </figure>
     </div>
     </div></div>
     <div class="d-who__cta">
-      <p class="d-who__q d-reveal" data-split="words">Przyłożysz się?</p>
-      <p class="d-who__chance d-reveal" data-split="words">Masz szansę skończyć program <br>z pierwszymi płacącymi klientami.</p>
+      <div class="d-who__lines">
+        <p class="d-who__q d-reveal" data-split="words">Przyłożysz się?</p>
+        <p class="d-who__chance d-reveal" data-split="words">Masz szansę skończyć program <br>z pierwszymi płacącymi klientami.</p>
+      </div>
+      <div class="d-apply"><a class="d-btn d-btn--shape d-who__btn" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Zgłoszenia do 19.10.2026</span></div>
     </div>
   </div>
 </section>
@@ -1929,8 +1947,15 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       <div class="d-apply d-apply--big"><a class="d-btn d-btn--shape d-btn--big d-cta__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Zgłoszenia do 19.10.2026</span></div>
     </div>
     <div class="d-cta__photo">
+      <!-- zielona plama (kształt z about-blob.svg; ścieżka zaczyna się na środku górnej krawędzi, żeby kontur rysował się
+           od góry w obie strony i domykał na środku dołu): kontur .d-cta__line przycięty kształtem — najpierw rysuje się
+           jako linia, potem grubieje do środka, aż wypełni kształt; na końcu zostaje samo wypełnienie .d-cta__fill -->
       <div class="d-cta__blobs" aria-hidden="true">
-        <img class="d-cta__blob" src="design-assets/about-blob.svg?v=2" width="1439.59" height="554.625" alt="">
+        <svg class="d-cta__blob" viewBox="0 0 1439.59 554.625" preserveAspectRatio="none">
+          <defs><clipPath id="cta-blob-clip"><path d="M723.37 57.36 L754.50 55.81 L808.00 125.81 L814.47 52.33 L887.25 0.00 L952.66 0.00 L1013.99 69.10 L1027.08 147.19 L1056.92 52.33 L1133.38 27.80 L1193.07 52.33 L1211.45 94.45 L1254.79 175.40 L1311.62 181.53 L1372.95 239.59 L1410.15 326.68 L1439.59 429.71 L1434.28 554.62 L1166.06 554.62 L295.61 554.62 L94.86 554.62 L137.00 390.31 L94.86 357.81 L50.29 340.58 L47.43 308.69 L25.76 291.93 L0.00 244.09 L10.22 222.42 L66.64 182.76 L173.36 132.47 L221.60 101.40 L266.60 69.10 L313.21 52.33 L365.54 40.89 L447.31 69.10 L463.00 151.81 L483.92 92.19 L532.58 77.47 L599.63 77.47 L624.20 132.47 L624.20 97.19 L674.00 59.81Z"/></clipPath></defs>
+          <path class="d-cta__fill" d="M723.37 57.36 L754.50 55.81 L808.00 125.81 L814.47 52.33 L887.25 0.00 L952.66 0.00 L1013.99 69.10 L1027.08 147.19 L1056.92 52.33 L1133.38 27.80 L1193.07 52.33 L1211.45 94.45 L1254.79 175.40 L1311.62 181.53 L1372.95 239.59 L1410.15 326.68 L1439.59 429.71 L1434.28 554.62 L1166.06 554.62 L295.61 554.62 L94.86 554.62 L137.00 390.31 L94.86 357.81 L50.29 340.58 L47.43 308.69 L25.76 291.93 L0.00 244.09 L10.22 222.42 L66.64 182.76 L173.36 132.47 L221.60 101.40 L266.60 69.10 L313.21 52.33 L365.54 40.89 L447.31 69.10 L463.00 151.81 L483.92 92.19 L532.58 77.47 L599.63 77.47 L624.20 132.47 L624.20 97.19 L674.00 59.81Z"/>
+          <path class="d-cta__line" d="M723.37 57.36 L754.50 55.81 L808.00 125.81 L814.47 52.33 L887.25 0.00 L952.66 0.00 L1013.99 69.10 L1027.08 147.19 L1056.92 52.33 L1133.38 27.80 L1193.07 52.33 L1211.45 94.45 L1254.79 175.40 L1311.62 181.53 L1372.95 239.59 L1410.15 326.68 L1439.59 429.71 L1434.28 554.62 L1166.06 554.62 L295.61 554.62 L94.86 554.62 L137.00 390.31 L94.86 357.81 L50.29 340.58 L47.43 308.69 L25.76 291.93 L0.00 244.09 L10.22 222.42 L66.64 182.76 L173.36 132.47 L221.60 101.40 L266.60 69.10 L313.21 52.33 L365.54 40.89 L447.31 69.10 L463.00 151.81 L483.92 92.19 L532.58 77.47 L599.63 77.47 L624.20 132.47 L624.20 97.19 L674.00 59.81Z" pathLength="1" clip-path="url(#cta-blob-clip)"/>
+        </svg>
       </div>
       <div class="d-cta__masked" aria-hidden="true">
         <div class="riso" data-cloud="free" data-design-width="1440" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/about-collage.png?v=5" width="2159" height="832" alt=""></div>
@@ -3062,103 +3087,139 @@ function paintSceneBg() {
 }
 
 /* ---------- „Jak to działa”: trybiki stoją, tekst jedzie; każdy trybik kręci się osobno, poklatkowo ----------
-   Wejście (postęp pierwszego kroku, trackProgress): a 2–30% — kropki wyłaniają się na tle; f 22–50% — plamki łapią
-   jasność zdjęcia; c 14–50% — raster gęstnieje do normy; plama pod spodem rośnie 0.95 → 1 (46–58%).
-   Obrót: postęp całej kolumny kroków (0 = góra kroków na dole ekranu, 1 = dół kroków nad górą ekranu) × GEAR_SPIN
-   dla pierwszego trybika, zaokrąglony do GEAR_STEP (jak celowanie latarki: kąt skokami, bez przejścia); pozostałe
-   z przełożenia data-k (ujemne = w drugą stronę) od fazy startowej data-rot0 (zęby w lukach sąsiada) — ruch stoi razem
-   ze scrollem i cofa się przy przewijaniu w górę. Bez rastra (WebGPU) zostaje zwykłe zdjęcie z przenikaniem.
-   Przy prefers-reduced-motion trybiki stoją uformowane i nie kręcą się. */
+   Wejście (postęp pierwszego kroku, trackProgress): trybiki wjeżdżają z przenikaniem, każdy ze swojej strony o GEAR_SHIFT
+   szerokości ramki (data-from: lewy z lewej 14–36%, prawy z prawej 18–40%, dolny z dołu 22–44%, easeOut), potem spod nich wyrasta
+   plama 0.3 → 1 (42–54%). Raster riso stoi uformowany od początku (bez chmury kropek).
+   Obrót dopiero po wejściu: postęp całej kolumny kroków (0 = góra kroków na dole ekranu, 1 = dół kroków nad górą ekranu),
+   liczony od chwili, gdy plama jest już cała (GEAR_FROM w postępie pierwszego kroku), × GEAR_SPIN dla pierwszego trybika,
+   zaokrąglony do GEAR_STEP (jak celowanie latarki: kąt skokami, bez przejścia); pozostałe z przełożenia data-k
+   (ujemne = w drugą stronę) od fazy startowej data-rot0 (zęby w lukach sąsiada) — ruch stoi razem ze scrollem i cofa się
+   przy przewijaniu w górę. Przy prefers-reduced-motion trybiki stoją na miejscu i nie kręcą się.
+   Mobile (< 1024): trybiki są pod wszystkimi krokami, więc wejście liczy się z postępu samej ramki z trybikami,
+   a obrót z tego samego postępu od GEAR_FROM do końca. */
 const howSteps = [...document.querySelectorAll('.d-how__step')];
 const howStepsEl = document.querySelector('.d-how__steps');
-const GEAR_STEP = 4, GEAR_SPIN = 60;   // skok klatki i obrót pierwszego trybika (°) na całą kolumnę kroków
+const GEAR_STEP = 4, GEAR_SPIN = 60, GEAR_FROM = 0.54;   // skok klatki, obrót pierwszego trybika (°) na kolumnę kroków, start obrotu
+const GEAR_IN = { left: [0.14, 0.36], right: [0.18, 0.40], bottom: [0.22, 0.44] }, GEAR_SHIFT = 0.22;
 const howGears = (() => {
   const el = document.querySelector('.d-how__gears');
   if (!el) return null;
   return { el, blob: el.querySelector('.d-how__blob'),
-    gears: [...el.querySelectorAll('.d-how__gear')].map((g) => ({ el: g, k: parseFloat(g.dataset.k) || 0, rot0: parseFloat(g.dataset.rot0) || 0, shown: null })),
-    enter: makeTrack(() => trackProgress(howSteps[0])), spin: makeTrack(() => trackProgress(howStepsEl)), key: '' };
+    gears: [...el.querySelectorAll('.d-how__gear')].map((g) => ({ el: g, k: parseFloat(g.dataset.k) || 0, rot0: parseFloat(g.dataset.rot0) || 0, shown: null,
+      from: g.dataset.from || 'bottom', left: parseFloat(g.style.left) / 100, top: parseFloat(g.style.top) / 100, w: parseFloat(g.style.width) / 100, off: null })),
+    enter: makeTrack(() => trackProgress(desktopMq.matches ? howSteps[0] : el)), spin: makeTrack(() => trackProgress(howStepsEl)), key: '', s0: 0, size: '' };
 })();
 function paintHowGears(Pe, Ps) {
   const it = howGears;
-  const a = reduced ? 1 : seg(Pe, 0.02, 0.30);
-  const f = reduced ? 1 : seg(Pe, 0.22, 0.50);
-  const c = reduced ? 0 : 1 - easeOut(seg(Pe, 0.14, 0.50));
-  const o = reduced ? 1 : easeOut(seg(Pe, 0.46, 0.58));
-  it.blob.style.transform = 'scale(' + (0.95 + 0.05 * o).toFixed(4) + ')';
+  // wymiary (ramka, wysokości kroków) tylko po zmianie okna — w malowaniu bez odczytów układu w każdej klatce
+  const size = innerWidth + 'x' + innerHeight;
+  if (size !== it.size) {
+    it.size = size;
+    it.W = it.el.offsetWidth; it.H = it.el.offsetHeight;
+    // postęp kolumny w chwili, gdy pierwszy krok ma postęp GEAR_FROM (oba trackProgress liczą od góry kolumny)
+    it.s0 = GEAR_FROM * (innerHeight + howSteps[0].offsetHeight) / (innerHeight + howStepsEl.offsetHeight);
+  }
+  const o = reduced ? 1 : easeOut(seg(Pe, 0.42, 0.54));
+  it.blob.style.transform = o >= 1 ? '' : 'scale(' + (0.3 + 0.7 * o).toFixed(4) + ')';
+  it.blob.style.visibility = o > 0 ? '' : 'hidden';
   // kąt wiodący skokami co GEAR_STEP; pozostałe trybiki dokładnie z przełożenia (k = ±N1/Ni), więc zazębienie się nie rozjeżdża
-  const master = reduced ? 0 : Math.round(GEAR_SPIN * Ps / GEAR_STEP) * GEAR_STEP;
+  const turn = desktopMq.matches ? seg(Ps, it.s0, 1) : seg(Pe, GEAR_FROM, 1);
+  const master = reduced ? 0 : Math.round(GEAR_SPIN * turn / GEAR_STEP) * GEAR_STEP;
   for (const g of it.gears) {
     const ang = Math.round((g.rot0 + g.k * master) * 100) / 100;
     if (ang !== g.shown) { g.shown = ang; g.el.style.setProperty('--rot', ang + 'deg'); }
-    if (window.risoSet && window.risoSet(g.el, { s: 1, c, a, f })) { if (g.el.style.opacity) g.el.style.opacity = ''; }
-    else g.el.style.opacity = f.toFixed(3);
+    // wjazd o GEAR_SHIFT ramki ze swojej strony, jednocześnie przenikanie 0 → 1 (bez maski — trybiki się nie ucinają)
+    const [a, b] = GEAR_IN[g.from] || GEAR_IN.bottom;
+    const e = reduced ? 1 : easeOut(seg(Pe, a, b)), r = 1 - e;
+    let gx = 0, gy = 0;
+    if (g.from === 'left') gx = -GEAR_SHIFT * it.W * r;
+    else if (g.from === 'right') gx = GEAR_SHIFT * it.W * r;
+    else gy = GEAR_SHIFT * it.H * r;
+    const off = gx.toFixed(1) + 'px ' + gy.toFixed(1) + 'px|' + e.toFixed(3);
+    if (off !== g.off) {
+      g.off = off;
+      g.el.style.translate = r > 0 ? gx.toFixed(1) + 'px ' + gy.toFixed(1) + 'px' : '';
+      g.el.style.opacity = e < 1 ? e.toFixed(3) : '';
+    }
   }
 }
 
 /* ---------- „Zobacz, jak robili to inni”: karuzela zapętlona + wejście przy scrollu ----------
    pos — ciągła pozycja (indeks kafla na środku). Każdy kafel ma względne położenie k (zawinięte do [−n/2, n/2)),
-   z którego liczymy środek x, szerokość, opacity i z-index (tablica SLOT, interpolacja między pełnymi k).
-   Oryginały są sklonowane raz, żeby zawinięcie działo się daleko poza ekranem.
-   Wejście (postęp sekcji z trackProgress, jak bloki tekstu): środkowy kafel i kształt rosną 0.7 → 1 (2–14%),
+   z którego liczymy środek x, szerokość, gęstość rastra i z-index (tablica SLOT, interpolacja między pełnymi k).
+   Każdy reels ma własny nieregularny wielokąt (clip-path kadru + niebieski obrys widoczny tylko na aktywnym);
+   boczne pokazują raster kropek z postera zamiast wideo. Oryginały są sklonowane raz, żeby zawinięcie działo się daleko poza ekranem.
+   Wejście (postęp sekcji z trackProgress, jak bloki tekstu): środkowy kafel rośnie 0.7 → 1 (2–14%),
    potem pierścienie |k| = 1, 2, 3 wyjeżdżają spod środka na swoje miejsca (od 8%, co 4%, każdy przez 14%). */
+// wielokąt kadru: kształt z Figmy (10 wierzchołków, rama 396.7 × 664.6) znormalizowany do kafla, dla reelsa k > 0
+// wierzchołki przesunięte deterministycznie o maks. ~3% (do środka przy krawędziach — poza kafel i tak nic nie ma)
+const SHAPE_P = [64.897, 4.628, 360.072, 16.128, 384.082, 37.36, 392.171, 345.526, 378.794, 637.831, 228.774, 660.091, 46.533, 652.621, 5.573, 600.827, 10.842, 209.679, 4.676, 54.304];
+function reelPoly(k) {
+  const h = (i) => { const x = Math.sin((k + 1) * 91.7 + i * 12.9898) * 43758.5453; return (x - Math.floor(x)) * 2 - 1; };
+  const pts = [];
+  for (let i = 0; i < SHAPE_P.length; i += 2) {
+    const x = (SHAPE_P[i] - 4.676) / 387.495 * 100, y = (SHAPE_P[i + 1] - 4.628) / 655.463 * 100;
+    pts.push([k === 0 ? x : Math.min(100, Math.max(0, x + 3 * h(i))), k === 0 ? y : Math.min(100, Math.max(0, y + 2 * h(i + 1)))]);
+  }
+  return pts;
+}
 const reels = (() => {
   const car = document.getElementById('reels-car');
   if (!car) return null;
-  const vp = car.querySelector('.d-reels__vp'), track = car.querySelector('.d-reels__track'), shape = car.querySelector('.d-reels__shape');
+  const vp = car.querySelector('.d-reels__vp'), track = car.querySelector('.d-reels__track');
   const orig = [...track.children];
+  orig.forEach((el, i) => {
+    const media = el.querySelector('.d-reel__media'), v = media.querySelector('video');
+    const pts = reelPoly((i - Math.floor(orig.length / 2) + orig.length) % orig.length);   // startowy (środkowy) = kształt z Figmy
+    media.style.clipPath = 'polygon(' + pts.map(([x, y]) => x.toFixed(2) + '% ' + y.toFixed(2) + '%').join(',') + ')';
+    const dots = document.createElement('img');
+    dots.className = 'd-reel__dots'; dots.alt = ''; dots.decoding = 'async';
+    dots.dataset.src = v.dataset.poster.replace(/\.webp$/, '.dots.webp');
+    media.appendChild(dots);
+    media.insertAdjacentHTML('afterend', '<svg class="d-reel__line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M'
+      + pts.map(([x, y]) => x.toFixed(2) + ' ' + y.toFixed(2)).join('L') + 'Z"/></svg>');
+  });
   orig.forEach((el) => { const c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); track.appendChild(c); });
   const slides = [...track.children];
   const probe = document.createElement('div');
   probe.style.cssText = 'position:absolute;visibility:hidden;height:0;width:calc(1000 * var(--u))';
   vp.appendChild(probe);
-  return { car, vp, shape, slides, n: slides.length, m: orig.length, probe, pos: Math.floor(orig.length / 2), target: Math.floor(orig.length / 2),
+  return { car, vp, slides, n: slides.length, m: orig.length, probe, pos: Math.floor(orig.length / 2), target: Math.floor(orig.length / 2),
     drag: null, track: makeTrack(() => trackProgress(car)), key: '', visible: false, sound: false, started: false, vkey: '' };
 })();
-// sloty w px Figmy: [x środka, szerokość, opacity]; |k| ≥ 3 jak 3
-const SLOT = [[0, 280, 1], [361.5, 230, 0.55], [624, 207, 0.55], [875, 207, 0.55]];
+// sloty w px Figmy: [x środka, szerokość, gęstość rastra kropek]; |k| ≥ 3 jak 3. Środek = --rw w CSS
+// poniżej 1024 px boczne bliżej środka, żeby wystawały zza krawędzi ekranu (pod strzałkami)
+const SLOT_D = [[0, 336, 0], [390, 254, 0.56], [670, 170, 0.38], [870, 170, 0.38]];
+const SLOT_M = [[0, 336, 0], [322, 254, 0.56], [560, 170, 0.38], [740, 170, 0.38]];
+let SLOT = desktopMq.matches ? SLOT_D : SLOT_M;
+desktopMq.addEventListener('change', () => { SLOT = desktopMq.matches ? SLOT_D : SLOT_M; if (reels) reels.key = ''; });
 const RK = 1.0389;   // px Figmy → u
 function slotAt(a) {
   const i = Math.min(Math.floor(a), 2), f = Math.min(a, 3) - i, A = SLOT[i], B = SLOT[i + 1];
-  const x = a > 3 ? SLOT[3][0] + (a - 3) * 251 : A[0] + (B[0] - A[0]) * f;
+  const x = a > 3 ? SLOT[3][0] + (a - 3) * 200 : A[0] + (B[0] - A[0]) * f;
   return [x, A[1] + (B[1] - A[1]) * f, A[2] + (B[2] - A[2]) * f];
-}
-// kształt pod aktywnym kaflem: przy każdej zmianie aktywnego reelsa przeskakuje (bez przejścia, jak klatka) na lekko
-// inną wersję wielokąta — wierzchołki przesunięte o maks. ~9 px Figmy, deterministycznie dla indeksu reelsa
-const SHAPE_P = [64.897, 4.628, 360.072, 16.128, 384.082, 37.36, 392.171, 345.526, 378.794, 637.831, 228.774, 660.091, 46.533, 652.621, 5.573, 600.827, 10.842, 209.679, 4.676, 54.304];
-const shapePath = document.getElementById('reels-shape-path');
-function reelShapeD(k) {
-  const h = (i) => { const x = Math.sin((k + 1) * 91.7 + i * 12.9898) * 43758.5453; return (x - Math.floor(x)) * 2 - 1; };
-  const pts = SHAPE_P.map((v, i) => (k === 0 ? v : v + 9 * h(i)).toFixed(2));
-  let d = '';
-  for (let i = 0; i < pts.length; i += 2) d += (i ? 'L' : 'M') + pts[i] + ' ' + pts[i + 1];
-  return d + 'Z';
 }
 function paintReels(P) {
   const R = reels, u = R.probe.offsetWidth / 1000;
-  const act = ((Math.round(R.pos) % R.m) + R.m) % R.m;   // indeks reelsa (oryginał i klon mają ten sam kształt)
-  if (shapePath && act !== R.shapeK) { R.shapeK = act; shapePath.setAttribute('d', reelShapeD((act - Math.floor(R.m / 2) + R.m) % R.m)); }
   const e0 = reduced ? 1 : easeOut(seg(P, 0.02, 0.14));
   const sc0 = 0.7 + 0.3 * e0;
-  R.shape.style.transform = e0 >= 1 ? '' : 'scale(' + sc0.toFixed(4) + ')';
-  R.shape.style.opacity = e0 >= 1 ? '' : e0.toFixed(3);
   R.slides.forEach((el, i) => {
     let k = ((i - R.pos) % R.n + R.n) % R.n;
     if (k >= R.n / 2) k -= R.n;
-    const a = Math.abs(k), [x0, w0, op] = slotAt(a);
+    const a = Math.abs(k), [x0, w0, dots] = slotAt(a);
     const ring = Math.min(3, Math.round(a));
     const ein = ring === 0 ? e0 : (reduced ? 1 : easeInOut(seg(P, 0.08 + 0.04 * (ring - 1), 0.22 + 0.04 * (ring - 1))));
     const x = Math.sign(k) * x0 * (ring === 0 ? 1 : ein) * RK * u;
-    const w = w0 * RK * u, h = w * 16 / 9, hA = 280 * RK * u * 16 / 9;
-    const y = (hA - h) / 2 + Math.min(a, 1) * 8.85 * RK * u;
+    const w = w0 * RK * u, h = w * 16 / 9, hA = SLOT[0][1] * RK * u * 16 / 9;
+    const y = (hA - h) / 2;
     const s = ring === 0 ? sc0 : 1;
     el.style.width = w.toFixed(2) + 'px';
     el.style.transform = 'translate(' + (x - w / 2).toFixed(2) + 'px,' + y.toFixed(2) + 'px)' + (s < 1 ? ' scale(' + s.toFixed(4) + ')' : '');
     el.style.transformOrigin = '50% 40%';
-    // nieaktywne: czarna apla na kadrze (--dim 0 → 1 przy op 1 → 0.55) zamiast przezroczystości — kafle nie prześwitują przez siebie;
-    // przezroczystość zostaje tylko na wejście sekcji
+    // aktywny: wideo w kolorze z obrysem; w drodze na bok wideo gaśnie, a raster kropek gęstnieje (--dim, --dots)
     el.style.opacity = (ring === 0 ? e0 : ein).toFixed(3);
-    el.style.setProperty('--dim', ((1 - op) / 0.45).toFixed(3));
+    el.style.setProperty('--dim', Math.min(1, a).toFixed(3));
+    el.style.setProperty('--dots', dots.toFixed(3));
     el.style.zIndex = String(10 - Math.round(a * 2));
     el.classList.toggle('is-active', a < 0.5);
   });
@@ -3182,7 +3243,7 @@ if (reels) {
   });
   R.vp.addEventListener('pointermove', (e) => {
     if (!R.drag) return;
-    const step = 361.5 * RK * R.probe.offsetWidth / 1000;
+    const step = SLOT[1][0] * RK * R.probe.offsetWidth / 1000;
     R.pos = R.drag.pos - (e.clientX - R.drag.x) / step;
   });
   const end = (e) => {
@@ -3214,6 +3275,7 @@ if (reels) {
     if (!en.isIntersecting) return;
     lazy.disconnect();
     R.slides.forEach((el) => el.querySelectorAll('video[data-poster]').forEach((v) => { v.poster = v.dataset.poster; }));
+    R.slides.forEach((el) => el.querySelectorAll('img[data-src]').forEach((img) => { img.src = img.dataset.src; img.removeAttribute('data-src'); }));
   }, { rootMargin: '50% 0px' });
   lazy.observe(R.car);
 }
@@ -3308,40 +3370,15 @@ if (aboutStatsEl) {
    nim, coś w nim ma fokus albo jest otwarte bio (tap) — zwalnia do zera. Chwycenie: rząd idzie za palcem/kursorem,
    po puszczeniu leci z prędkością rzutu, która wygasa do prędkości jazdy. Tap/klik bez przesunięcia: bio w kaflu.
    Własna pętla rAF (tylko gdy sekcja jest w ekranie); reduced motion: bez jazdy, przeciąganie zostaje. */
-/* raster riso na hover kafla: jeden element .riso (WebGPU) przenoszony do kafla. Wejście: sama postać (mXX-cut.avif),
-   kropki pojawiają się tylko w kształcie postaci (bez trybu free) i układają w zdjęcie jak kolaż w „Nie robimy
-   konkursów” (fazy a/f/c), papier rastra przykrywa kolorowe zdjęcie w obrysie postaci; ramka i niebieskie tło zostają. Czas: wejście 900 ms,
-   wyjście 350 ms (to interakcja, nie scroll). Bez WebGPU nic się nie dzieje (zostaje zwykłe zdjęcie i bio). */
-const mentorRiso = (() => {
-  const el = document.getElementById('mentor-riso'), park = el && el.parentNode;
-  const img = el && el.querySelector('img');
-  let tile = null, p = 0, target = 0, last = 0, raf = 0, token = 0;
-  const cutOf = (t) => (t.querySelector('.d-mtile__photo img').getAttribute('src') || '').replace(/(m\d\d)\.(?:webp|avif)(\?.*)?$/, '$1-cut.avif$2');
-  function paint() {
-    const a = seg(p, 0, 0.45), f = seg(p, 0.2, 0.85), c = 1 - easeOut(seg(p, 0.1, 0.85));
-    if (window.risoSet) window.risoSet(el, { s: 1, c, a, f });
-  }
-  function tick(now) {
-    const dt = Math.min(0.05, (now - last) / 1000); last = now;
-    p = target > p ? Math.min(target, p + dt / 0.45) : Math.max(target, p - dt / 0.22);   // wejście 450 ms, wyjście 220 ms
-    paint();
-    if (p === 0 && target === 0 && tile) { park.appendChild(el); tile = null; }
-    raf = p !== target ? requestAnimationFrame(tick) : 0;
-  }
-  function run() { if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }
-  function show(t) {
-    if (!el || !window.risoRedraw || reduced) return;
-    if (!t) { target = 0; run(); return; }
-    if (t === tile) { target = 1; run(); return; }
-    const my = ++token, src = cutOf(t);
-    tile = t; p = 0; target = 1;
-    t.querySelector('.d-mtile__photo').insertBefore(el, t.querySelector('.d-mtile__tag, .d-mtile__bio'));
-    const go = () => { if (my !== token || tile !== t) return; if (window.risoRedraw(el)) { paint(); run(); } };
-    if (img.getAttribute('src') === src && img.complete) go();
-    else { img.onload = go; img.src = src; }
-  }
-  return { show };
-})();
+/* obrys postaci na hover: w każdym kaflu warstwa .d-mtile__halo z maską mXX-halo.webp (ten sam numer co zdjęcie);
+   dodawana przed klonowaniem rzędów, więc klony mają ją od razu. Hover/fokus/tap: obrys zielony, bio na przyciemnieniu gradientem (CSS). */
+document.querySelectorAll('#mentors-rows .d-mtile__photo').forEach((ph) => {
+  const src = (ph.querySelector('img').getAttribute('src') || '').replace(/(m\d\d)\.(?:webp|avif)(\?.*)?$/, '$1-halo.webp$2');
+  const h = document.createElement('span');
+  h.className = 'd-mtile__halo'; h.setAttribute('aria-hidden', 'true');
+  h.style.setProperty('--halo', 'url("' + src + '")');
+  ph.querySelector('picture').after(h);
+});
 const mentorRows = (() => {
   const root = document.getElementById('mentors-rows');
   if (!root) return null;
@@ -3364,7 +3401,6 @@ const mentorRows = (() => {
   }
   function closeAll(except) {
     root.querySelectorAll('.d-mtile.is-open').forEach((t) => { if (t !== except) t.classList.remove('is-open'); });
-    if (!except) mentorRiso.show(null);
   }
   rows.forEach((R) => {
     // zatrzymanie od razu (bez wyhamowania) — inaczej kafel jeszcze przesuwa się pod kursorem i hover przeskakuje
@@ -3394,14 +3430,12 @@ const mentorRows = (() => {
       if (R.moved) R.v = Math.max(-2500, Math.min(2500, D.v));
       else if (e.type === 'pointerup') {   // tap/klik: bio w kaflu (dotyk; myszą bio jest na hover)
         const t = e.target.closest('.d-mtile');
-        if (t && e.pointerType !== 'mouse') { const open = !t.classList.contains('is-open'); closeAll(t); t.classList.toggle('is-open', open); mentorRiso.show(open ? t : null); }
+        if (t && e.pointerType !== 'mouse') { const open = !t.classList.contains('is-open'); closeAll(t); t.classList.toggle('is-open', open); }
       }
     };
     R.el.addEventListener('pointerup', end);
     R.el.addEventListener('pointercancel', end);
     R.el.addEventListener('dragstart', (e) => e.preventDefault());
-    R.el.addEventListener('pointerover', (e) => { if (e.pointerType === 'mouse' && !R.drag) mentorRiso.show(e.target.closest('.d-mtile')); });
-    R.el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') mentorRiso.show(null); });
   });
   document.addEventListener('pointerdown', (e) => { if (!e.target.closest('#mentors-rows')) closeAll(null); });
   // pionowo: rząd przesunięty o ułamek tak, żeby jego góra w dokumencie wypadała na całym pikselu urządzenia
@@ -3445,23 +3479,25 @@ const mentorRows = (() => {
 
 /* ---------- 8 · Dla kogo: pasek zdjęć jedzie w lewo przy scrollu (jak na referencji wideo) ----------
    Desktop: pasek siedzi w .d-who__pin (sticky, 100svh) wewnątrz .d-who__run (wysokość = ekran + droga paska).
-   s = scroll względem chwili przyklejenia (góra .d-who__run na górze ekranu; przed nią ujemne). Pasek przesuwa się
-   liniowo x = x0 − WHO_SPEED · s: przy s = 0 pierwsze zdjęcie stoi obok tekstów (lewa krawędź za blokiem tekstu
-   + odstęp), wcześniej wjeżdża zza prawej krawędzi ekranu; droga przyklejenia kończy się, gdy prawa krawędź ostatniego
-   zdjęcia stanie 40 px od prawej krawędzi ekranu (x1), potem pasek jedzie dalej w tym samym tempie razem z odklejonym
-   pinem. Pion: zdjęcia stoją w schodkach, więc pasek przesuwa się w pionie tak, żeby zdjęcie na środku ekranu było
+   s = scroll względem chwili przyklejenia (góra .d-who__run na górze ekranu; przed nią ujemne). Przy s = 0 pierwsze
+   zdjęcie stoi obok tekstów (lewa krawędź za blokiem tekstu + odstęp), wcześniej wjeżdża zza prawej krawędzi ekranu
+   (x = x0 − WHO_SPEED · s). Po przyklejeniu pasek stoi (who.hold px scrolla), aż tekst — jedzie zwykłym scrollem w górę —
+   zejdzie nad górną krawędź pierwszego zdjęcia, żeby zdjęcie nie wjechało pod tekst; potem rusza w lewo, rozpędzając się
+   przez WHO_RAMP px scrolla do WHO_SPEED. Droga przyklejenia kończy się, gdy prawa krawędź ostatniego zdjęcia stanie 40 px
+   od prawej krawędzi ekranu (x1), potem pasek jedzie dalej w tym samym tempie razem z odklejonym pinem. Pion: zdjęcia stoją w schodkach, więc pasek przesuwa się w pionie tak, żeby zdjęcie na środku ekranu było
    wyśrodkowane w pionie pod nawigacją (interpolacja liniowa między środkami zdjęć).
    Mobile (bez pinu): P = 0, gdy góra paska jest na dole ekranu, 1, gdy dół paska znika górą ekranu (cały czas, gdy pasek
    jest widoczny); x od x0 (pierwsze zdjęcie przy 85 % szerokości) do x1 (ostatnie z prawym marginesem równym lewemu pierwszego).
    Skala każdego zdjęcia z odległości jego środka od środka ekranu: na środku WHO_BIG, od pół szerokości ekranu WHO_SMALL
    (cos², płynnie). Reduced motion: bez przyklejania, pasek stoi w połowie drogi, bez skalowania. */
 const WHO_BIG = 1.06, WHO_SMALL = 0.84, WHO_SPEED = 2, WHO_GAP = 64;   // WHO_SPEED: px w bok na 1 px scrolla
+const WHO_RAMP = 160, WHO_CLEAR = 40;   // rozpęd paska (px scrolla) i odstęp tekstu nad pierwszym zdjęciem przed ruszeniem
 const who = (() => {
   const sec = document.querySelector('.d-who');
   if (!sec) return null;
   const track = sec.querySelector('.d-who__track');
   const it = { sec, track, run: sec.querySelector('.d-who__run'), body: sec.querySelector('.d-who__body'), title: sec.querySelector('.d-who__title'),
-    phs: [...track.querySelectorAll('.d-who__ph')], pts: [], pinned: false, x0: 0, x1: 0 };
+    phs: [...track.querySelectorAll('.d-who__ph')], pts: [], pinned: false, x0: 0, x1: 0, hold: 0 };
   it.tr = makeTrack(() => {
     if (it.pinned) return -it.run.getBoundingClientRect().top;
     return clamp01((innerHeight - track.getBoundingClientRect().top) / (innerHeight + track.offsetHeight));
@@ -3480,7 +3516,15 @@ function placeWho() {
     const textRight = Math.max(who.title.getBoundingClientRect().right, who.body.getBoundingClientRect().right) - frameLeft;
     who.x0 = textRight + WHO_GAP - f.offsetLeft;
     who.x1 = innerWidth - 40 - frameLeft - (l.offsetLeft + l.offsetWidth);
-    who.run.style.height = (innerHeight + Math.max(0, (who.x0 - who.x1) / WHO_SPEED)) + 'px';
+    // postój po przyklejeniu: dół tekstu (względem góry .d-who__run = góry ekranu w chwili przyklejenia) ma zejść
+    // WHO_CLEAR nad górę pierwszego zdjęcia (pozycja i skala zdjęcia w tej chwili, jak w paintWho)
+    const runTop = who.run.getBoundingClientRect().top;
+    const textBottom = Math.max(who.title.getBoundingClientRect().bottom, who.body.getBoundingClientRect().bottom) - runTop;
+    const y0 = whoY(innerWidth / 2 - frameLeft - who.x0);
+    const mid = innerWidth / 2, d = Math.min(1, Math.abs(frameLeft + who.track.offsetLeft + who.x0 + f.offsetLeft + f.offsetWidth / 2 - mid) / mid);
+    const c = Math.cos(d * Math.PI / 2), sc = WHO_SMALL + (WHO_BIG - WHO_SMALL) * c * c;
+    who.hold = Math.max(0, textBottom + WHO_CLEAR - (y0 + f.offsetTop + f.offsetHeight * (1 - sc) / 2));
+    who.run.style.height = (innerHeight + who.hold + WHO_RAMP / 2 + Math.max(0, (who.x0 - who.x1) / WHO_SPEED)) + 'px';
   } else {
     who.run.style.height = '';
     who.x0 = w * 0.85 - f.offsetLeft;
@@ -3498,9 +3542,16 @@ function whoY(cx) {
   }
   return (innerHeight + 56) / 2 - y;
 }
+// droga paska w px scrolla: przed przyklejeniem jak scroll, potem postój (hold), rozpęd przez WHO_RAMP i dalej 1:1
+function whoTravel(v) {
+  if (v <= 0) return v;
+  const z = v - who.hold;
+  if (z <= 0) return 0;
+  return z < WHO_RAMP ? z * z / (2 * WHO_RAMP) : z - WHO_RAMP / 2;
+}
 function paintWho(v) {
   let x, y = 0;
-  if (who.pinned) x = who.x0 - WHO_SPEED * v;
+  if (who.pinned) x = who.x0 - WHO_SPEED * whoTravel(v);
   else x = reduced ? who.x1 / 2 : who.x0 + (who.x1 - who.x0) * v;
   const frameLeft = who.track.parentElement.getBoundingClientRect().left;
   if (who.pinned) y = whoY(innerWidth / 2 - frameLeft - x);
@@ -3515,18 +3566,19 @@ function paintWho(v) {
 }
 if (who) { new ResizeObserver(placeWho).observe(who.track); addEventListener('resize', placeWho); placeWho(); }
 
-/* ---------- 10 · CTA: latarka w rogu świeci na nagłówek i przycisk, zdjęcie formuje się z kropek ----------
+/* ---------- 10 · CTA: latarka w rogu świeci na nagłówek i przycisk, pod spodem rysuje się plama i wjeżdża zdjęcie ----------
    Snop zapala się z mrugnięciem (switchOn), gdy góra sekcji wjedzie poniżej 60 % ekranu, i gaśnie, gdy sekcja zjeżdża
    z ekranu (histereza). Latarka celuje za kursorem (makeAimer 'aim', jak w Problemie) i mruga na klik (wirePress).
    Pod snopem przycisk robi się niebieski (paintLit: wielokąt snopa → clip-path warstwy); plama zdjęcia zostaje zielona.
-   Zdjęcie: wejście jak wcześniej w „Nie robimy konkursów” (postęp = ile zdjęcia wjechało w ekran: kropki a .02–.24,
-   jasność f .14–.40, raster c .08–.40, plama .36–.48), tagi wyjeżdżają z masek po kolei od .44.
-   Reduced motion: snop świeci, zdjęcie od razu uformowane. */
+   Zdjęcie (postęp = ile zdjęcia wjechało w ekran): kontur zielonej plamy rysuje się od środka górnej krawędzi w obie
+   strony .02–.32, potem linia grubieje do środka, aż wypełni kształt .30–.50; kolaż (raster riso, stoi uformowany)
+   wyjeżdża od dołu .46–.76; tagi wyjeżdżają z masek po kolei od .70. Reduced motion: snop świeci, wszystko od razu na miejscu. */
 const cta = (() => {
   const sec = document.querySelector('.d-cta');
   if (!sec) return null;
   const photo = sec.querySelector('.d-cta__photo');
-  return { sec, A: sec.querySelector('.d-cta__fl--a'), beam: ctaBeam, photo, riso: photo.querySelector('.riso'), blobs: photo.querySelector('.d-cta__blobs'),
+  return { sec, A: sec.querySelector('.d-cta__fl--a'), beam: ctaBeam, photo, riso: photo.querySelector('.riso'),
+    line: photo.querySelector('.d-cta__line'), fill: photo.querySelector('.d-cta__fill'),
     // postęp zdjęcia: 0 = góra zdjęcia na dole ekranu, 1 = dół zdjęcia na dole ekranu (= koniec strony; zwykły trackProgress
     // nie doszedłby tu nawet do połowy, bo za zdjęciem nie ma już nic do przewinięcia)
     tags: [...photo.querySelectorAll('.d-mask__i')], track: makeTrack(() => { const r = photo.getBoundingClientRect(); return clamp01((innerHeight - r.top) / Math.max(1, r.height)); }), lit: null };
@@ -3544,17 +3596,20 @@ function checkCtaLight() {
   const want = reduced ? r.bottom > 0 : (cta.lit ? r.top < innerHeight * 0.7 && r.bottom > 0 : r.top < innerHeight * 0.6 && r.bottom > 0);
   if (want !== cta.lit) ctaLight(want, cta.lit === null);
 }
-// zdjęcie i tagi: tylko gdy zmienia się postęp (wcześniej co klatkę scrolla na całej stronie, z renderem rastra 1440 px)
+// plama, zdjęcie i tagi: tylko gdy zmienia się postęp; style wpisywane tylko po zmianie wartości
+const CTA_LINE = 16, CTA_FILL = 480;   // grubość konturu i kreski, która wypełnia kształt (2 × największa odległość od brzegu ≈ 2 × 223)
+function ctaSet(el, prop, v) { const c = el.__st || (el.__st = {}); if (c[prop] !== v) { c[prop] = v; el.style.setProperty(prop, v); } }
 function paintCta(P) {
-  const a = reduced ? 1 : seg(P, 0.02, 0.24);
-  const f = reduced ? 1 : seg(P, 0.14, 0.40);
-  const c = reduced ? 0 : 1 - easeOut(seg(P, 0.08, 0.40));
-  const o = reduced ? 1 : easeOut(seg(P, 0.36, 0.48));
-  cta.blobs.style.opacity = o >= 1 ? '' : o.toFixed(3);
-  cta.blobs.style.transform = o >= 1 ? '' : 'scale(' + (0.96 + 0.04 * o).toFixed(4) + ')';
-  cta.tags.forEach((el, i) => paintMask(el, reduced ? 0 : 1 - easeOut(seg(P, 0.44 + i * 0.02, 0.56 + i * 0.02)), +1));
-  if (window.risoSet && window.risoSet(cta.riso, { s: 1, c, a, f })) { if (cta.riso.style.opacity) cta.riso.style.opacity = ''; }
-  else cta.riso.style.opacity = f.toFixed(3);
+  const d = reduced ? 1 : easeInOut(seg(P, 0.02, 0.32));   // rysowanie konturu (od startu ścieżki w obie strony)
+  const g = reduced ? 1 : easeInOut(seg(P, 0.30, 0.50));   // kontur grubieje do środka (kreska przycięta kształtem)
+  const up = reduced ? 0 : 1 - easeOut(seg(P, 0.46, 0.76)); // kolaż: 1 = schowany pod dolną krawędzią
+  const full = g >= 1;
+  ctaSet(cta.line, 'visibility', d > 0 && !full ? 'visible' : 'hidden');
+  ctaSet(cta.line, 'stroke-dasharray', (d / 2).toFixed(4) + ' ' + (1 - d).toFixed(4) + ' ' + (d / 2).toFixed(4));
+  ctaSet(cta.line, 'stroke-width', (CTA_LINE + (CTA_FILL - CTA_LINE) * g).toFixed(1) + 'px');
+  ctaSet(cta.fill, 'visibility', full ? 'visible' : 'hidden');
+  ctaSet(cta.riso, 'transform', up > 0 ? 'translateY(' + (up * 100).toFixed(2) + '%)' : '');
+  cta.tags.forEach((el, i) => paintMask(el, reduced ? 0 : 1 - easeOut(seg(P, 0.70 + i * 0.025, 0.82 + i * 0.025)), +1));
 }
 if (cta) {
   // celowanie: grupa latarki obrócona o −45.22° (Problem: −68.25°, rest 159.2) → rest 182.2
@@ -3620,9 +3675,6 @@ if (cta) {
 /* ---------- pętla: jeden zegar dla wszystkiego, co zależy od scrolla ---------- */
 const travelTrack = makeTrack(() => (geo ? clamp01(scrollY / geo.span) : 0));   // podróż: do przyklejenia latarki
 
-const darkSecs = [...document.querySelectorAll('.d-about, .d-mentors, .d-who')];
-// ciemne tło: „Nie robimy konkursów” od połowy przejścia w czerń (.is-dark), mentorzy i „Dla kogo” dopóki nie są niebiescy
-const isDarkSec = (el) => (el === aboutBgEl ? el.classList.contains('is-dark') : !el.classList.contains('is-blue'));
 /* „Dla kogo” → FAQ: tło obu sekcji z czarnego w niebieski, gdy góra FAQ jedzie od 70 % do 20 % wysokości ekranu
    (scroll-linked, bez zegara); od połowy przejścia teksty i nawigacja przełączają się na wersję na jasnym tle */
 const whoSecEl = document.querySelector('.d-who'), faqSecEl = document.querySelector('.d-faq');
@@ -3650,32 +3702,38 @@ function paintAboutBg() {
   [aboutBgEl, mentorsBgEl].forEach((el) => { el.style.backgroundColor = bg; });
   aboutBgEl.classList.toggle('is-dark', v >= 0.5);
 }
-// tło pod przyciskiem nawigacji: pierwszy element pod nim (poza samą nawigacją) z nieprzezroczystym tłem;
-// jasne = wszystkie kanały ≥ 225 (krem, biel) — niebieski Hero i czarni mentorzy nie są jasne
-const navCta = nav.querySelector('.d-nav__cta');
-let navBgKey = null;
+/* pasek nawigacji: kolor tła sekcji tuż pod jego dolną krawędzią — pierwsza warstwa tła (sekcja albo scena) pod punktem,
+   pomijając treść (zdjęcia, kafle, przyciski) i warstwy przezroczyste. Ciemny pasek (luminancja < 50%): logo i linki białe.
+   Jasny (wszystkie kanały ≥ 225: krem, biel): kształt przycisku Aplikuj niebieski (.is-light), jak wcześniej nad jasnym tłem. */
+const navBar = nav.querySelector('.d-nav__bar');
+const NAV_BG = '.d-scene, .d-hero, .d-about, .d-mentors, .d-who, .d-faq, .d-cta, body';
+let navBgKey = null, navPosKey = null;
 function paintNavBg() {
-  const key = scrollY + ':' + innerWidth + ':' + innerHeight;
-  if (key === navBgKey) return;
-  navBgKey = key;
-  const r = navCta.getBoundingClientRect();
-  let light = false;
-  for (const el of document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2)) {
-    if (nav.contains(el)) continue;
-    const bg = getComputedStyle(el).backgroundColor, m = bg.match(/[\d.]+/g);   // rgb(…) albo color(srgb 0–1 …) z color-mix
+  // tła zależą tylko od scrolla (i rozmiaru okna) — próbkujemy tylko po ich zmianie
+  const pos = scrollY + ':' + innerWidth + ':' + innerHeight;
+  if (pos === navPosKey) return;
+  navPosKey = pos;
+  const y = navBar.offsetHeight + 1;
+  let bg = '';
+  for (const el of document.elementsFromPoint(innerWidth / 2, y)) {
+    if (nav.contains(el) || !el.matches(NAV_BG)) continue;
+    const c = getComputedStyle(el).backgroundColor, m = c.match(/[\d.]+/g);   // rgb(…) albo color(srgb 0–1 …) z color-mix
     if (!m || (m.length > 3 && +m[3] < 0.5)) continue;
-    const k = bg.startsWith('color(') ? 255 : 1;
-    light = Math.min(+m[0], +m[1], +m[2]) * k >= 225;
+    const k = c.startsWith('color(') ? 255 : 1;
+    bg = [+m[0] * k, +m[1] * k, +m[2] * k];
     break;
   }
-  nav.classList.toggle('is-light', light);
+  if (!bg) return;
+  const key = bg.map(Math.round).join(',');
+  if (key === navBgKey) return;
+  navBgKey = key;
+  navBar.style.backgroundColor = 'rgb(' + key + ')';
+  nav.classList.toggle('is-dark', 0.2126 * bg[0] + 0.7152 * bg[1] + 0.0722 * bg[2] < 128);
+  nav.classList.toggle('is-light', Math.min(bg[0], bg[1], bg[2]) >= 225);
 }
 function frame(driving, dt) {
-  nav.classList.toggle('is-scrolled', scrollY > 8);
   paintWhoBg();
   paintAboutBg();
-  nav.classList.toggle('is-dark', darkSecs.some((el) => { if (!isDarkSec(el)) return false; const r = el.getBoundingClientRect(); return r.top <= 28 && r.bottom >= 28; }));
-  paintNavBg();
   if (travelOn()) {
     const pe = sync(exitTrack, driving, dt);
     if (pe !== exitTrack.key) { exitTrack.key = pe; paintHeroExit(pe); }
@@ -3689,6 +3747,7 @@ function frame(driving, dt) {
   }
   checkBeamOut();
   paintSceneBg();
+  paintNavBg();
   if (howGears) {
     const pe = sync(howGears.enter, driving, dt), ps = sync(howGears.spin, driving, dt);
     const key = pe.toFixed(4) + ':' + ps.toFixed(4);
@@ -3733,6 +3792,7 @@ function loop(ts) {
 applyMode();
 (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
   splitAll(); placeHeroBeam();
+  if (who) placeWho();   // blok tekstu „Dla kogo” w docelowym foncie (postój paska liczy się od dołu tekstu)
   requestAnimationFrame(loop);
 });
 let rt;
