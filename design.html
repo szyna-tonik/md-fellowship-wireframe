@@ -633,15 +633,15 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 /* 60 px Figmy (62.33u); blok 810u jak w Figmie dla 64 px;
    tekst na krawędzi contentu: 40 px od lewej krawędzi strony jak w Hero, także gdy ramka (maks. 1920) jest wyśrodkowana;
    odstęp między akapitami 92 px */
-.d-problem__text { position: relative; z-index: 1; margin-left: calc(40px - (100cqw - 1496 * var(--u)) / 2); width: calc(810 * var(--u));
+.d-problem__text { position: relative; z-index: 1; margin-left: calc(40px - (100cqw - 1496 * var(--u)) / 2); width: calc(624 * var(--u));
   display: flex; flex-direction: column; gap: calc(92 * var(--u)); }
-.d-problem__text > * { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(62.33 * var(--u)); line-height: 1.1;
-  letter-spacing: calc(-1.52 * var(--u)); color: var(--c-black); }   /* bez wersalików: wielkie litery tylko tam, gdzie w tekście */
+.d-problem__text > * { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(48 * var(--u)); line-height: 1.1;
+  letter-spacing: calc(-1.17 * var(--u)); color: var(--c-black); }   /* Figma 62.33 → 48: mniejsze na prośbę klienta (2026-10-07) */   /* bez wersalików: wielkie litery tylko tam, gdzie w tekście */
 /* ostatni akapit (Figma 7265:1747): do lewej krawędzi contentu, „Przyłożysz się?” 107.8 px, pod nim 60 px i przycisk;
    odstęp od akapitów wyżej 2× (92 → 184: gap 92 + margines 92) */
 .d-problem__text > .d-problem__cta { width: max-content; margin-top: calc(92 * var(--u)); display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
 .d-problem__cta > p { margin: 0; }
-.d-problem__big { font-size: calc(91.42 * var(--u)); letter-spacing: calc(-1.83 * var(--u)); }   /* 88 px */
+.d-problem__big { font-size: calc(70.4 * var(--u)); letter-spacing: calc(-1.41 * var(--u)); }   /* Figma 88 px → 68 px */
 .d-problem__sub { margin-top: calc(49.9 * var(--u)) !important; }
 .d-problem__btn { position: relative; pointer-events: auto; }
 .d-problem__apply { margin-top: calc(33.2 * var(--u)); }
@@ -907,8 +907,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-mtile__photo img { position: absolute; left: -1px; top: -1px; display: block; width: calc(100% + 2px); height: calc(100% + 2px); object-fit: cover; pointer-events: none; }
 /* lekki zoom na hover: zdjęcie i raster riso razem (ten sam środek), plakietka i bio stoją */
 .d-mtile__photo img, .d-mtile__halo { transform-origin: 50% 60%; transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1); }
-/* obrys postaci na hover: zielona warstwa przycięta maską białego wielokąta wpieczonego w zdjęcie (mXX-halo.webp,
-   scratchpad mentors/halo.py; --halo wpisuje skrypt) — biały obrys przechodzi w zielony, zbliża się razem ze zdjęciem */
+/* obrys postaci na hover: zielona warstwa przycięta maską białego wielokąta wpieczonego w zdjęcie (<slug>-halo.webp,
+   scratchpad ment/build.py; --halo wpisuje skrypt) — biały obrys przechodzi w zielony, zbliża się razem ze zdjęciem */
 .d-mtile__halo { position: absolute; z-index: 1; left: -1px; top: -1px; width: calc(100% + 2px); height: calc(100% + 2px); pointer-events: none;
   background: #A6F893; -webkit-mask: var(--halo) no-repeat 0 0 / 100% 100%; mask: var(--halo) no-repeat 0 0 / 100% 100%;
   opacity: 0; transition: opacity 250ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1); }
@@ -1016,6 +1016,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-faq__in { min-height: 0; overflow: hidden; }   /* w środku, żeby odstęp pod tekstem też się zwijał */
 .d-faq__a .d-body { margin: 0; padding-bottom: calc(32 * var(--u)); color: var(--c-white); text-wrap: pretty;
   opacity: 0; translate: 0 calc(-10 * var(--u)); transition: opacity 320ms ease, translate 520ms cubic-bezier(0.22, 1, 0.36, 1); }
+.d-faq__a .d-body > * { margin: 0; }
+.d-faq__a .d-body > * + * { margin-top: 0.6em; }
+.d-faq__rounds { padding-left: 1.2em; }
 .d-faq__a.is-open .d-body { opacity: 1; translate: none; transition-delay: 80ms, 0ms; }
 .d-faq__sign { transition: transform 200ms ease, rotate 360ms cubic-bezier(0.22, 1, 0.36, 1); }
 .d-faq__q[aria-expanded="true"] .d-faq__sign { rotate: 180deg; }
@@ -1263,7 +1266,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     <h1 class="d-hero__title"><span class="d-hero__w d-hero__w--1"><span class="d-hero__wi">Startup</span></span> <span class="d-hero__w d-hero__w--2"><span class="d-hero__wi">disco</span></span><span class="d-hero__w d-hero__w--3"><span class="d-hero__wi">very</span></span> <span class="d-hero__w d-hero__w--4"><span class="d-hero__wi">Sprint</span></span></h1>
     <div class="d-hero__intro d-intro-in" id="hero-cta" style="--intro-delay: 560ms">
       <p class="d-body d-hero__lead" data-split="lines">Zanim zaczniesz budować, porozmawiaj z klientami:<br>pokażemy Ci, jak znaleźć problem, za którego<br>rozwiązanie ktoś będzie gotowy zapłacić.</p>
-      <span class="d-mask d-mask--btn d-apply"><a class="d-btn d-btn--shape d-mask__i" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date d-mask__i">Zgłoszenia do 19.10.2026</span></span>
+      <span class="d-mask d-mask--btn d-apply"><a class="d-btn d-btn--shape d-mask__i" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date d-mask__i">Deadline early bird: 19.10</span></span>
     </div>
     <div class="d-hero__flashlight" aria-hidden="true">
       <div class="d-fl d-fl--hero">
@@ -1312,7 +1315,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       <div class="d-problem__cta">
         <p class="d-problem__big d-reveal" data-split="words">Daj nam miesiąc</p>
         <p class="d-problem__sub d-reveal" data-split="words">pokażemy Ci, jak rozmawiać <br>z potencjalnymi klientami i znaleźć <br>problem do rozwiązania.</p>
-        <div class="d-apply d-problem__apply"><a class="d-btn d-btn--shape d-problem__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Zgłoszenia do 19.10.2026</span></div>
+        <div class="d-apply d-problem__apply"><a class="d-btn d-btn--shape d-problem__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Deadline early bird: 19.10</span></div>
       </div>
     </div>
   </div>
@@ -1353,7 +1356,6 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   <div class="d-reels__head">
     <h2 class="d-reels__title d-reveal" data-split="words">Zobacz, jak robili to inni</h2>
     <div class="d-reels__aside">
-      <p class="d-reels__lead d-reveal" data-split="lines">Pięcioro Fellows opowiada, jak szukali problemu, dzwonili do obcych ludzi i stawiali pierwsze MVP.</p>
       <a class="d-reels__ig" href="https://www.instagram.com/mdfellowship"><span>Więcej na Instagramie</span><span class="d-btn__arrow" aria-hidden="true">→</span></a>
     </div>
   </div>
@@ -1479,7 +1481,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     <h2 class="d-about__title d-reveal" data-split="words">Nie robimy konkursów. Pomagamy serio budować firmy.</h2>
     <div class="d-about__text">
       <p class="d-body d-reveal" data-split="lines">MD Fellowship to społeczność młodych w wieku 18–24 lat, którzy już teraz budują swoje pierwsze firmy, startupy i projekty.</p>
-      <p class="d-body d-reveal" data-split="lines">Każdy MD Fellow otrzymuje mentoring 1:1 od topowych przedsiębiorców, którzy przeszli drogę od pomysłu do globalnych sukcesów i potrafią przekazać praktyczną wiedzę oraz wsparcie w kluczowych momentach budowania.</p>
+      <p class="d-body d-reveal" data-split="lines">Każdy MD Fellow otrzymuje mentoring 1:1 od topowych przedsiębiorców, którzy przeszli drogę od pomysłu do globalnych sukcesów.</p>
     </div>
    </div>
     <div class="d-about__stats" id="about-stats">
@@ -1509,167 +1511,86 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 <section class="d-mentors" id="mentorzy">
   <div class="d-mentors__head">
     <h2 class="d-mentors__title d-reveal" data-split="words">Z kim będziesz pracować</h2>
-    <p class="d-body d-mentors__lead d-reveal" data-split="lines">Ludzie, którzy budowali firmy, zatrudniali, sprzedawali, popełniali błędy i wyciągali z nich wnioski.</p>
+    <p class="d-body d-mentors__lead d-reveal" data-split="lines">Ludzie, którzy budowali firmy, sprzedawali, popełniali błędy i wyciągali z nich wnioski.</p>
   </div>
   <!-- dwa rzędy kafelków: górny jedzie w prawo, dolny w lewo; hover/fokus zatrzymuje rząd i pokazuje bio;
        każdy rząd można chwycić i przesunąć. Prelegenci wymieszani w obu rzędach (tag „Prelegent”).
-       Wszyscy z listy mentorów (bez względu na status zgody), rozdzieleni na przemian między rzędy.
-       UWAGA: zdjęcia przypisane do nazwisk tymczasowo — pewne tylko m01 (plakietka „Bartek”), m03 (bluza Clastify),
-       m06 (plakietka z nazwiskiem); reszta to powtórzone zdjęcia zastępcze. Prelegenci, brakujące role i bio — placeholdery. -->
+       18 osób z arkusza „Mentorzy Discovery Sprint” (15 mentorów + 3 prelegentów), po 9 w rzędzie. Kafle: design-assets/mentors/<slug>.avif|webp
+       (600×800, postać wycięta Vision + biały wielokąt + tło #B9C5FF) i <slug>-halo.webp; skrypt w scratchpadzie ment/build.py. -->
   <div class="d-mentors__rows" id="mentors-rows">
     <div class="d-marquee" data-dir="1">
      <div class="d-marquee__track">
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m03.avif?v=4" type="image/avif"><img src="design-assets/mentors/m03.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/jan-kolaczyk.avif" type="image/avif"><img src="design-assets/mentors/jan-kolaczyk.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Założyciel Clastify, platformy dla uczniów matury IB, którą rozwinął do 400 tys. użytkowników miesięcznie i w 2026 roku sprzedał funduszowi Hawk Infinity.</p>
         </div>
         <h3 class="d-mtile__name">Jan Kolaczyk</h3>
         <p class="d-mtile__role">(exited) Founder Clastify</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/kacper-gadomski.avif" type="image/avif"><img src="design-assets/mentors/kacper-gadomski.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Wcześniej: tworzył wertykalnego agenta AI, który automatyzuje pracę spedytorów. Teraz: stealth startup.</p>
         </div>
         <h3 class="d-mtile__name">Kacper Gadomski</h3>
-        <p class="d-mtile__role">Co-founder Talona</p>
+        <p class="d-mtile__role">Co-Founder Talona</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 1]</h3>
-        <p class="d-mtile__role">[Firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Mikołaj Nowak</h3>
-        <p class="d-mtile__role">Co-founder & CEO Vetina</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m06.avif?v=4" type="image/avif"><img src="design-assets/mentors/m06.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/marek-rewolinski.avif" type="image/avif"><img src="design-assets/mentors/marek-rewolinski.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Buduje Rinvo – AI dla branży automotive, generuje kilkanaście tys. zł MRR.</p>
         </div>
         <h3 class="d-mtile__name">Marek Rewoliński</h3>
-        <p class="d-mtile__role">Co-founder & CEO Rinvo</p>
+        <p class="d-mtile__role">Co-founder &amp; CEO Rinvo</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m01.avif?v=4" type="image/avif"><img src="design-assets/mentors/m01.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/tomasz-karwatka.avif" type="image/avif"><img src="design-assets/mentors/tomasz-karwatka.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">Co-Founder Divante (exit przy wycenie 260 mln zł) i Vue Storefront, inwestor w ponad 30 firm, m.in. ElevenLabs. Prowadzi Open Mercato i Catch The Tornado, jest autorem książki „The 5”.</p>
+        </div>
+        <h3 class="d-mtile__name">Tomasz Karwatka</h3>
+        <p class="d-mtile__role">Co-Founder Open Mercato, Catch the Tornado, angel investor</p>
+      </article>
+      <article class="d-mtile" tabindex="0">
+        <div class="d-mtile__photo">
+          <picture><source srcset="design-assets/mentors/bartek-nowak.avif" type="image/avif"><img src="design-assets/mentors/bartek-nowak.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Wcześniej: medtech, budował AI do analizy preparatów histopatologicznych. Teraz: something new.</p>
         </div>
         <h3 class="d-mtile__name">Bartek Nowak</h3>
         <p class="d-mtile__role">Stealth Startup</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m10.avif?v=4" type="image/avif"><img src="design-assets/mentors/m10.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/tomek-ostrowski.avif" type="image/avif"><img src="design-assets/mentors/tomek-ostrowski.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Buduje Aurum Olympia – firmę przygotowującą uczniów liceum do Olimpiad Matematycznych i egzaminów.</p>
         </div>
         <h3 class="d-mtile__name">Tomek Ostrowski</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
+        <p class="d-mtile__role">Founder Aurum Olympia</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/piotrek-czuprynski.avif" type="image/avif"><img src="design-assets/mentors/piotrek-czuprynski.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Piotrek buduje Repto.pl – narzędzie do automatycznego zbierania opinii na Google dla branży medycznej oraz beauty, generuje kilkanaście tys. zł MRR. Uczęszcza do trzeciej klasy technikum.</p>
         </div>
-        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 2]</h3>
-        <p class="d-mtile__role">[Firma]</p>
+        <h3 class="d-mtile__name">Piotrek Czupryński</h3>
+        <p class="d-mtile__role">Founder Repto.pl</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/maciej-foks.avif" type="image/avif"><img src="design-assets/mentors/maciej-foks.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Buduje Quomerce, automatyzuje audyty sklepów internetowych.</p>
         </div>
-        <h3 class="d-mtile__name">Adam Majcher</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
+        <h3 class="d-mtile__name">Maciej Foks</h3>
+        <p class="d-mtile__role">Co-founder Quomerce</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/weronika-gatkowska.avif" type="image/avif"><img src="design-assets/mentors/weronika-gatkowska.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Teraz: MD Fellowship. Wcześniej: sprzedaż do enterprise (Marriott, PepsiCo, Unilever, InPost itd.), kampanie w SM o zasięgu 2 mln organicznie i eventy na 500 osób.</p>
         </div>
-        <h3 class="d-mtile__name">Mateusz Jacniacki</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Bartek Ludera</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Mateusz Piątkowski</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m10.avif?v=4" type="image/avif"><img src="design-assets/mentors/m10.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 3]</h3>
-        <p class="d-mtile__role">[Firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Mirella Kłosińska</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Oskar Wójcikiewicz</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Michał Wójcik</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Wiktor Gaweł</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 4]</h3>
-        <p class="d-mtile__role">[Firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Maciej Szymczyk</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
+        <h3 class="d-mtile__name">Weronika Gątkowska</h3>
+        <p class="d-mtile__role">CEO MD Fellowship</p>
       </article>
      </div>
     </div>
@@ -1677,155 +1598,75 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
      <div class="d-marquee__track">
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/mikolaj-nowak.avif" type="image/avif"><img src="design-assets/mentors/mikolaj-nowak.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Po 4 latach spędzonych w e-commerce i budowaniu analogisklep.pl, przyszedł czas na nowy projekt.</p>
         </div>
-        <h3 class="d-mtile__name">Piotrek Czupryński</h3>
-        <p class="d-mtile__role">Founder Repto.pl</p>
+        <h3 class="d-mtile__name">Mikołaj Nowak</h3>
+        <p class="d-mtile__role">Stealth Startup</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/lech-kaniuk.avif" type="image/avif"><img src="design-assets/mentors/lech-kaniuk.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">Co-founder PizzaPortal.pl i iTaxi, były CEO SunRoof, inwestor w ponad 20 startupów. Venture Partner w Eleven Ventures, autor książki „The Power of Momentum”.</p>
         </div>
-        <h3 class="d-mtile__name">Maciej Foks</h3>
-        <p class="d-mtile__role">Co-founder Quomerce</p>
+        <h3 class="d-mtile__name">Lech Kaniuk</h3>
+        <p class="d-mtile__role">Founder Kepta, angel investor</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 5]</h3>
-        <p class="d-mtile__role">[Firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/piotrek-gatkowski.avif" type="image/avif"><img src="design-assets/mentors/piotrek-gatkowski.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Buduje homi – system dla branży zarządzania nieruchomościami, z którego korzysta ponad 500 wspólnot w Polsce.</p>
         </div>
         <h3 class="d-mtile__name">Piotrek Gątkowski</h3>
-        <p class="d-mtile__role">Co-founder & CEO homi</p>
+        <p class="d-mtile__role">Co-founder &amp; CEO homi</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/filip-lasyk.avif" type="image/avif"><img src="design-assets/mentors/filip-lasyk.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Po 2,5 roku spędzonych w LiveKid na stanowisku CEO of agents, przyszedł czas na nowy projekt.</p>
         </div>
         <h3 class="d-mtile__name">Filip Lasyk</h3>
-        <p class="d-mtile__role">Co-founder & CTO Vetina</p>
+        <p class="d-mtile__role">Stealth Startup</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m11.avif?v=4" type="image/avif"><img src="design-assets/mentors/m11.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Weronika Gątkowska</h3>
-        <p class="d-mtile__role">CEO MD Fellowship</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/kacper-urbanowski.avif" type="image/avif"><img src="design-assets/mentors/kacper-urbanowski.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Wcześniej: AI w branży marketingowej i dla twórców UGC. Teraz: stealth startup.</p>
         </div>
         <h3 class="d-mtile__name">Kacper Urbanowski</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
+        <p class="d-mtile__role">Stealth Startup, ex CTO Wayde</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/antoni-gmitruk.avif" type="image/avif"><img src="design-assets/mentors/antoni-gmitruk.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">Co-founder MD Fellowship. Zaczynał od drukarek 3D w piwnicy, następnie budował Golf w ramach Y Combinator. Obecnie w stealth startupie.</p>
         </div>
-        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 6]</h3>
-        <p class="d-mtile__role">[Firma]</p>
+        <h3 class="d-mtile__name">Antoni Gmitruk</h3>
+        <p class="d-mtile__role">Stealth Startup, ex CTO Golf (YC X25)</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Jan Kundziołka</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Antek Pater</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m10.avif?v=4" type="image/avif"><img src="design-assets/mentors/m10.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/michal-karp.avif" type="image/avif"><img src="design-assets/mentors/michal-karp.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Wielokrotny laureat globalnej Olimpiady AI, buduje coś nowego.</p>
         </div>
         <h3 class="d-mtile__name">Michał Karp</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
+        <p class="d-mtile__role">Stealth Startup</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/artur-wala.avif" type="image/avif"><img src="design-assets/mentors/artur-wala.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">GTM engineering for teams that need ownership, not lock-in. McKinsey depth. Startup speed. Forward-deployed.</p>
         </div>
-        <h3 class="d-mtile__name">Mikołaj Rostkowski</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
+        <h3 class="d-mtile__name">Artur Wala</h3>
+        <p class="d-mtile__role">Co-Founder GTM Tech Week</p>
       </article>
       <article class="d-mtile" tabindex="0">
         <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m04.avif?v=4" type="image/avif"><img src="design-assets/mentors/m04.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
+          <picture><source srcset="design-assets/mentors/oskar-wojcikiewicz.avif" type="image/avif"><img src="design-assets/mentors/oskar-wojcikiewicz.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></picture>
+          <p class="d-mtile__bio">Founder SlimTwin – digital twin wspomagający utrzymanie zdrowych nawyków.</p>
         </div>
-        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 7]</h3>
-        <p class="d-mtile__role">[Firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m05.avif?v=4" type="image/avif"><img src="design-assets/mentors/m05.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Natalia Żak</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m07.avif?v=4" type="image/avif"><img src="design-assets/mentors/m07.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Paweł Rainer</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m08.avif?v=4" type="image/avif"><img src="design-assets/mentors/m08.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Wojtek Basiński</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m09.avif?v=4" type="image/avif"><img src="design-assets/mentors/m09.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Mikołaj Wolny</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m10.avif?v=4" type="image/avif"><img src="design-assets/mentors/m10.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <span class="d-mtile__tag">Prelegent</span><p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">[Imię Nazwisko — prelegent 8]</h3>
-        <p class="d-mtile__role">[Firma]</p>
-      </article>
-      <article class="d-mtile" tabindex="0">
-        <div class="d-mtile__photo">
-          <picture><source srcset="design-assets/mentors/m02.avif?v=4" type="image/avif"><img src="design-assets/mentors/m02.webp?v=4" width="480" height="640" alt="" loading="lazy" decoding="async" draggable="false"></picture>
-          <p class="d-mtile__bio">[Krótkie bio, 2–3 zdania — do uzupełnienia]</p>
-        </div>
-        <h3 class="d-mtile__name">Sonia Piorek</h3>
-        <p class="d-mtile__role">[Rola, firma]</p>
+        <h3 class="d-mtile__name">Oskar Wójcikiewicz</h3>
+        <p class="d-mtile__role">Founder SlimTwin</p>
       </article>
      </div>
     </div>
@@ -1876,7 +1717,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         <p class="d-who__q d-reveal" data-split="words">Przyłożysz się?</p>
         <p class="d-who__chance d-reveal" data-split="words">Masz szansę skończyć program <br>z pierwszymi płacącymi klientami.</p>
       </div>
-      <div class="d-apply"><a class="d-btn d-btn--shape d-who__btn" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Zgłoszenia do 19.10.2026</span></div>
+      <div class="d-apply"><a class="d-btn d-btn--shape d-who__btn" href="#aplikuj"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Deadline early bird: 19.10</span></div>
     </div>
   </div>
 </section>
@@ -1894,7 +1735,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       </div>
       <div class="d-faq__item">
         <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p2" id="faq-b2"><span class="d-faq__qt">Do kiedy mogę aplikować?</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden><div class="d-faq__in"><p class="d-body">Nabór odbywa się w sposób ciągły, a liczba miejsc jest ograniczona. Im szybciej zaaplikujesz, tym większe masz szanse, aby dostać się do programu. Decyzję otrzymasz od nas na podany w zgłoszeniu adres e-mail.</p></div></div>
+        <div class="faq-a d-faq__a" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden><div class="d-faq__in"><div class="d-body"><p>Nabór odbywa się w trzech rundach:</p><ul class="d-faq__rounds"><li><b>Early bird:</b> do poniedziałku, 19 października</li><li><b>Regular:</b> do poniedziałku, 26 października</li><li><b>Last call:</b> do wtorku, 3 listopada</li></ul><p>Im szybciej zaaplikujesz, tym większe masz szanse na dostanie się do programu. Decyzję otrzymasz e-mailem na adres podany w zgłoszeniu.</p></div></div></div>
       </div>
       <div class="d-faq__item">
         <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p5" id="faq-b5"><span class="d-faq__qt">Nie mam pomysłu.</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
@@ -1921,10 +1762,6 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         <div class="faq-a d-faq__a" id="faq-p10" role="region" aria-labelledby="faq-b10" hidden><div class="d-faq__in"><p class="d-body">Dwa pełne dni na miejscu (12–13 listopada), potem min. 10 godzin tygodniowo przez 4 tygodnie.</p></div></div>
       </div>
       <div class="d-faq__item">
-        <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p11" id="faq-b11"><span class="d-faq__qt">Czy mogę uczestniczyć tylko online?</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
-        <div class="faq-a d-faq__a" id="faq-p11" role="region" aria-labelledby="faq-b11" hidden><div class="d-faq__in"><p class="d-body">[DO UZUPEŁNIENIA]</p></div></div>
-      </div>
-      <div class="d-faq__item">
         <h3 class="d-faq__h"><button type="button" class="faq-q d-faq__q" aria-expanded="false" aria-controls="faq-p12" id="faq-b12"><span class="d-faq__qt">Co mi to da?</span><span class="faq-sign d-faq__sign" aria-hidden="true">+</span></button></h3>
         <div class="faq-a d-faq__a" id="faq-p12" role="region" aria-labelledby="faq-b12" hidden><div class="d-faq__in"><p class="d-body">Jeśli się przyłożysz, zakończysz program z konkretną wizją na swoją własną firmę i pierwszymi płacącymi klientami. Dodatkowo każdy, kto ukończy Discovery Sprint, trafia od razu do 2. etapu rekrutacji do MD Fellowship.</p></div></div>
       </div>
@@ -1944,7 +1781,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
     </div></div>
     <div class="d-cta__head">
       <h2 class="d-cta__title d-reveal" data-split="words">Najtrudniej się przełamać.<br>Z resztą Ci pomożemy.</h2>
-      <div class="d-apply d-apply--big"><a class="d-btn d-btn--shape d-btn--big d-cta__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Zgłoszenia do 19.10.2026</span></div>
+      <div class="d-apply d-apply--big"><a class="d-btn d-btn--shape d-btn--big d-cta__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Deadline early bird: 19.10</span></div>
     </div>
     <div class="d-cta__photo">
       <!-- zielona plama (kształt z about-blob.svg; ścieżka zaczyna się na środku górnej krawędzi, żeby kontur rysował się
@@ -1986,7 +1823,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 
 
 <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
-  <p class="cta-note"><b>Bezpłatnie · 120 miejsc</b>Zgłoszenia do 19.10.2026</p>
+  <p class="cta-note"><b>Bezpłatnie · 120 miejsc</b>Deadline early bird: 19.10</p>
   <a class="btn btn-sm" href="#aplikuj" tabindex="-1">Aplikuj</a>
 </div>
 
@@ -3370,10 +3207,10 @@ if (aboutStatsEl) {
    nim, coś w nim ma fokus albo jest otwarte bio (tap) — zwalnia do zera. Chwycenie: rząd idzie za palcem/kursorem,
    po puszczeniu leci z prędkością rzutu, która wygasa do prędkości jazdy. Tap/klik bez przesunięcia: bio w kaflu.
    Własna pętla rAF (tylko gdy sekcja jest w ekranie); reduced motion: bez jazdy, przeciąganie zostaje. */
-/* obrys postaci na hover: w każdym kaflu warstwa .d-mtile__halo z maską mXX-halo.webp (ten sam numer co zdjęcie);
+/* obrys postaci na hover: w każdym kaflu warstwa .d-mtile__halo z maską <slug>-halo.webp (ta sama nazwa co zdjęcie);
    dodawana przed klonowaniem rzędów, więc klony mają ją od razu. Hover/fokus/tap: obrys zielony, bio na przyciemnieniu gradientem (CSS). */
 document.querySelectorAll('#mentors-rows .d-mtile__photo').forEach((ph) => {
-  const src = (ph.querySelector('img').getAttribute('src') || '').replace(/(m\d\d)\.(?:webp|avif)(\?.*)?$/, '$1-halo.webp$2');
+  const src = (ph.querySelector('img').getAttribute('src') || '').replace(/\.(?:webp|avif)(\?.*)?$/, '-halo.webp$1');
   const h = document.createElement('span');
   h.className = 'd-mtile__halo'; h.setAttribute('aria-hidden', 'true');
   h.style.setProperty('--halo', 'url("' + src + '")');
