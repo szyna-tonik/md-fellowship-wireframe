@@ -831,9 +831,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
    w górę zwykłym scrollem i po kolei wjeżdżają z maski i naliczają się. Gdy dół liczb dojedzie do dołu akapitów,
    cała sekcja przewija się normalnie. Długość osi liczb liczy skrypt (placeAbout). */
 /* „Nie robimy konkursów” → mentorzy: jednolite tło obu sekcji sterowane scrollem (krem → czerń, paintAboutBg);
-   po przekroczeniu połowy (.is-dark) teksty sekcji przechodzą w biel. Pas 420u pod liczbami to miejsce na przejście. */
+   po przekroczeniu połowy (.is-dark) teksty sekcji przechodzą w biel. Pas 280u pod liczbami to miejsce na przejście. */
 .d-about, .d-mentors { background: var(--c-cream); }
-.d-about { position: relative; z-index: 2; padding-bottom: calc(420 * var(--u)); overflow: clip; color: var(--c-black); }
+.d-about { position: relative; z-index: 2; padding-bottom: calc(280 * var(--u)); overflow: clip; color: var(--c-black); }
 .d-about__title, .d-about__text .d-body, .d-about__num { transition: color 300ms ease; }
 .d-about.is-dark .d-about__title, .d-about.is-dark .d-about__text .d-body, .d-about.is-dark .d-about__num { color: var(--c-white); }
 .d-about__pin { padding-top: calc(115.3 * var(--u)); }
@@ -870,7 +870,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
    570 × 760 od x = 562. Kafle (zapętlone) ustawia skrypt z ciągłej pozycji: k = −2, −1 po lewej pod opisem, 0 duże,
    +1 po prawej pod strzałkami, dalsze poza kadrem. Opis aktywnej osoby w lewym górnym rogu sceny. */
 .d-mentors { position: relative; z-index: 2; color: var(--c-white); overflow: clip;
-  padding: calc(280 * var(--u)) 0 calc(160 * var(--u)); }   /* góra 2× (było 140) */
+  padding: calc(187 * var(--u)) 0 calc(160 * var(--u)); }   /* góra: odstęp od liczb (280 + 187) o 1/3 mniejszy niż wcześniej (420 + 280) */
 .d-mentors__head { display: flex; align-items: flex-start; justify-content: space-between; gap: calc(40 * var(--u)); padding: 0 40px; }
 .d-mentors__title { margin: 0; width: calc(868 * var(--u)); font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u));   /* 88 px */
   line-height: 1.1; letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-white); }
@@ -922,8 +922,10 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
    literami od x = 286, dwa akapity obok siebie (375 + 40 + 435), pasek zdjęć od y = 630.7 (3 zdjęcia w schodkach,
    ramka-wielokąt #B9C5FF + zdjęcie przycięte tą samą ścieżką — inline SVG, kadry wycięte 1:1 z Figmy),
    na końcu (Figma 7291:3275) „Przyłożysz się?” 88 px + „Masz szansę…” 60 px, od lewej krawędzi contentu jak pytanie.
-   Pasek (.d-who__track) jedzie w lewo przy scrollu: wjeżdża zza prawej krawędzi ekranu (pierwsze zdjęcie startuje
-   przy 85 % szerokości) i kończy, gdy trzecie zdjęcie stanie z prawym marginesem równym lewemu marginesowi pierwszego
+   Desktop: pasek (.d-who__track, 4 zdjęcia) siedzi w .d-who__pin przyklejonym do ekranu na czas przejazdu (.d-who__run,
+   wysokość liczy skrypt). Pierwsze zdjęcie wjeżdża zza prawej krawędzi i przy przyklejeniu stoi obok tekstów; dalej tekst
+   odjeżdża zwykłym scrollem do góry, a pasek jedzie w lewo (2 px w bok na 1 px scrolla), aż czwarte zdjęcie stanie
+   z prawym marginesem 40 px. Schodki są kompensowane w pionie — zdjęcie na środku ekranu jest wyśrodkowane w pionie
    (paintWho). Zdjęcie na środku ekranu jest powiększone, przy krawędziach mniejsze. Jednostka zdjęć --pu. */
 .d-who { position: relative; z-index: 2; color: var(--c-white); overflow: clip; }
 /* „Dla kogo” i FAQ: wspólne tło sterowane scrollem (czarny → niebieski, paintWhoBg); po przekroczeniu
@@ -931,7 +933,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-who, .d-faq { background: var(--c-black); }
 .d-who__title, .d-who__body .d-body, .d-who__cta > p, .d-faq__title, .d-faq__q, .d-faq__a .d-body { transition: color 300ms ease; }
 .d-who.is-blue .d-who__title, .d-who.is-blue .d-who__body .d-body, .d-who.is-blue .d-who__cta > p { color: var(--c-black); }
-.d-who__stage { --pu: var(--u); height: calc(1972 * var(--u)); }   /* tekst końcowy pod paskiem (1547.5u) + 287.6u + dolny margines z Figmy 137u */
+.d-who__stage { --pu: var(--u); padding-bottom: calc(137 * var(--u)); }   /* dolny margines z Figmy */
 /* blok tekstu przy lewej krawędzi contentu (40 px od krawędzi ekranu, także gdy ramka 1496u jest węższa od ekranu) */
 .d-who__title { position: absolute; z-index: 2; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); top: calc(218.9 * var(--u)); width: calc(902.8 * var(--u)); margin: 0;
   font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u)); line-height: 1.1;   /* 88 px */
@@ -939,24 +941,32 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-who__body { position: absolute; z-index: 2; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); top: calc(482.8 * var(--u)); display: grid;
   grid-template-columns: calc(389.6 * var(--u)) calc(451.9 * var(--u)); column-gap: calc(41.6 * var(--u)); }
 .d-who__body .d-body { margin: 0; color: var(--c-white); text-wrap: pretty; }
-.d-who__track { position: absolute; z-index: 1; left: 0; top: calc(655.2 * var(--u)); width: 100%; height: calc(782.3 * var(--pu)); will-change: transform; }
+.d-who__run { position: relative; z-index: 1; height: 100svh; }   /* wysokość = ekran + droga paska (placeWho) */
+.d-who__pin { position: sticky; top: 0; height: 100svh; }
+/* reduced motion (desktop): bez przyklejania — pasek stoi pod tekstem, w połowie drogi */
+.d-who.is-static .d-who__run { height: auto; padding-top: calc(655.2 * var(--u)); }
+.d-who.is-static .d-who__pin { position: relative; height: calc(938.3 * var(--pu)); }
+.d-who__track { position: absolute; left: 0; top: 0; width: 100%; height: calc(938.3 * var(--pu)); will-change: transform; }
 .d-who__ph { position: absolute; margin: 0; will-change: scale; }
 .d-who__ph svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .d-who__frame { fill: var(--c-blue-500); stroke: var(--c-blue-500); stroke-width: 22.49; }
 .d-who__ph--1 { left: calc(88.3 * var(--pu)); top: 0; width: calc(822.6 * var(--pu)); height: calc(547.5 * var(--pu)); }
 .d-who__ph--2 { left: calc(974.5 * var(--pu)); top: calc(152.7 * var(--pu)); width: calc(571.6 * var(--pu)); height: calc(542.3 * var(--pu)); }
 .d-who__ph--3 { left: calc(1634.2 * var(--pu)); top: calc(274.3 * var(--pu)); width: calc(762 * var(--pu)); height: calc(508 * var(--pu)); }
-/* tekst końcowy pod paskiem zdjęć (pasek kończy się na 1437.5u — w Figmie tekst stoi zaraz pod drugim zdjęciem, ale pasek
-   jedzie, więc trzecie zdjęcie przejechałoby przez tekst); lewa krawędź jak pytanie */
-.d-who__cta { position: absolute; z-index: 2; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); top: calc(1547.5 * var(--u));
+.d-who__ph--4 { left: calc(2472.2 * var(--pu)); top: calc(396 * var(--pu)); width: calc(571.6 * var(--pu)); height: calc(542.3 * var(--pu)); }   /* schodek niżej, jak w Figmie */
+/* tekst końcowy pod przejazdem paska (w przepływie, po odklejeniu paska); lewa krawędź jak pytanie */
+.d-who__cta { position: relative; z-index: 2; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); margin-top: calc(40 * var(--u));
   display: flex; flex-direction: column; align-items: flex-start; gap: calc(49.87 * var(--u)); }
 .d-who__cta > p { margin: 0; font-family: var(--f-display); font-weight: 400; line-height: 1.1; text-transform: uppercase; color: var(--c-white); }
 .d-who__q { font-size: calc(91.42 * var(--u)); letter-spacing: calc(-2.24 * var(--u)); }   /* 88 px */
 .d-who__chance { width: calc(828 * var(--u)); font-size: calc(62.33 * var(--u)); letter-spacing: calc(-1.52 * var(--u)); }   /* 60 px */
 
 /* ---------- 9 · FAQ ---------- */
-.d-faq { position: relative; z-index: 2; color: var(--c-white); }
-.d-faq__frame { display: grid; grid-template-columns: 1fr calc(868 * var(--u)); column-gap: calc(40 * var(--u)); align-items: start;
+/* FAQ bez własnego kontekstu warstw (z-index auto): snop latarki z CTA wychodzi w górę na tło FAQ, a treść FAQ (z 3)
+   leży nad snopem — światło jest pod tekstem, jak w Problemie */
+.d-faq { position: relative; z-index: auto; color: var(--c-white); }
+.d-faq__frame { z-index: 3; }
+.d-faq__frame { width: auto; display: grid; grid-template-columns: 1fr calc(868 * var(--u)); column-gap: calc(40 * var(--u)); align-items: start;
   padding: calc(260 * var(--u)) 40px calc(200 * var(--u)); }
 .d-faq__title { position: sticky; top: calc(56px + 80 * var(--u)); margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u));   /* 88 px */
   line-height: 1.1; letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-white); }
@@ -988,18 +998,24 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-faq.is-blue, .d-faq.is-blue .d-faq__title, .d-faq.is-blue .d-faq__q, .d-faq.is-blue .d-faq__a .d-body { color: var(--c-black); }
 
 /* ---------- 10 · CTA (Figma 7291:3094) ----------
-   Ramka Figmy 1440 × 1216 = 1496u × 1263.3u, pozycje × 1.0389. Na górze nagłówek 88 px i duży Aplikuj (399.7 × 138 Figmy):
+   Ramka Figmy 1440 × 1197 = 1496u × 1243.6u, pozycje × 1.0389. Na górze wyśrodkowany nagłówek 88 px i pod nim (odstęp 48)
+   wyśrodkowany duży Aplikuj (399.7 × 138 Figmy), pod przyciskiem termin zgłoszeń:
    biały, a tam, gdzie pada snop — niebieski (.d-btn__lit przycinany skryptem do wielokąta snopa, paintLit).
-   Latarka w prawym górnym rogu (geometria jak w Problemie, obrót −51.73°, środek 1300 / 435 px) ze snopem pod tekstem;
-   celuje za kursorem (--aim ze skryptu) i mruga na klik. Od y = 661 px kolaż zdjęć na całą szerokość (1440 × 555,
+   Latarka po prawej na wysokości przycisku (geometria jak w Problemie × 0.9626, obrót −45.22°, środek 1415.8 / 512.2 px —
+   w Figmie 1300.3, przesunięta w prawo)
+   ze snopem pod tekstem;
+   celuje za kursorem (--aim ze skryptu) i mruga na klik. Od y = 642 px kolaż zdjęć na całą szerokość (1440 × 555,
    jak wcześniej w „Nie robimy konkursów”): zielona plama (zawsze zielona, także pod snopem);
    na zdjęciu wyśrodkowane tagi (od 331 px wysokości zdjęcia) i linki do social mediów. */
-.d-cta { position: relative; z-index: 2; background: var(--c-blue-500); overflow: clip; }
-.d-cta__stage { height: calc(1263.3 * var(--u)); }
-.d-cta__head { position: absolute; z-index: 1; left: calc(40px - (100cqw - 1496 * var(--u)) / 2); top: calc(209.65 * var(--u));
-  display: flex; flex-direction: column; align-items: flex-start; gap: calc(33.24 * var(--u)); }
+.d-cta { position: relative; z-index: 2; background: var(--c-blue-500); overflow-x: clip; overflow-y: visible; }   /* snop sięga w górę na FAQ */
+.d-cta__stage { height: calc(1243.6 * var(--u)); }
+.d-cta__head { position: absolute; z-index: 1; left: 0; right: 0; top: calc(209.65 * var(--u));
+  display: flex; flex-direction: column; align-items: center; gap: calc(49.87 * var(--u)); text-align: center; }
 .d-cta__title { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u)); line-height: 1.1;   /* 88 px */
   letter-spacing: calc(-2.24 * var(--u)); text-transform: uppercase; color: var(--c-black); }
+.d-cta__title.is-split { align-items: center; }   /* linie po podziale skryptem też wyśrodkowane */
+/* termin pod przyciskiem (w Figmie go nie ma; obok przycisku zepchnąłby go ze środka) */
+.d-cta__head .d-apply { flex-direction: column; gap: calc(20 * var(--u)); }
 /* duży Aplikuj: kształt przycisku z Hero, 2× */
 .d-btn--big { width: calc(415.2 * var(--u)); height: calc(143.4 * var(--u)); gap: calc(44.8 * var(--u)); font-size: calc(64 * var(--u)); letter-spacing: calc(-1.28 * var(--u)); }
 .d-btn--big .d-btn__arrow { width: calc(52.2 * var(--u)); height: calc(44.8 * var(--u)); font-size: calc(44.8 * var(--u)); }
@@ -1007,7 +1023,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-cta__btn > :not(.d-btn__lit) { position: relative; }
 
 /* zdjęcie: kolaż w plamie (kształt plamy w alfie kolażu — chmura kropek może wyjść poza niego) */
-.d-cta__photo { position: absolute; left: 0; top: calc(686.7 * var(--u)); width: 100%; aspect-ratio: 1439.59 / 554.625; }
+.d-cta__photo { position: absolute; left: 0; top: calc(667 * var(--u)); width: 100%; aspect-ratio: 1439.59 / 554.625; }
 .d-cta__blobs { position: absolute; inset: 0; transform-origin: 50% 100%; }
 .d-cta__blob { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .d-cta__masked { position: absolute; inset: 0; }
@@ -1024,12 +1040,18 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-tag--social:focus-visible { outline: 2px solid var(--c-black); outline-offset: 3px; }
 
 /* latarka i snop: wrapper wyśrodkowany w punkcie z Figmy, obrót za kursorem przez --aim (ustawia skrypt na sekcji) */
-.d-cta__fl, .d-cta__beam { position: absolute; display: flex; align-items: center; justify-content: center; pointer-events: none;
-  left: calc(1350.85 * var(--u)); top: calc(452.28 * var(--u)); width: calc(633.5 * var(--du)); height: calc(627.8 * var(--du));
+.d-cta__fl, .d-cta__beam { --du: calc(var(--u) * 0.9626);   /* latarka w nowej ramce Figmy: 415.6 zamiast 431.8 px */
+  position: absolute; display: flex; align-items: center; justify-content: center; pointer-events: none;
+  left: calc(1470.87 * var(--u)); top: calc(532.07 * var(--u));   /* 120u bardziej w prawo niż w Figmie (prośba użytkownika) */ width: calc(633.5 * var(--du)); height: calc(627.8 * var(--du));
   translate: -50% -50%; rotate: var(--aim, 0deg); }
 .d-cta__beam { z-index: 0; }
+/* snop przycięty do pasa: od 2000u nad sekcją (na FAQ) do dołu sekcji, na całą szerokość ekranu — w dół nie wystaje,
+   więc nie wydłuża strony za zdjęciem; latarka liczy pozycję jak wcześniej od ramki (marginesy oddają przesunięcie pasa) */
+.d-cta__beamclip { position: absolute; z-index: 0; left: calc((100cqw - 1496 * var(--u)) / -2); right: calc((100cqw - 1496 * var(--u)) / -2);
+  top: calc(-2000 * var(--u)); bottom: 0; overflow: clip; pointer-events: none; }
+.d-cta__beamclip > .d-cta__beam { margin: calc(2000 * var(--u)) 0 0 calc((100cqw - 1496 * var(--u)) / 2); }
 .d-cta__fl--a { z-index: 3; }
-.d-fl--cta { position: relative; flex: none; width: calc(431.81 * var(--du)); height: calc(466.254 * var(--du)); transform: rotate(-51.73deg);
+.d-fl--cta { position: relative; flex: none; width: calc(431.81 * var(--du)); height: calc(466.254 * var(--du)); transform: rotate(-45.22deg);
   scale: var(--press, 1); transition: scale 160ms cubic-bezier(0.2, 0.8, 0.2, 1); }
 .d-fl--cta .d-fl__shape { position: absolute; left: calc(-2.99 * var(--du)); top: calc(-2.12 * var(--du)); width: calc(441.89 * var(--du)); height: calc(473.505 * var(--du)); }
 .d-fl--cta .d-fl__photo { position: absolute; left: calc(-0.14 * var(--du)); top: calc(-30.24 * var(--du)); width: calc(425.514 * var(--du)); height: calc(546.063 * var(--du));
@@ -1113,6 +1135,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-who { --u: calc(var(--m) * 0.75); padding: calc(72 * var(--m)) 0 calc(64 * var(--m)); }
   .d-who__stage { --pu: calc(var(--m) * 0.4); height: auto; }
   .d-who__title, .d-who__body, .d-who__track, .d-who__cta { position: relative; left: auto; top: auto; right: auto; }
+  .d-who__run, .d-who__pin { position: static; height: auto !important; }   /* mobile: pasek w przepływie, bez przyklejania */
   .d-who__title { width: auto; padding: 0 calc(20 * var(--m)); font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
   .d-who__body { grid-template-columns: 1fr; row-gap: calc(16 * var(--m)); margin-top: calc(20 * var(--m)); padding: 0 calc(20 * var(--m)); }
   .d-who__track { margin-top: calc(40 * var(--m)); }
@@ -1132,7 +1155,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   /* CTA: bez latarki z rogu; zdjęcie w przepływie, tagi pod nim */
   .d-cta { --u: calc(var(--m) * 0.75); }
   .d-cta__stage { height: auto; display: flex; flex-direction: column; padding: calc(96 * var(--m)) 0 calc(48 * var(--m)); }
-  .d-cta__beam, .d-cta__fl--a { display: none; }
+  .d-cta__beamclip, .d-cta__fl--a { display: none; }
   .d-cta__head { position: static; gap: calc(24 * var(--m)); padding: 0 calc(20 * var(--m)); }
   .d-cta__title { font-size: calc(44 * var(--m)); letter-spacing: calc(-0.88 * var(--m)); }
   .d-btn--big { width: calc(296 * var(--m)); height: calc(102 * var(--m)); gap: calc(32 * var(--m)); font-size: calc(45.7 * var(--m)); letter-spacing: calc(-0.9 * var(--m)); }
@@ -1143,7 +1166,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-cta__blobs, .d-cta__masked { bottom: auto; aspect-ratio: 1439.59 / 554.625; }
   .d-cta__tags { position: static; margin-top: calc(24 * var(--m)); padding: 0 calc(16 * var(--m)); }
   .d-cta__row { flex-wrap: wrap; }
-  .d-mentors { --u: calc(var(--m) * 0.75); padding: calc(144 * var(--m)) 0 calc(72 * var(--m)); }
+  .d-mentors { --u: calc(var(--m) * 0.75); padding: calc(96 * var(--m)) 0 calc(72 * var(--m)); }
   .d-mentors__head { flex-direction: column; gap: calc(20 * var(--m)); padding: 0 calc(20 * var(--m)); }
   .d-mentors__title { width: auto; font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
   .d-mentors__lead { width: auto; }
@@ -1161,7 +1184,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-about__num { font-size: calc(88 * var(--m)); line-height: 1.1; letter-spacing: calc(-1.3 * var(--m)); }
   .d-about__label { width: auto; max-width: 100%; height: auto; white-space: normal; font-size: calc(20 * var(--m));
     padding: calc(7 * var(--m)) calc(13 * var(--m)) calc(8 * var(--m)) calc(10 * var(--m)); }
-  .d-about { padding-bottom: calc(120 * var(--m)); }
+  .d-about { padding-bottom: calc(80 * var(--m)); }
   .d-reels__arrow--prev { left: calc(12 * var(--m)); }
   .d-reels__arrow--next { right: calc(12 * var(--m)); }
 }
@@ -1781,9 +1804,10 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   </div>
 </section>
 
-<!-- 8. DLA KOGO + CTA (Figma 7283:2950): pytanie 88 px + dwa akapity obok siebie, pod nimi pasek 3 zdjęć ułożonych
-     w schodki (kadry, ramki i maski 1:1 z Figmy — trzecie zdjęcie w Figmie stoi poza ramką), który przy scrollu jedzie
-     w lewo jak na referencji wideo (paintWho, przyspawane do scrolla); na końcu „Przyłożysz się?” (Figma 7291:3275). -->
+<!-- 8. DLA KOGO + CTA (Figma 7283:2950): pytanie 88 px + dwa akapity obok siebie, obok nich po prawej wjeżdża pasek
+     4 zdjęć w schodkach (kadry, ramki i maski 1:1 z Figmy; czwarte — Figma 7305:3867 — w masce drugiego). Desktop: pasek
+     przyklejony do ekranu (.d-who__pin), tekst odjeżdża scrollem do góry, a zdjęcia jadą w lewo na jego miejsce
+     (paintWho, przyspawane do scrolla); na końcu „Przyłożysz się?” (Figma 7291:3275). -->
 <section class="d-who" id="dlakogo">
   <div class="d-frame d-who__stage">
     <h2 class="d-who__title d-reveal" data-split="words">Masz 18–24 lata i chcesz zbudować własną firmę?</h2>
@@ -1791,6 +1815,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       <p class="d-body d-reveal" data-split="lines">Nie potrzebujesz pomysłu, zespołu ani umiejętności programowania.</p>
       <p class="d-body d-reveal" data-split="lines">Potrzebujesz odwagi, żeby zadzwonić do obcej osoby i zapytać, co ją naprawdę boli.</p>
     </div>
+    <div class="d-who__run"><div class="d-who__pin">
     <div class="d-who__track">
       <figure class="d-who__ph d-who__ph--1">
         <svg viewBox="0 0 791.8 527" preserveAspectRatio="none" overflow="visible" role="img" aria-label="Pięciu uczestników w bluzach MD Fellowship">
@@ -1813,7 +1838,15 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
           <image href="design-assets/who/f3.webp" x="12.6" y="5.0" width="708.76" height="478.99" preserveAspectRatio="none" clip-path="url(#who-clip-3)"/>
         </svg>
       </figure>
+      <figure class="d-who__ph d-who__ph--4">
+        <svg viewBox="0 0 550.2 522" preserveAspectRatio="none" overflow="visible" role="img" aria-label="Uczestnicy słuchają prelekcji z telefonami w rękach">
+          <defs><clipPath id="who-clip-4"><path transform="translate(17.18 15.93)" d="M 34.6311 461.8404 L 0 330.5065 L 19.2951 55.5286 L 71.7755 17.7692 L 258.2473 0 L 458.9657 19.7041 L 516.1693 67.5229 L 508.2537 176.8034 L 516.1693 422.0179 L 441.9605 489.0968 L 167.7121 476.6582 L 34.6311 461.8404 Z"/></clipPath></defs>
+          <path class="d-who__frame" transform="translate(17.18 15.93)" d="M 34.6311 461.8404 L 0 330.5065 L 19.2951 55.5286 L 71.7755 17.7692 L 258.2473 0 L 458.9657 19.7041 L 516.1693 67.5229 L 508.2537 176.8034 L 516.1693 422.0179 L 441.9605 489.0968 L 167.7121 476.6582 L 34.6311 461.8404 Z"/>
+          <image href="design-assets/who/f4.webp" x="17.18" y="15.93" width="516.17" height="489.1" preserveAspectRatio="none" clip-path="url(#who-clip-4)"/>
+        </svg>
+      </figure>
     </div>
+    </div></div>
     <div class="d-who__cta">
       <p class="d-who__q d-reveal" data-split="words">Przyłożysz się?</p>
       <p class="d-who__chance d-reveal" data-split="words">Masz szansę skończyć program <br>z pierwszymi płacącymi klientami.</p>
@@ -1872,16 +1905,16 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   </div>
 </section>
 
-<!-- 10. CTA (Figma 7291:3094, ramka 1440 × 1216): nagłówek + duży Aplikuj w świetle latarki z prawego górnego rogu; latarka
+<!-- 10. CTA (Figma 7291:3094, ramka 1440 × 1197): wyśrodkowany nagłówek + duży Aplikuj w świetle latarki stojącej po prawej na wysokości przycisku; latarka
      celuje za kursorem i mruga na klik; pod snopem przycisk robi się niebieski, plama zdjęcia zostaje zielona. Niżej kolaż zdjęć
      (przeniesiony z „Nie robimy konkursów”, ta sama animacja formowania z kropek) z tagami i linkami do social mediów. -->
 <section class="d-cta" id="final">
   <div class="d-frame d-cta__stage">
-    <div class="d-cta__beam" aria-hidden="true">
+    <div class="d-cta__beamclip" aria-hidden="true"><div class="d-cta__beam">
       <div class="d-fl d-fl--cta">
         <div class="d-fl__beam"><img src="design-assets/beam-flat.svg?v=2" width="3196.97" height="3050.29" alt=""><i class="d-fl__pt" style="left:0;top:0"></i><i class="d-fl__pt" style="left:100%;top:0"></i><i class="d-fl__pt" style="left:0;top:100%"></i></div>
       </div>
-    </div>
+    </div></div>
     <div class="d-cta__head">
       <h2 class="d-cta__title d-reveal" data-split="words">Najtrudniej się przełamać.<br>Z resztą Ci pomożemy.</h2>
       <div class="d-apply d-apply--big"><a class="d-btn d-btn--shape d-btn--big d-cta__btn" href="#aplikuj"><span class="d-btn__lit" aria-hidden="true"></span><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a><span class="d-apply__date">Zgłoszenia do 19.10.2026</span></div>
@@ -3397,33 +3430,68 @@ const mentorRows = (() => {
 })();
 
 /* ---------- 8 · Dla kogo: pasek zdjęć jedzie w lewo przy scrollu (jak na referencji wideo) ----------
-   P = 0, gdy góra paska jest na dole ekranu; 1, gdy na dół ekranu dochodzi góra CTA (span = odległość paska od CTA w
-   układzie) — do tej chwili wszystkie zdjęcia przelatują przez środek. Pasek przesuwa się liniowo od x0 (pierwsze zdjęcie
-   przy 85 % szerokości — wjeżdża zza prawej krawędzi) przez x1 = −dist przy P = 1 (prawa krawędź ostatniego zdjęcia
-   w odległości lewego marginesu pierwszego od prawej krawędzi) i jedzie dalej w tym samym tempie, aż pasek zniknie
-   górą ekranu (P maks. = (ekran + wysokość paska) / span) — zdjęcia wyjeżdżają za lewą krawędź.
+   Desktop: pasek siedzi w .d-who__pin (sticky, 100svh) wewnątrz .d-who__run (wysokość = ekran + droga paska).
+   s = scroll względem chwili przyklejenia (góra .d-who__run na górze ekranu; przed nią ujemne). Pasek przesuwa się
+   liniowo x = x0 − WHO_SPEED · s: przy s = 0 pierwsze zdjęcie stoi obok tekstów (lewa krawędź za blokiem tekstu
+   + odstęp), wcześniej wjeżdża zza prawej krawędzi ekranu; droga przyklejenia kończy się, gdy prawa krawędź ostatniego
+   zdjęcia stanie 40 px od prawej krawędzi ekranu (x1), potem pasek jedzie dalej w tym samym tempie razem z odklejonym
+   pinem. Pion: zdjęcia stoją w schodkach, więc pasek przesuwa się w pionie tak, żeby zdjęcie na środku ekranu było
+   wyśrodkowane w pionie pod nawigacją (interpolacja liniowa między środkami zdjęć).
+   Mobile (bez pinu): P = 0, gdy góra paska jest na dole ekranu, 1, gdy dół paska znika górą ekranu (cały czas, gdy pasek
+   jest widoczny); x od x0 (pierwsze zdjęcie przy 85 % szerokości) do x1 (ostatnie z prawym marginesem równym lewemu pierwszego).
    Skala każdego zdjęcia z odległości jego środka od środka ekranu: na środku WHO_BIG, od pół szerokości ekranu WHO_SMALL
-   (cos², płynnie). Reduced motion: pasek stoi w połowie drogi, bez skalowania. */
-const WHO_BIG = 1.06, WHO_SMALL = 0.84;
+   (cos², płynnie). Reduced motion: bez przyklejania, pasek stoi w połowie drogi, bez skalowania. */
+const WHO_BIG = 1.06, WHO_SMALL = 0.84, WHO_SPEED = 2, WHO_GAP = 64;   // WHO_SPEED: px w bok na 1 px scrolla
 const who = (() => {
   const sec = document.querySelector('.d-who');
   if (!sec) return null;
   const track = sec.querySelector('.d-who__track');
-  const it = { track, cta: sec.querySelector('.d-who__cta'), phs: [...track.querySelectorAll('.d-who__ph')], x0: 0, x1: 0, span: 1 };
-  it.tr = makeTrack(() => Math.min((innerHeight + track.offsetHeight) / it.span, Math.max(0, (innerHeight - track.getBoundingClientRect().top) / it.span)));
+  const it = { sec, track, run: sec.querySelector('.d-who__run'), body: sec.querySelector('.d-who__body'), title: sec.querySelector('.d-who__title'),
+    phs: [...track.querySelectorAll('.d-who__ph')], pts: [], pinned: false, x0: 0, x1: 0 };
+  it.tr = makeTrack(() => {
+    if (it.pinned) return -it.run.getBoundingClientRect().top;
+    return clamp01((innerHeight - track.getBoundingClientRect().top) / (innerHeight + track.offsetHeight));
+  });
   return it;
 })();
 function placeWho() {
   const f = who.phs[0], l = who.phs[who.phs.length - 1], w = who.track.clientWidth;
-  who.x0 = w * 0.85 - f.offsetLeft;
-  who.x1 = -Math.max(0, l.offsetLeft + l.offsetWidth - (w - f.offsetLeft));
-  who.span = Math.max(1, who.cta.offsetTop - who.track.offsetTop);
-  who.tr.key = -1;
+  who.pinned = desktopMq.matches && !reduced;
+  who.sec.classList.toggle('is-static', desktopMq.matches && reduced);
+  who.track.style.transform = '';   // pomiary bez przesunięcia (paintWho ustawi je od nowa)
+  const frameLeft = who.track.parentElement.getBoundingClientRect().left;
+  // środki zdjęć w układzie paska (skala od środka nie przesuwa środka)
+  who.pts = who.phs.map((el) => [el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2]);
+  if (who.pinned) {
+    const textRight = Math.max(who.title.getBoundingClientRect().right, who.body.getBoundingClientRect().right) - frameLeft;
+    who.x0 = textRight + WHO_GAP - f.offsetLeft;
+    who.x1 = innerWidth - 40 - frameLeft - (l.offsetLeft + l.offsetWidth);
+    who.run.style.height = (innerHeight + Math.max(0, (who.x0 - who.x1) / WHO_SPEED)) + 'px';
+  } else {
+    who.run.style.height = '';
+    who.x0 = w * 0.85 - f.offsetLeft;
+    who.x1 = -Math.max(0, l.offsetLeft + l.offsetWidth - (w - f.offsetLeft));
+  }
+  who.tr.Ps = null; who.tr.key = -1;
 }
-function paintWho(P) {
-  const x = reduced ? who.x1 / 2 : who.x0 + (who.x1 - who.x0) * P;
-  who.track.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
-  const left = who.track.parentElement.getBoundingClientRect().left + who.track.offsetLeft + x, mid = innerWidth / 2;
+// pion paska (desktop): środek zdjęcia, które jest na środku ekranu, na środku widocznej części ekranu (pod nawigacją 56 px)
+function whoY(cx) {
+  const P = who.pts;
+  let y = P[0][1];
+  if (cx >= P[P.length - 1][0]) y = P[P.length - 1][1];
+  else for (let i = 0; i < P.length - 1; i++) {
+    if (cx >= P[i][0] && cx < P[i + 1][0]) { const k = (cx - P[i][0]) / (P[i + 1][0] - P[i][0]); y = P[i][1] + (P[i + 1][1] - P[i][1]) * k; break; }
+  }
+  return (innerHeight + 56) / 2 - y;
+}
+function paintWho(v) {
+  let x, y = 0;
+  if (who.pinned) x = who.x0 - WHO_SPEED * v;
+  else x = reduced ? who.x1 / 2 : who.x0 + (who.x1 - who.x0) * v;
+  const frameLeft = who.track.parentElement.getBoundingClientRect().left;
+  if (who.pinned) y = whoY(innerWidth / 2 - frameLeft - x);
+  who.track.style.transform = 'translate3d(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px,0)';
+  const left = frameLeft + who.track.offsetLeft + x, mid = innerWidth / 2;
   who.phs.forEach((el) => {
     if (reduced) { el.style.scale = ''; return; }
     const d = Math.min(1, Math.abs(left + el.offsetLeft + el.offsetWidth / 2 - mid) / mid);
@@ -3475,8 +3543,8 @@ function paintCta(P) {
   else cta.riso.style.opacity = f.toFixed(3);
 }
 if (cta) {
-  // celowanie: grupa latarki obrócona o −51.73° (Problem: −68.25°, rest 159.2) → rest 175.7
-  aims.push(makeAimer({ el: cta.A, host: cta.sec, rest: 175.7, max: 25,
+  // celowanie: grupa latarki obrócona o −45.22° (Problem: −68.25°, rest 159.2) → rest 182.2
+  aims.push(makeAimer({ el: cta.A, host: cta.sec, rest: 182.2, max: 25,
     active: () => finePointer && !reduced && cta.lit && (() => { const r = cta.sec.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; })() }));
   wirePress(cta.A, cta.A, () => !!cta.lit, () => {
     if (running(cta.beam)) return;
