@@ -23,7 +23,7 @@ Przebieg:
 - kolejne 4 tygodnie: rozmowy z klientami w terenie, grupa na WhatsAppie, kilka spotkań online (min. 10 godzin tygodniowo),
 - 13 grudnia: zakończenie; każdy, kto ukończy program, trafia od razu do 2. etapu rekrutacji do MD Fellowship.
 
-**Sukces = jak najwięcej zgłoszeń, jak najwcześniej.** Zgłoszenia do 19.10.2026 (termin podany przez użytkownika 2026-10-06; wcześniej klient komunikował nabór ciągły), miejsc jest 120, więc strona ma skłaniać do aplikowania od razu.
+**Sukces = jak najwięcej zgłoszeń, jak najwcześniej.** Nabór w trzech rundach: early bird do 19.10, regular do 26.10, last call do 3.11.2026 (od 2026-10-07; przy przyciskach Aplikuj „Deadline early bird: 19.10”), miejsc jest 120, więc strona ma skłaniać do aplikowania od razu.
 
 ## Positioning
 
@@ -43,7 +43,7 @@ Czym różni się od innych inicjatyw startupowych: to miesiąc praktyki w teren
 - Strona statyczna: `design.html` z CSS/JS inline i modułami w `design-assets/js/`; działa tylko przez serwer (`python3 -m http.server 4173`).
 - Język: wyłącznie polski (`lang="pl"`).
 - **Aplikuj** prowadzi do zewnętrznego formularza (Typeform/Tally/Google Forms itp.). Link jeszcze nieznany; do tego czasu CTA to kotwice.
-- Fakty programu: bezpłatny; 120 miejsc; zgłoszenia do 19.10.2026 (termin przy każdym przycisku Aplikuj); dojazd i nocleg po stronie uczestnika; decyzja przychodzi mailem na adres ze zgłoszenia.
+- Fakty programu: bezpłatny; 120 miejsc; nabór w trzech rundach (early bird 19.10, regular 26.10, last call 3.11; przy każdym przycisku Aplikuj „Deadline early bird: 19.10”); dojazd i nocleg po stronie uczestnika; decyzja przychodzi mailem na adres ze zgłoszenia.
 - Nie komunikujemy wymogu „80% obecności” (decyzja klienta): każdy, kto ukończy, idzie do 2. etapu rekrutacji.
 - Otwarte decyzje: czy można uczestniczyć tylko online; tematy prelekcji; lista prelegentów; los sekcji finałowego CTA (obecnie dubluje CTA z „Dla kogo”).
 
@@ -67,7 +67,7 @@ Brakuje (nie wymyślać, zostawiać placeholder w `[...]`): prelegenci (8 miejsc
 
 ## Product Principles
 
-1. **Każdy ekran przybliża do Aplikuj.** Sukces to liczba zgłoszeń, więc CTA jest zawsze pod ręką, zwłaszcza na telefonie, a nabór ciągły i limit miejsc zachęcają, żeby aplikować teraz.
+1. **Każdy ekran przybliża do Aplikuj.** Sukces to liczba zgłoszeń, więc CTA jest zawsze pod ręką, zwłaszcza na telefonie, a rundy naboru (early bird) i limit miejsc zachęcają, żeby aplikować teraz.
 2. **Najpierw problem, potem obietnica.** Strona zaczyna od tego, dlaczego startupy upadają, i dopiero potem mówi, czego się nauczysz.
 3. **Zbijamy obiekcje, zanim padną.** Brak pomysłu, zespołu, kodu czy doświadczenia to nie przeszkoda, i strona mówi to wprost, w kilku miejscach.
 4. **Prawdziwi ludzie zamiast deklaracji.** Wiarygodność dają twarze Fellows i mentorów oraz prawdziwe liczby, nie przymiotniki. Brakujący dowód zostaje placeholderem, nie zmyśleniem.
