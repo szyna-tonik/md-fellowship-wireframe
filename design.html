@@ -543,7 +543,10 @@ html { scroll-behavior: auto; overscroll-behavior: none; }   /* smooth-scroll.js
 html.travel .d-hero { overflow: visible; }
 html.travel .d-hero.is-arrived .d-hero__flashlight { opacity: 0; }
 .d-hero.is-traveling .d-fl__hit { pointer-events: none; }
-html.travel .d-problem__flashlight, html.travel .d-problem__beam { opacity: 0; transition: opacity 180ms ease; }
+html.travel .d-problem__flashlight, html.travel .d-problem__beam { opacity: 0; }
+html.travel .d-problem__beam { transition: opacity 180ms ease; }
+/* podmiana latarki Hero ↔ Problem w jednej klatce (bez przenikania dwóch warstw) */
+html.travel:not(.intro) .d-hero__flashlight { transition: none; }
 html.travel .d-problem.is-lit .d-problem__flashlight, html.travel .d-problem.is-lit .d-problem__beam { opacity: 1; }
 html.travel .d-problem:not(.is-lit) .d-fl__hit { pointer-events: none; }
 .d-fl--problem .d-fl__hit { position: absolute; left: calc(-2.99 * var(--du)); top: calc(-2.12 * var(--du));
@@ -675,6 +678,10 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   width: calc(593.086 * var(--du)); height: calc(573.861 * var(--du)); translate: -50% -50%; rotate: var(--aim, 0deg);
   display: flex; align-items: center; justify-content: center; pointer-events: none; }
 .d-fl--problem { position: relative; flex: none; width: calc(431.81 * var(--du)); height: calc(466.254 * var(--du)); transform: rotate(-68.25deg); }
+/* korpus latarki w Problemie: geometria latarki z Hero (.d-fl--hero) w skali 0.77709 — dokładnie to, co dojeżdża z Hero
+   (--tsc = 431.81 / 555.676), obrócone jak grupa Problemu; dzięki temu przy przyklejeniu nic nie przeskakuje */
+.d-problem__flashlight { --pdu: var(--du); }
+.d-fl--twin { --du: calc(var(--pdu) * 0.77709); transform: rotate(-68.25deg); }
 .d-fl--problem .d-fl__shape { position: absolute; left: calc(-2.99 * var(--du)); top: calc(-2.12 * var(--du)); width: calc(441.89 * var(--du)); height: calc(473.505 * var(--du)); }
 .d-fl--problem .d-fl__photo { position: absolute; left: calc(-0.14 * var(--du)); top: calc(-30.24 * var(--du)); width: calc(425.514 * var(--du)); height: calc(546.063 * var(--du));
   display: flex; align-items: center; justify-content: center; }
@@ -1265,12 +1272,14 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
       </div>
     </div>
     <div class="d-problem__pin d-problem__pin--body" aria-hidden="true">
+      <!-- bliźniak latarki z Hero (ten sam obrys, kadr i raster, w skali 0.77709 = rozmiar po dojechaniu), żeby
+           podmiana Hero → Problem przy przyklejeniu była niewidoczna -->
       <div class="d-problem__flashlight">
-        <div class="d-fl d-fl--problem">
-          <img class="d-fl__shape" src="design-assets/problem-flashlight-shape.svg" width="441.89" height="473.505" alt="">
+        <div class="d-fl d-fl--hero d-fl--twin">
+          <img class="d-fl__shape" src="design-assets/hero-flashlight-shape.svg" width="550.268" height="587.772" alt="">
           <div class="d-fl__hit"></div>
           <div class="d-fl__photo">
-            <div class="riso" data-fit="cover" data-design-width="481.885" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
+            <div class="riso" data-fit="cover" data-design-width="620.116" data-riso-ref=".d-hero__flashlight .riso" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
           </div>
         </div>
       </div>
@@ -2585,7 +2594,12 @@ return { setup: setup, render: render, manifest: manifest };
 
     // parametry z Figmy są w px ramki projektu — przeliczamy na px urządzenia,
     // żeby raster wyglądał tak samo przy każdej szerokości ekranu
-    var k = dpr * Math.max(cssW / parseFloat(it.el.dataset.designWidth), 0.7);
+    // data-riso-ref: raster w tej samej skali co wskazany element (przeliczony na rozmiar tego) — bliźniak latarki
+    // z Hero ma wtedy identyczne kropki jak latarka z Hero po dojechaniu (także gdy tamta trafia w próg 0.7)
+    var ref = it.el.dataset.risoRef ? document.querySelector(it.el.dataset.risoRef) : null;
+    var k = ref && ref.clientWidth
+      ? dpr * Math.max(ref.clientWidth / parseFloat(ref.dataset.designWidth), 0.7) * cssW / ref.clientWidth
+      : dpr * Math.max(cssW / parseFloat(it.el.dataset.designWidth), 0.7);
     it.frame.params = {
       grain: it.params.grain,
       misregistration: it.params.misregistration * k,
@@ -2925,7 +2939,7 @@ function measure() {
   geo = {
     dx: (b.left + b.width / 2) - (a.left + a.width / 2 - tx),
     dy: (pinnedY + stickAt) - (a.top + a.height / 2 + scrollY - ty),
-    k: probFl.querySelector('.d-fl--problem').offsetWidth / heroFl.querySelector('.d-fl--hero').offsetWidth,
+    k: probFl.querySelector('.d-fl--twin').offsetWidth / heroFl.querySelector('.d-fl--hero').offsetWidth,
     rot: -68.25 - -9.58,             // obrót grupy: Hero −9.58° → Problem −68.25°
     span: Math.max(1, stickAt),      // podróż kończy się przy przyklejeniu
   };
