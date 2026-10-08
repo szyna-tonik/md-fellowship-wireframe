@@ -314,13 +314,22 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
 
   .sticky-cta {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-    min-height: 80px; padding: 12px 20px;
-    background: var(--surface); border-top: 1px solid var(--line);
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; isolation: isolate;
+    min-height: 72px; padding: 14px 20px calc(12px + env(safe-area-inset-bottom));
     transform: translateY(110%); transition: transform 150ms linear;
   }
+  /* tło: czarna apla z lekko poszarpaną górną krawędzią (wielokąt jak plakietki i kształty przycisków), bez linii */
+  .sticky-cta::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: -6px; bottom: 0; background: var(--c-black);
+    clip-path: polygon(0 5px, 7% 1px, 15% 6px, 24% 2px, 33% 5px, 43% 0, 52% 4px, 61% 1px, 71% 6px, 80% 2px, 89% 5px, 95% 0, 100% 3px, 100% 100%, 0 100%); }
   .sticky-cta.is-visible { transform: translateY(0); }
-  .sticky-cta .cta-note b { font-size: 15px; }
+  .d-sticky__note { margin: 0; min-width: 0; }
+  /* rozmiar Anton: przy 22 px napis ma ~8.8× szerokość fontu; poniżej ~360 px ekranu maleje, żeby zmieścić się obok przycisku */
+  .d-sticky__note b { display: block; font-family: var(--f-display); font-weight: 400; font-size: min(22px, calc((100vw - 168px) / 8.8)); line-height: 1.05; letter-spacing: -0.02em;
+    text-transform: uppercase; white-space: nowrap; color: var(--c-white); }
+  .d-sticky__note span { display: block; margin-top: 4px; font-family: var(--f-body); font-weight: 500; font-size: 14px; line-height: 1.2; color: var(--c-blue-500); }
+  /* przycisk jak w nawigacji (wariant niebieski), węższy */
+  .d-nav__cta.d-sticky__btn { flex: none; width: 108px; gap: 10px; }
+  .sticky-cta .d-sticky__btn::before { opacity: 1; }
   body.has-sticky { padding-bottom: 96px; }
 }
 @media (max-width: 768px) and (prefers-reduced-motion: reduce) {
@@ -458,6 +467,8 @@ main { container-type: inline-size; }
 .riso[data-fit="cover"] > img { object-fit: cover; }
 .riso__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .riso.is-riso > img { visibility: hidden; }
+/* bez WebGPU: <img> dostaje gotowy raster (design-assets/riso/*-d|m.webp, wyrenderowany shaderem w stanie końcowym) */
+.riso.is-riso-fb > img { filter: none !important; }
 
 /* ---------- 1 · HERO ---------- */
 .d-hero { position: relative; background: var(--c-blue-500); overflow: clip; }
@@ -849,6 +860,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 .d-about { position: relative; z-index: 2; padding-bottom: calc(280 * var(--u)); overflow: clip; color: var(--c-black); }
 .d-about__title, .d-about__text .d-body, .d-about__num { transition: color 300ms ease; }
 .d-about.is-dark .d-about__title, .d-about.is-dark .d-about__text .d-body, .d-about.is-dark .d-about__num { color: var(--c-white); }
+/* mobile: tło przechodzi później, więc nagłówek mentorów wjeżdża jeszcze na jasne — czarny do połowy przejścia (paintAboutBg) */
+.d-mentors.is-light .d-mentors__title, .d-mentors.is-light .d-mentors__lead { color: var(--c-black); }
+.d-mentors__title, .d-mentors__lead { transition: color 300ms ease; }
 .d-about__pin { padding-top: calc(115.3 * var(--u)); }
 .d-about__title { margin: 0; width: calc(837.4 * var(--u)); font-family: var(--f-display); font-weight: 400; font-size: calc(91.42 * var(--u));   /* 88 px */
   line-height: 1.1; letter-spacing: calc(-1.83 * var(--u)); text-transform: uppercase; color: var(--c-black); }
@@ -1121,10 +1135,15 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-hero__w { position: static; display: block; }
   .d-hero__w + .d-hero__w { margin-top: -0.08em; }
   .d-hero__w--3, .d-hero__w--4 { text-align: right; }
-  .d-hero__beam { --du: calc(var(--m) * 0.42); }
-  .d-hero__flashlight { position: relative; order: 3; left: auto; top: auto; translate: none; --du: calc(var(--m) * 0.42);
-    margin: calc(-78 * var(--m)) 0 calc(-56 * var(--m)) calc(96 * var(--m)); }
-  .d-hero__intro { position: static; order: 4; width: auto; margin-top: calc(8 * var(--m)); gap: 20px; }
+  /* latarka na napisie (jak na desktopie): środek ~55% wysokości tytułu, w poziomie na środku; skala 0.378 (było 0.42, −10%).
+     W przepływie z ujemnym marginesem górnym (−302) i dodatnim dolnym (302 − 227 wysokości), więc lead zaczyna się pod tytułem */
+  .d-hero__beam { --du: calc(var(--m) * 0.378); }
+  .d-hero__flashlight { position: relative; order: 3; left: auto; top: auto; translate: none; --du: calc(var(--m) * 0.378);
+    margin: calc(-302 * var(--m)) 0 calc(75 * var(--m)) calc(58 * var(--m)); }
+  .d-hero__intro { position: static; order: 4; width: auto; margin-top: calc(4 * var(--m)); gap: 20px; }   /* lead ~36m pod SPRINT */
+  /* termin zawsze obok przycisku (Hero, Problem): jeden tekst, łamie się sam, wiersze wyrównane (balance) */
+  .d-hero .d-apply, .d-problem .d-apply { flex-wrap: nowrap; }
+  .d-hero .d-apply__date, .d-problem .d-apply__date { min-width: 0; white-space: normal; line-height: 1.05; text-wrap: balance; }
   .d-hero__lead br { display: none; }
 
   .d-problem { overflow: clip; }
@@ -1144,7 +1163,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 
   .d-learn__frame { min-height: 0; display: flex; flex-direction: column; padding: calc(72 * var(--m)) calc(20 * var(--m)) calc(80 * var(--m)); }
   .d-learn__title { position: static; order: 1; margin-left: 0; font-size: calc(64 * var(--m)); letter-spacing: calc(-1.28 * var(--m)); }
-  .d-learn__list { order: 3; gap: calc(44 * var(--m)); }
+  .d-learn__list { order: 3; gap: calc(44 * var(--m)); margin-top: calc(88 * var(--m)); }   /* od tytułu 2 × odstęp między punktami */
   .d-skill__title { font-size: calc(34 * var(--m)); letter-spacing: calc(-0.68 * var(--m)); }
   .d-skill__desc { margin-top: 16px; }
 
@@ -1163,7 +1182,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-about { --u: calc(var(--m) * 0.75); }
   .d-about__pin { padding-top: calc(72 * var(--m)); }
   /* mobile: teksty w przepływie, pasek zdjęć (ta sama mechanika, skala --pu) między akapitami a przyciskiem */
-  .d-who { --u: calc(var(--m) * 0.75); padding: calc(72 * var(--m)) 0 calc(64 * var(--m)); }
+  .d-who { --u: calc(var(--m) * 0.75); padding: calc(72 * var(--m)) 0 0; }
   .d-who__stage { --pu: calc(var(--m) * 0.4); height: auto; }
   .d-who__title, .d-who__body, .d-who__track, .d-who__cta { position: relative; left: auto; top: auto; right: auto; }
   .d-who__run, .d-who__pin { position: static; height: auto !important; }   /* mobile: pasek w przepływie, bez przyklejania */
@@ -1171,14 +1190,15 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-who__body { grid-template-columns: 1fr; row-gap: calc(16 * var(--m)); margin-top: calc(20 * var(--m)); padding: 0 calc(20 * var(--m)); }
   .d-who__track { margin-top: calc(40 * var(--m)); }
   .d-who__ph--1 { left: calc(20 * var(--m)); }
-  .d-who__cta { margin-top: calc(56 * var(--m)); padding: 0 calc(20 * var(--m)); gap: calc(20 * var(--m)); }
+  .d-who__cta { margin-top: calc(56 * var(--m)); padding: 0 calc(20 * var(--m)); gap: calc(30 * var(--m)); }
+  .d-who__lines { gap: calc(37.4 * var(--m)); }   /* po „Przyłożysz się?” i przed przyciskiem odstępy +50% (24.9 → 37.4, 20 → 30) */
   .d-who__q { font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
   .d-who__chance { width: auto; white-space: normal; font-size: calc(30 * var(--m)); letter-spacing: calc(-0.6 * var(--m)); }
   .d-who__btn { width: 176px; height: 60px; gap: 18px; font-size: 27px; letter-spacing: -0.54px; }
   .d-who__chance br { display: none; }
   .d-who__stage { height: auto; }
   .d-faq { --u: calc(var(--m) * 0.75); }
-  .d-faq__frame { display: block; padding: calc(120 * var(--m)) calc(20 * var(--m)) calc(72 * var(--m)); }
+  .d-faq__frame { display: block; padding: calc(40 * var(--m)) calc(20 * var(--m)) calc(72 * var(--m)); }   /* odstęp przed FAQ o połowę mniejszy */
   .d-faq__title { position: static; margin-bottom: calc(28 * var(--m)); font-size: calc(48 * var(--m)); letter-spacing: calc(-0.96 * var(--m)); }
   .d-faq__q { gap: calc(16 * var(--m)); padding: calc(18 * var(--m)) 0; font-size: calc(24 * var(--m)); letter-spacing: calc(-0.4 * var(--m)); }
   .d-faq__sign { width: calc(34 * var(--m)); height: calc(30 * var(--m)); font-size: calc(22 * var(--m)); }
@@ -1186,17 +1206,18 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
   .d-faq__a .d-body { padding-bottom: calc(20 * var(--m)); }
   /* CTA: bez latarki z rogu; zdjęcie w przepływie, tagi pod nim */
   .d-cta { --u: calc(var(--m) * 0.75); }
-  .d-cta__stage { height: auto; display: flex; flex-direction: column; padding: calc(96 * var(--m)) 0 calc(48 * var(--m)); }
+  .d-cta__stage { height: auto; display: flex; flex-direction: column; padding: calc(96 * var(--m)) 0 0; }   /* strona kończy się na dole kolażu */
   .d-cta__beamclip, .d-cta__fl--a { display: none; }
   .d-cta__head { position: static; gap: calc(24 * var(--m)); padding: 0 calc(20 * var(--m)); }
   .d-cta__title { font-size: calc(44 * var(--m)); letter-spacing: calc(-0.88 * var(--m)); }
   .d-btn--big { width: calc(296 * var(--m)); height: calc(102 * var(--m)); gap: calc(32 * var(--m)); font-size: calc(45.7 * var(--m)); letter-spacing: calc(-0.9 * var(--m)); }
   .d-btn--big .d-btn__arrow { width: calc(37 * var(--m)); height: calc(32 * var(--m)); font-size: calc(32 * var(--m)); }
   /* zdjęcie: ramka o proporcji kolażu (::before), pod nią tagi w przepływie; warstwy plamy i kolażu kryją tylko ramkę */
-  .d-cta__photo { position: relative; top: auto; margin-top: calc(56 * var(--m)); aspect-ratio: auto; display: flex; flex-direction: column; }
-  .d-cta__photo::before { content: ""; display: block; width: 100%; aspect-ratio: 1439.59 / 554.625; }
-  .d-cta__blobs, .d-cta__masked { bottom: auto; aspect-ratio: 1439.59 / 554.625; }
-  .d-cta__tags { position: static; margin-top: calc(24 * var(--m)); padding: 0 calc(16 * var(--m)); }
+  /* tagi nad zdjęciem: siatka — wiersz 1 tagi, wiersz 2 kolaż (::before trzyma proporcję, plama i raster leżą na nim) */
+  .d-cta__photo { position: relative; top: auto; margin-top: calc(48 * var(--m)); aspect-ratio: auto; display: grid; grid-template-columns: 100%; }
+  .d-cta__photo::before { content: ""; display: block; grid-area: 2 / 1; width: 100%; aspect-ratio: 1439.59 / 554.625; }
+  .d-cta__blobs, .d-cta__masked { position: relative; inset: auto; grid-area: 2 / 1; width: 100%; aspect-ratio: 1439.59 / 554.625; }
+  .d-cta__tags { position: static; grid-area: 1 / 1; margin-bottom: calc(40 * var(--m)); padding: 0 calc(16 * var(--m)); }
   .d-cta__row { flex-wrap: wrap; }
   .d-mentors { --u: calc(var(--m) * 0.75); padding: calc(96 * var(--m)) 0 calc(72 * var(--m)); }
   .d-mentors__head { flex-direction: column; gap: calc(20 * var(--m)); padding: 0 calc(20 * var(--m)); }
@@ -1273,7 +1294,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         <img class="d-fl__shape" src="design-assets/hero-flashlight-shape.svg" width="550.268" height="587.772" alt="">
         <div class="d-fl__hit"></div>
         <div class="d-fl__photo">
-          <div class="riso" data-fit="cover" data-design-width="620.116" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
+          <div class="riso" data-riso-fb="design-assets/riso/hero-fl" data-fit="cover" data-design-width="620.116" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
         </div>
       </div>
     </div>
@@ -1304,7 +1325,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
           <img class="d-fl__shape" src="design-assets/hero-flashlight-shape.svg" width="550.268" height="587.772" alt="">
           <div class="d-fl__hit"></div>
           <div class="d-fl__photo">
-            <div class="riso" data-fit="cover" data-design-width="620.116" data-riso-ref=".d-hero__flashlight .riso" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
+            <div class="riso" data-riso-fb="design-assets/riso/prob-fl" data-fit="cover" data-design-width="620.116" data-riso-ref=".d-hero__flashlight .riso" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
           </div>
         </div>
       </div>
@@ -1459,9 +1480,9 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         <div class="d-how__gears" aria-hidden="true">
           <svg class="d-how__blob" viewBox="0 0 583.536 581.169"><path d="M496.6 265.9L436.3 314.7L376.0 329.0L395.6 378.2L394.5 453.9L345.2 529.8L305.3 551.9L206.4 567.3L135.5 544.7L97.7 487.4L76.8 422.8L103.9 300.1L71.8 257.3L58.0 204.9L65.0 148.9L114.7 107.4L159.9 91.6L210.1 103.1L291.7 43.3L360.2 13.6L446.1 30.0L495.8 59.5L523.7 129.5L525.2 216.4Z"/></svg>
           <div class="d-how__gearset">
-            <div class="riso d-how__gear" style="left:40.921%;top:5.406%;width:47.038%;height:47.229%" data-from="right" data-k="-0.6579" data-rot0="-3.27" data-design-width="274.5" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-2.webp" width="720" height="720" alt=""></div>
-            <div class="riso d-how__gear" style="left:12.534%;top:19.447%;width:31.771%;height:31.901%" data-from="left" data-k="1.0" data-rot0="-6.36" data-design-width="185.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-1.webp" width="720" height="720" alt=""></div>
-            <div class="riso d-how__gear" style="left:15.949%;top:46.424%;width:49.429%;height:49.631%" data-from="bottom" data-k="-0.625" data-rot0="-0.94" data-design-width="288.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-3.webp" width="720" height="720" alt=""></div>
+            <div class="riso d-how__gear" data-riso-fb="design-assets/riso/how-gear-2" style="left:40.921%;top:5.406%;width:47.038%;height:47.229%" data-from="right" data-k="-0.6579" data-rot0="-3.27" data-design-width="274.5" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-2.webp" width="720" height="720" alt=""></div>
+            <div class="riso d-how__gear" data-riso-fb="design-assets/riso/how-gear-1" style="left:12.534%;top:19.447%;width:31.771%;height:31.901%" data-from="left" data-k="1.0" data-rot0="-6.36" data-design-width="185.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-1.webp" width="720" height="720" alt=""></div>
+            <div class="riso d-how__gear" data-riso-fb="design-assets/riso/how-gear-3" style="left:15.949%;top:46.424%;width:49.429%;height:49.631%" data-from="bottom" data-k="-0.625" data-rot0="-0.94" data-design-width="288.4" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/how-gear-3.webp" width="720" height="720" alt=""></div>
           </div>
         </div>
       </div>
@@ -1795,7 +1816,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         </svg>
       </div>
       <div class="d-cta__masked" aria-hidden="true">
-        <div class="riso" data-cloud="free" data-design-width="1440" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/about-collage.png?v=5" width="2159" height="832" alt=""></div>
+        <div class="riso" data-riso-fb="design-assets/riso/cta-collage" data-cloud="free" data-design-width="1440" data-riso='{"grain":0,"misregistration":0,"dotScale":4,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/about-collage.png?v=5" width="2159" height="832" alt=""></div>
       </div>
       <div class="d-cta__tags">
         <p class="d-cta__row d-mask"><span class="d-tag d-tag--free d-mask__i">Bezpłatnie</span><span class="d-tag d-tag--age d-mask__i">18–24 lata</span><span class="d-tag d-tag--seats d-mask__i">120 miejsc</span></p>
@@ -1811,7 +1832,7 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
         <img class="d-fl__shape" src="design-assets/problem-flashlight-shape.svg" width="441.89" height="473.505" alt="">
         <div class="d-fl__hit"></div>
         <div class="d-fl__photo">
-          <div class="riso" data-fit="cover" data-design-width="463.847" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
+          <div class="riso" data-riso-fb="design-assets/riso/cta-fl" data-riso-fb-only="d" data-fit="cover" data-design-width="463.847" data-riso='{"grain":0.17000000178813934,"misregistration":12,"dotScale":6,"color1":{"r":0,"g":0,"b":0,"a":1},"color2":{"r":0,"g":0,"b":0,"a":1}}'><img src="design-assets/photo-flashlight.png" width="701" height="453" alt=""></div>
         </div>
       </div>
     </div>
@@ -1823,8 +1844,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 
 
 <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
-  <p class="cta-note"><b>Bezpłatnie · 120 miejsc</b>Deadline early bird: 19.10</p>
-  <a class="btn btn-sm" href="#aplikuj" tabindex="-1">Aplikuj</a>
+  <p class="d-sticky__note"><b>Bezpłatnie · 120 miejsc</b><span>Deadline early bird: 19.10</span></p>
+  <a class="d-nav__cta d-sticky__btn" href="#aplikuj" tabindex="-1"><span>Aplikuj</span><span class="d-btn__arrow" aria-hidden="true">→</span></a>
 </div>
 
 
@@ -1887,7 +1908,8 @@ html.intro--spread .d-problem, html.intro--spread .d-learn, html.intro--spread .
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) { heroVisible = en.isIntersecting; });
+      // pasek dopiero, gdy przycisk z Hero zjedzie górą ekranu (na niskim telefonie bywa jeszcze pod krawędzią)
+      entries.forEach(function (en) { heroVisible = en.isIntersecting || en.boundingClientRect.top > 0; });
       render();
     }).observe(document.getElementById('hero-cta'));
 
@@ -2380,13 +2402,28 @@ return { setup: setup, render: render, manifest: manifest };
 /* ---------- host WebGPU ---------- */
 (async function initRiso() {
   var nodes = Array.prototype.slice.call(document.querySelectorAll('.riso[data-riso]'));
-  if (!nodes.length || !navigator.gpu) return;
+  // zapas bez WebGPU (np. Safari przed iOS 26, strona po http z adresu w sieci lokalnej): zamiast zdjęcia gotowy raster
+  // wyrenderowany wcześniej tym samym shaderem (wariant d = układ 1440 px, m = 390 px); reveal/morf idą wtedy zastępczo w CSS
+  function fallback(list) {
+    var mob = matchMedia('(max-width: 1023px)').matches;
+    list.forEach(function (el) {
+      var base = el.dataset.risoFb, img = el.querySelector('img');
+      if (!base || !img || el.classList.contains('is-riso-fb')) return;
+      var v = mob && el.dataset.risoFbOnly !== 'd' ? '-m' : '-d';
+      img.removeAttribute('srcset');
+      img.src = base + v + '.webp';
+      el.classList.remove('is-riso');
+      el.classList.add('is-riso-fb');
+    });
+  }
+  if (!nodes.length) return;
+  if (!navigator.gpu) { fallback(nodes); return; }
   var device;
   try {
     var adapter = await navigator.gpu.requestAdapter();
-    if (!adapter) return;
+    if (!adapter) { fallback(nodes); return; }
     device = await adapter.requestDevice();
-  } catch (e) { return; }
+  } catch (e) { fallback(nodes); return; }
   var format = navigator.gpu.getPreferredCanvasFormat();
   var items = [];
 
@@ -2410,13 +2447,13 @@ return { setup: setup, render: render, manifest: manifest };
     var img = imgs[0];
     var okAll = true;
     for (var j = 0; j < imgs.length; j++) if (!(await ready(imgs[j]))) okAll = false;
-    if (!okAll) continue;
+    if (!okAll) { fallback([el]); continue; }
     var canvas = document.createElement('canvas');
     canvas.className = 'riso__canvas';
     canvas.setAttribute('aria-hidden', 'true');
     el.appendChild(canvas);
     var ctx = canvas.getContext('webgpu');
-    if (!ctx) { canvas.remove(); continue; }
+    if (!ctx) { canvas.remove(); fallback([el]); continue; }
     ctx.configure({ device: device, format: format, alphaMode: 'premultiplied' });
     var frame = { state: {}, params: {} };
     RisoEffect.setup(device, frame);
@@ -2504,7 +2541,7 @@ return { setup: setup, render: render, manifest: manifest };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawAll);
   var t;
   window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(drawAll, 120); });
-  device.lost.then(function () { items.forEach(function (it) { it.el.classList.remove('is-riso'); }); });
+  device.lost.then(function () { items.forEach(function (it) { it.el.__riso = null; it.canvas.remove(); }); fallback(items.map(function (it) { return it.el; })); });
 
 })();
 </script>
@@ -3414,7 +3451,7 @@ const cta = (() => {
   const sec = document.querySelector('.d-cta');
   if (!sec) return null;
   const photo = sec.querySelector('.d-cta__photo');
-  return { sec, A: sec.querySelector('.d-cta__fl--a'), beam: ctaBeam, photo, riso: photo.querySelector('.riso'),
+  return { sec, A: sec.querySelector('.d-cta__fl--a'), beam: ctaBeam, photo, riso: photo.querySelector('.riso'), masked: photo.querySelector('.d-cta__masked'),
     line: photo.querySelector('.d-cta__line'), fill: photo.querySelector('.d-cta__fill'),
     // postęp zdjęcia: 0 = góra zdjęcia na dole ekranu, 1 = dół zdjęcia na dole ekranu (= koniec strony; zwykły trackProgress
     // nie doszedłby tu nawet do połowy, bo za zdjęciem nie ma już nic do przewinięcia)
@@ -3437,6 +3474,8 @@ function checkCtaLight() {
 const CTA_LINE = 16, CTA_FILL = 480;   // grubość konturu i kreski, która wypełnia kształt (2 × największa odległość od brzegu ≈ 2 × 223)
 function ctaSet(el, prop, v) { const c = el.__st || (el.__st = {}); if (c[prop] !== v) { c[prop] = v; el.style.setProperty(prop, v); } }
 function paintCta(P) {
+  const mob = !desktopMq.matches, P0 = P;
+  if (mob) { const r = cta.masked.getBoundingClientRect(); P = clamp01((innerHeight - r.top) / Math.max(1, r.height)); }
   const d = reduced ? 1 : easeInOut(seg(P, 0.02, 0.32));   // rysowanie konturu (od startu ścieżki w obie strony)
   const g = reduced ? 1 : easeInOut(seg(P, 0.30, 0.50));   // kontur grubieje do środka (kreska przycięta kształtem)
   const up = reduced ? 0 : 1 - easeOut(seg(P, 0.46, 0.76)); // kolaż: 1 = schowany pod dolną krawędzią
@@ -3446,7 +3485,8 @@ function paintCta(P) {
   ctaSet(cta.line, 'stroke-width', (CTA_LINE + (CTA_FILL - CTA_LINE) * g).toFixed(1) + 'px');
   ctaSet(cta.fill, 'visibility', full ? 'visible' : 'hidden');
   ctaSet(cta.riso, 'transform', up > 0 ? 'translateY(' + (up * 100).toFixed(2) + '%)' : '');
-  cta.tags.forEach((el, i) => paintMask(el, reduced ? 0 : 1 - easeOut(seg(P, 0.70 + i * 0.025, 0.82 + i * 0.025)), +1));
+  // mobile: tagi nad zdjęciem — wjeżdżają od razu po wejściu bloku w ekran (postęp całości P0)
+  cta.tags.forEach((el, i) => paintMask(el, reduced ? 0 : 1 - easeOut(mob ? seg(P0, 0.02 + i * 0.025, 0.16 + i * 0.025) : seg(P, 0.70 + i * 0.025, 0.82 + i * 0.025)), +1));
 }
 if (cta) {
   // celowanie: grupa latarki obrócona o −45.22° (Problem: −68.25°, rest 159.2) → rest 182.2
@@ -3531,13 +3571,15 @@ const aboutBgEl = document.querySelector('.d-about'), mentorsBgEl = document.que
 let abKey = -1;
 function paintAboutBg() {
   if (!aboutBgEl || !mentorsBgEl) return;
-  const p = clamp01((innerHeight - mentorsBgEl.getBoundingClientRect().top) / (innerHeight * 0.6));
+  const lag = desktopMq.matches ? 0 : 0.3;   // mobile: zmiana opóźniona o połowę zakresu (100→40 % ekranu → 70→10 %)
+  const p = clamp01((innerHeight * (1 - lag) - mentorsBgEl.getBoundingClientRect().top) / (innerHeight * 0.6));
   const v = Math.round(p * 1000) / 1000;
   if (v === abKey) return;
   abKey = v;
   const bg = mixBg(BG.cream, BG.black, v);
   [aboutBgEl, mentorsBgEl].forEach((el) => { el.style.backgroundColor = bg; });
   aboutBgEl.classList.toggle('is-dark', v >= 0.5);
+  mentorsBgEl.classList.toggle('is-light', lag > 0 && v < 0.5);
 }
 /* pasek nawigacji: kolor tła sekcji tuż pod jego dolną krawędzią — pierwsza warstwa tła (sekcja albo scena) pod punktem,
    pomijając treść (zdjęcia, kafle, przyciski) i warstwy przezroczyste. Ciemny pasek (luminancja < 50%): logo i linki białe.
