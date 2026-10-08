@@ -318,15 +318,15 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
     min-height: 72px; padding: 14px 20px calc(12px + env(safe-area-inset-bottom));
     transform: translateY(110%); transition: transform 150ms linear;
   }
-  /* tło: czarna apla z lekko poszarpaną górną krawędzią (wielokąt jak plakietki i kształty przycisków), bez linii */
-  .sticky-cta::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: -6px; bottom: 0; background: var(--c-black);
-    clip-path: polygon(0 5px, 7% 1px, 15% 6px, 24% 2px, 33% 5px, 43% 0, 52% 4px, 61% 1px, 71% 6px, 80% 2px, 89% 5px, 95% 0, 100% 3px, 100% 100%, 0 100%); }
+  /* tło: biała apla z lekko poszarpaną górną krawędzią — mało wierzchołków, nierówne odcinki (jak plakietki), bez linii */
+  .sticky-cta::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: -8px; bottom: 0; background: var(--c-white);
+    clip-path: polygon(0 6px, 13% 1px, 22% 7px, 47% 3px, 58% 8px, 64% 0, 86% 5px, 100% 1px, 100% 100%, 0 100%); }
   .sticky-cta.is-visible { transform: translateY(0); }
   .d-sticky__note { margin: 0; min-width: 0; }
   /* rozmiar Anton: przy 22 px napis ma ~8.8× szerokość fontu; poniżej ~360 px ekranu maleje, żeby zmieścić się obok przycisku */
   .d-sticky__note b { display: block; font-family: var(--f-display); font-weight: 400; font-size: min(22px, calc((100vw - 168px) / 8.8)); line-height: 1.05; letter-spacing: -0.02em;
-    text-transform: uppercase; white-space: nowrap; color: var(--c-white); }
-  .d-sticky__note span { display: block; margin-top: 4px; font-family: var(--f-body); font-weight: 500; font-size: 14px; line-height: 1.2; color: var(--c-blue-500); }
+    text-transform: uppercase; white-space: nowrap; color: var(--c-black); }
+  .d-sticky__note span { display: block; margin-top: 4px; font-family: var(--f-body); font-weight: 500; font-size: 14px; line-height: 1.2; color: var(--c-black); }
   /* przycisk jak w nawigacji (wariant niebieski), węższy */
   .d-nav__cta.d-sticky__btn { flex: none; width: 108px; gap: 10px; }
   .sticky-cta .d-sticky__btn::before { opacity: 1; }
